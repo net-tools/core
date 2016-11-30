@@ -1,0 +1,22 @@
+{
+    "name" : "net-tools/core",
+	
+    "description" : "Composer library providing core functionalities",
+	
+	"type": "library",
+	
+	"require" : {
+		"php": ">= 5.4.0"
+	},
+	
+    "license" : "MIT",
+
+    "authors": [
+        {
+            "name": "Pierre",
+            "email": "dev@net-tools.ovh",
+            "role": "Developer"
+        }
+    ]
+
+}
