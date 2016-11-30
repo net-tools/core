@@ -9,6 +9,16 @@
 		"php": ">= 5.4.0"
 	},
 	
+    "files": [
+        "src/Includes/Init.php"
+    ],
+
+	"autoload": {
+		"psr-4": {
+			"Nettools\\Core\\": "src/"
+		}
+    },
+	 
     "license" : "MIT",
 
     "authors": [
