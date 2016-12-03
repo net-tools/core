@@ -123,10 +123,11 @@ class SecurityHelper {
 	
 	
 	// clean a string by replacing all accented letters with their corresponding non-accented letters
-    // and replacing spaces and single quote with -
-	static function cleanString($s)
+    // and replacing all non letters and digits by a default character. Useful for removing quotes and spaces
+	// which are not allowed on some filesystems.
+	static function cleanString($s, $replacement = '-')
 	{
-		return str_replace(array(' ', "'"), '-', EncodingHelper::noAccents($s));
+		return preg_replace('/[^a-zA-Z0-9]/', '-', EncodingHelper::noAccents($s));
 	}
 	
 	
