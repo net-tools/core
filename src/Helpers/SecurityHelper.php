@@ -127,7 +127,7 @@ class SecurityHelper {
 	// which are not allowed on some filesystems.
 	static function cleanString($s, $replacement = '-')
 	{
-		return preg_replace('/[^a-zA-Z0-9]/', '-', EncodingHelper::noAccents($s));
+		return preg_replace('/[^a-zA-Z0-9_.-]/', '-', EncodingHelper::noAccents($s));
 	}
 	
 	
