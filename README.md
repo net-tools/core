@@ -23,7 +23,7 @@ Helpers   | DataHelper         | Miscellaneous functions to deal with string, da
 Helpers   | EncodingHelper     | Encode/decode accented characters to/from html entities or remove any accented character
 Helpers   | FileHelper         | Guess the file type (image, video, etc...) or the Mime type of a file by looking at it's name
 Helpers   | ImagingHelper      | Resize an image to a given with and/or height (aspect ratio preserved)
-Helpers   | NetworkingHelper   | Construct JSON data with function calls ; add parameters to an url ; get relative folder (to webroot) for a file
+Helpers   | NetworkingHelper   | Send XMLHttp response headers (no cache allowed) ; add parameters to an url ; get relative folder (to webroot) for a file ; get feedback about an file upload error code
 Helpers   | SecurityHelper     | Create tokens, token with an expiration delay, sanitize strings
 Helpers   | PdoHelper          | Provide convenient functions to make queries with PDO. Deals with foreign keys (database schema with foreign keys must be supplied within an array). Can be used as any Pdo instance, as PdoHelper is a subclass of PHP Pdo class.
 Containers| Pool               | Manage a pool of objects (refer to 'Pool' design pattern)
@@ -39,37 +39,70 @@ When the package is mentionned in you composer.json, it will automatically requi
 
 ### Samples 
 
-For helpers classes other than PdoHelper and NetworkingHelper, the function names and their parameters are self-explanatory.
+For most classes, the function names and their parameters are self-explanatory.
 
-#### Sample : NetworkingHelper / Json functions
+#### Sample : CsvFormatter
 
-The Helpers\NetworkingHelper class has methods to produce Json formatted data in a programmatic way, rather than build a large PHP array and then 'json_encoding' it. When reading the source code, I think reading function calls is more confortable than dealing with (nested) arrays, when there's a large amount of properties in the JSON object litteral.
+The Formatters namespace has some classes to help export tabular data. 
 
-For example, to return the following Json :
-```json
-{
-  "name" : "John",
-  "age" : 36,
-  "phones" : [
-    "0123456789",
-    "9876543210"
-  ]
-}
-```
-We can write : 
+Currently, only CSV export is implemented, but we could also implement HTML Table export rather simply by subclassing the `Formatter` class and providing code to it's abstract methods (those methods define how to print lines, rows, separate columns, etc.). For `CsvFormatter` subclass, the only implementation needed is how to separate columns (in CSV, this is done with ';' character). New rows are written with a newline character.
+
 ```php
-$t = array(
-    "name" => "john",
-    "age" => 36,
-    "phones" => ['0123456789', '9876543210']
-);
-$t = json_encode($t);
+// we create a file at $PATH
+$fhandle = fopen($path, 'w');
+
+// we create the formatter along with an output strategy, here to a file handle
+$csv = new CsvFormatter(new FormatterFileOutputStrategy($fhandle));
+
+// beginning export
+$csv->newRow();
+$csv->row(array('column1 header', 'column2 header', 'column3 header'));
+$csv->closeRow();
+$csv->newRow();
+$csv->row(array('line2_column1_value', 'line3_column2_value', ''));
+$csv->closeRow(true);   // true = this is the last row
+
+// closing file handle
+fclose($fhandle);
 ```
 
-or (see nested call, the last parameter of `json_value` is a another call to the same method, adding a new property to the returned JSON data) :
+
+#### Sample : PdoHelper
+
+PdoHelper is a subclass of PHP Pdo class (instantiation needed, use the same constructor parameters as the Pdo constructor). So you may use any usual method of Pdo (such as `prepare` and `execute`).
+
+There are simple functions such as `pdo_query` or `pdo_query_select` which prepare AND then execute the request with a single call.
+
+There is a `pdo_dbexists` method you may use to test whether a value exists for a SQL Select statement, with only one PHP code line (the value is returned) :
 ```php
-$t = NetworkingHelper::json_value('name', 'john', 
-     NetworkingHelper::json_value('age', 36, 
-     NetworkingHelper::json_value('phones', ['0123456789', '9876543210']
-   )));
+if ( $name = $pdoh->pdo_dbexists('SELECT name FROM Client WHERE id=?', array(123456)) )
+    echo "found client ; its name is '$name' !";
 ```
+
+The main benefit of PdoHelper is it's foreign key querying system. If you define your relationnal schema (just the tables having foreign keys, other tables are useless), you may ask the question "is there a table which has a line with a column referencing a particular foreign key ?". In other words, may I delete safely a row in a table X without breaking a table Y with a column referencing table X and the row deleted ?
+
+To build the schema of tables/foreign keys, you just call `addForeignKey` method for all tables whoses rows may be referenced (tables being foreign keys to other). For example, in a Town and Client schema, Town is the table being referenced by a idTown column in the Client table.
+
+```php
+// defining a schema with 2 tables referencing the Town table through it's idTown column
+$pdoh->addForeignKey('Town', 'idTown', ['Client', 'Merchants']);
+```
+
+To safely delete a row in Town table, we need to check that no row in Client or Merchants has a reference to the town being deleted :
+
+```php
+$test = $pdoh->pdo_foreignkeys('Town', 1234);
+if ( $test['statut'] )
+   // no foreign key detected, we may delete safely the town
+   echo "deletion is safe";
+else
+   echo "deletion is not safe : " . $test['cause']['message'];
+```   
+
+
+
+
+
+
+
+
