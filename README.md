@@ -36,6 +36,40 @@ Formatters| FormatterOutputStrategy    | Strategy pattern to implement concrete 
 When the package is mentionned in you composer.json, it will automatically require `Includes/Init.php` which will perform some initialization stuff, as the default charset, locale and timezones. Currently, it sets UTF8 as charset, and French locale and timezone. Futures releases will be more opened to i18n ;-) !
 
 
+
 ### Samples 
 
-f
+For helpers classes other than PdoHelper and NetworkingHelper, the function names and their parameters are self-explanatory.
+
+#### Sample : NetworkingHelper / Json functions
+
+The Helpers\NetworkingHelper class has methods to produce Json formatted data in a programmatic way, rather than build a large PHP array and then 'json_encoding' it. When reading the source code, I think reading function calls is more confortable than dealing with (nested) arrays, when there's a large amount of properties in the JSON object litteral.
+
+For example, to return the following Json :
+```json
+{
+  "name" : "John",
+  "age" : 36,
+  "phones" : [
+    "0123456789",
+    "9876543210"
+  ]
+}
+```
+We can write : 
+```php
+$t = array(
+    "name" => "john",
+    "age" => 36,
+    "phones" => ['0123456789', '9876543210']
+);
+$t = json_encode($t);
+```
+
+or (see nested call, the last parameter of `json_value` is a another call to the same method, adding a new property to the returned JSON data) :
+```php
+$t = NetworkingHelper::json_value('name', 'john', 
+     NetworkingHelper::json_value('age', 36, 
+     NetworkingHelper::json_value('phones', ['0123456789', '9876543210']
+   )));
+```
