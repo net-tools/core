@@ -1,15 +1,32 @@
 <?php
 
-// afficher les erreurs
-ini_set('display_errors', 'stdout');
+// display errors on screen (stdout) rather than on the error log (stderr)
+// As the error log may not be easily accessible on some hosts, errors
+// could be printed on default display to help debug (if a system is well
+// designed, errors should be catched with exceptions and throwables handling).
+if ( !defined('K_NETTOOLS_DISPLAY_ERRORS') )
+	// by default, errors are displayed in the standard output, unless the user
+	// defines a K_NETTOOLS_DISPLAY_ERRORS constant to 'stderr' value.
+	define('K_NETTOOLS_DISPLAY_ERRORS', 'stdout');
+ini_set('display_errors', K_NETTOOLS_DISPLAY_ERRORS);
 
-// initialiser fuseau horaire (obligatoire depuis php 5.5.10)
-ini_set('date.timezone', 'Europe/Paris');
 
-// forcer encodage
-mb_internal_encoding("utf-8");
+// set default timezone
+if ( defined('K_NETTOOLS_INIT_TIMEZONE') )
+	ini_set('date.timezone', K_NETTOOLS_INIT_TIMEZONE);
 
-// définir locale
-setlocale(LC_TIME, 'fr_FR.utf8');
+
+// set default encoding for mb_* functions ; since PHP 5.6, it's utf-8 by default. 
+// However, if the php config file on your host is wrong, it may set another charset
+// which should be avoided, as UTF-8 is more global. It's a good pratice to ensure
+// the right charset is defined, whichever is the php config file
+if ( !defined('K_NETTOOLS_INIT_MB_INTERNAL_ENCODING') )
+	define('K_NETTOOLS_INIT_MB_INTERNAL_ENCODING', 'utf-8');
+mb_internal_encoding(K_NETTOOLS_INIT_MB_INTERNAL_ENCODING);
+
+
+// set default locale, if not defined by user before including the vendor autoload.php
+if ( defined('K_NETTOOLS_INIT_LOCALE') )
+	setlocale(LC_TIME, K_NETTOOLS_INIT_LOCALE);
 
 ?>
