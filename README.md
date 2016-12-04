@@ -33,7 +33,16 @@ Formatters| Formatter          | Base class to handle a tabular output (rows and
 Formatters| CsvFormatter       | Handle CSV output (subclass of `Formatter`)
 Formatters| FormatterOutputStrategy    | Strategy pattern to implement concrete output (to a file or a string) ; provide one of the `FormatterOutputStrategy` subclass.
 
-When the package is mentionned in you composer.json, it will automatically require `Includes/Init.php` which will perform some initialization stuff, as the default charset, locale and timezones. Currently, it sets UTF8 as charset, and French locale and timezone. Futures releases will be more opened to i18n ;-) !
+When the package is mentionned in you composer.json, it will automatically require `Includes/Init.php` which will perform some initialization stuff, as the default charset, locale and timezones. Currently, if not specified, the errors are displayed in the standard output, and the `mb_xxx` functions default encoding is set to UTF_8, as this is the most easy way to deal with foreign characters.
+
+You may set other values, by defining the following constants BEFORE including your vendor/autoload.php :
+
+Constant                             |  default value set     | Description
+-------------------------------------|------------------------|---------------
+K_NETTOOLS_DISPLAY_ERRORS            | `'stdout'`             | Provide `'stderr'` string to redirect errors to the error log
+K_NETTOOLS_INIT_TIMEZONE             | None (PHP config used) | Provide the timezone string, such as `'Europe/Paris'` if PHP default timezone is not set correctly by the server config.
+K_NETTOOLS_INIT_MB_INTERNAL_ENCODING | `'utf-8'`              | Provide the encoding to user with mb_xxx functions
+K_NETTOOLS_INIT_LOCALE               | None (PHP uses US locale by default)   | Set the right locale, such as `'fr_FR.utf8'`
 
 
 
