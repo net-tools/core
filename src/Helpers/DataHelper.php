@@ -25,11 +25,11 @@ class DataHelper {
 	
 	
 	/** 
-     * Format a number (stictly lower than 10) with a leading zero
+     * Format a number (strictly lower than 10) with a leading zero
      *
      * Useful to format hours and dates (e.g. 9 becomes 09)
      * 
-     * @param int Number to format
+     * @param int $n Number to format
      * @return string The number with a leading 0 if $n is lower than 10
      */
 	static function leadingZero($n)
@@ -88,7 +88,7 @@ class DataHelper {
     /**
     * Reset a given unix timestamp to midnight
     *
-    * @param $d Timestamp to reset to midnight
+    * @param int $d Timestamp to reset to midnight
     * @return int Timestamp resetted
     */
 	static function date2midnight($d)
@@ -98,7 +98,7 @@ class DataHelper {
     
 	
 	/**
-     * Convert a month (1..12) to string
+     * Convert a month (1 to 12) to string
      * 
      * @param int $m Month number (1 to 12)
      * @return string Month number converted to month name, according to locale settings
@@ -110,9 +110,9 @@ class DataHelper {
 	}
 			
 	
-	/** Convert a month (1..12) to string (short name for month)
+	/** Convert a month (1 to 12) to string (short name for month)
      *
-     * @param int $m Mont number (1 to 12)
+     * @param int $m Month number (1 to 12)
      * @return string Month number converted to a short month name, according to locale settings
      */
 	static function month2shortstr($m)
@@ -213,7 +213,7 @@ class DataHelper {
      * 
      * @param string $str String to process
      * @param string $sep Separator of values (e.g. '&' in a querystring)
-     * @param string $sepvalue Separator between key and value (e.g. '=' in a querystring)
+     * @param string $sepval Separator between key and value (e.g. '=' in a querystring)
      * @param string $valIfEmpty Default value if value is empty
      * @return array String converted to an associative array
      */
@@ -236,7 +236,12 @@ class DataHelper {
 	
 
     /** 
-    * Synonymous for string2associativeArray, with default values for separators
+     * Synonymous for string2associativeArray, with default values for separators
+     * @param string $str String to process
+     * @param string $sep Separator of values (e.g. '&' in a querystring)
+     * @param string $sepval Separator between key and value (e.g. '=' in a querystring)
+     * @param string $valIfEmpty Default value if value is empty
+     * @return array String converted to an associative array
     */
 	static function explodeAssociativeArray($str, $sep = ';', $sepval = '=', $valIfEmpty = NULL)
 	{
