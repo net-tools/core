@@ -6,17 +6,32 @@ namespace Nettools\Core\Helpers;
 
 
 
-// helper class to handle strings, numbers and various formats
+/**
+ * Helper class to handle strings, numbers and various formats
+ */
 class DataHelper {
 	
-	// get a number with ',' as decimal separator, with DEC digits after decimal
+	/**
+     * get a number with ',' as decimal separator, with DEC digits after decimal
+     *
+     * @param string $n Number to format
+     * @param int $dec Number of digits after decimal separator
+     * @return string The number formatted
+     */
 	static function number($n, $dec)
 	{
 		return str_replace(".", ",", sprintf("%01.$dec" ."f", $n));
 	}
 	
 	
-	// format a number (stictly lower than 10) with a leading zero ; useful to format hours and dates (e.g. 9 becomes 09)
+	/** 
+     * Format a number (stictly lower than 10) with a leading zero
+     *
+     * Useful to format hours and dates (e.g. 9 becomes 09)
+     * 
+     * @param int Number to format
+     * @return string The number with a leading 0 if $n is lower than 10
+     */
 	static function leadingZero($n)
 	{
 		if ( $n < 10 )
@@ -26,7 +41,12 @@ class DataHelper {
 	}
 	
 	
-	// remove a leading zero from a number (useful to remove the left 0 from hours and dates < 10)
+	/**
+     * Remove a leading zero from a number (useful to remove the left 0 from hours and dates < 10)
+     * 
+     * @param string $n Number to format
+     * @return int The number with no leading zero
+     */
 	static function trimLeadingZero($n)
 	{
 		if ( substr($n,0,1) == "0" )
@@ -36,7 +56,15 @@ class DataHelper {
 	}
 	
 	
-	// convert an array to a commas separated string of parameters ; strings in array are enclosed with a given delimiter, number are outputed directly
+	/**
+     * Convert an array to a commas separated string of parameters 
+     *
+     * Srings in array are enclosed with a given delimiter, number are outputed directly
+     *
+     * @param array $params An associative array to convert to a string
+     * @param string $stringdelim Delimiters for strings (usually ' or ")
+     * @return string Return a string with the array imploded (values separated by ,)
+     */
 	static function array2Parameters($params, $stringdelim)
 	{
 		$s = "";
@@ -57,14 +85,24 @@ class DataHelper {
 	}
 	
 	
-    // reset a given unix timestamp to midnight
+    /**
+    * Reset a given unix timestamp to midnight
+    *
+    * @param $d Timestamp to reset to midnight
+    * @return int Timestamp resetted
+    */
 	static function date2midnight($d)
 	{
 		return mktime(0, 0, 0, date("n", $d), date("j", $d), date("Y", $d));
 	}
     
 	
-	// convert a month (1..12) to string
+	/**
+     * Convert a month (1..12) to string
+     * 
+     * @param int $m Month number (1 to 12)
+     * @return string Month number converted to month name, according to locale settings
+     */
 	static function month2str($m)
 	{
         $d = mktime(0, 0, 0, $m, 1, 2000);
@@ -72,7 +110,11 @@ class DataHelper {
 	}
 			
 	
-	// convert a month (1..12) to string (short name for month)
+	/** Convert a month (1..12) to string (short name for month)
+     *
+     * @param int $m Mont number (1 to 12)
+     * @return string Month number converted to a short month name, according to locale settings
+     */
 	static function month2shortstr($m)
 	{
         $d = mktime(0, 0, 0, $m, 1, 2000);
@@ -80,7 +122,12 @@ class DataHelper {
 	}
 			
 			
-	// test if a given array is associative or has only numeric keys
+	/**
+     * Test if a given array is associative or has only numeric keys
+     *
+     * @param array $a Array to test
+     * @return bool True if array $a is associative, false otherwise
+     */
 	static function is_associative_array($a)
 	{
 		// firstly, verify that all keys are ints ; if not, the array is associative
@@ -94,14 +141,26 @@ class DataHelper {
 	}
 	
 		
-	// capitalize first letters in a string (useful to have caps on a "surname name" string)
+	/**
+     * Capitalize first letters of each word in a string (useful to have caps on a "surname name" string)
+     *
+     * @param string $s String to process
+     * @return string String with first letter of each word uppercased
+     */
 	static function capsFirstLetters($s)
 	{
 		return mb_convert_case($s, MB_CASE_TITLE);
 	}
 	
 	
-	// abbreviate a string by returning only the first letter of each word. Useful for abbreviating a list of surnames or compound names (e.g. John-Henry becomes J.-H.)
+	/** 
+     * Abbreviate a string by returning only the first letter of each word. 
+     * 
+     * Useful for abbreviating a list of surnames or compound names (e.g. John-Henry becomes J.-H.)
+     *
+     * @param string $s String to process
+     * @return string String with words abbreviated
+     */
 	static function abbreviate($s)
 	{
 		// ecrire les initiales du prénom en majuscules
@@ -109,12 +168,16 @@ class DataHelper {
 	}
 	
 		
-	// convenient function to extract data from a string through a regular expression, and get data in an associative array
-    // (instead of numeric indexes for capturing parenthesis).
-    // the function set all matching substrings (preg_match_all) in the matches paremeters (passed by reference), so the
-    // returned array is in fact an array of array : first index is the n-substring matching, second index is the named parenthesis data
-    // - $pattern : PCRE regular expression
-	// - $vars : array of strings, naming capturing parenthesis in their order of appearance in the pattern.
+	/**
+     * Convenient function to extract data from a string through a regular expression, and get data in an associative array (instead of numeric indexes for capturing parenthesis).
+     * 
+     * The function set all matching substrings (preg_match_all) in the matches paremeters (passed by reference), so the
+     * returned array is in fact an array of array : first index is the n-substring matching, second index is the named parenthesis data
+     * @param string $pattern PCRE regular expression
+     * @param string $buffer String to be searched 
+     * @param string $vars Array of strings, naming capturing parenthesis in their order of appearance in the pattern
+     * @param array $matches Array of matches (passed by reference)
+     */
     static function matchAll($pattern, $buffer, $vars, &$matches)
 	{
 		$tmp = array();
@@ -143,7 +206,17 @@ class DataHelper {
 	}
 	
 	
-	// decode a string to an associative array ; useful to decode url parameters to array : e.g. file=my.txt&user=me becomes the array ['file'=>'my.txt','user'=>'me']
+	/**
+     * Decode a string to an associative array
+     * 
+     * Useful to decode url parameters to array : e.g. file=my.txt&user=me becomes the array ['file'=>'my.txt','user'=>'me']
+     * 
+     * @param string $str String to process
+     * @param string $sep Separator of values (e.g. '&' in a querystring)
+     * @param string $sepvalue Separator between key and value (e.g. '=' in a querystring)
+     * @param string $valIfEmpty Default value if value is empty
+     * @return array String converted to an associative array
+     */
 	static function string2associativeArray($str, $sep, $sepval, $valIfEmpty = NULL)
 	{
 		$str = explode($sep, $str);
@@ -162,14 +235,23 @@ class DataHelper {
 	}
 	
 
-    // synonymous for string2associativeArray, with default values for separators
+    /** 
+    * Synonymous for string2associativeArray, with default values for separators
+    */
 	static function explodeAssociativeArray($str, $sep = ';', $sepval = '=', $valIfEmpty = NULL)
 	{
 		return self::string2associativeArray($str, $sep, $sepval, $valIfEmpty);
 	}
 	
 	
-	// utf8 compliant str_pad
+	/** 
+     * utf8 compliant str_pad
+     * 
+     * @param string $input String to pad
+     * @param int $pad_length Length of final string
+     * @param string $pad_string Character to use for padding
+     * @param $pad_type Pad left or right
+     */
 	static function mb_str_pad($input, $pad_length, $pad_string=' ', $pad_type=STR_PAD_RIGHT)
 	{
 		// if utf8 characters, strlen > mb_strlen (as unicode characters may take 2 or more bytes ; strlen does not support multibyte characters)
