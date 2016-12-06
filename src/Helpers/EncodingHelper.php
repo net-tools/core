@@ -5,17 +5,29 @@ namespace Nettools\Core\Helpers;
 
 
 
-// helper class to deal with encodings
+/**
+ * Helper class to deal with encodings
+ */
 class EncodingHelper {
 	
-	// get a string where slashes are escaped, and newlines are escaped with a litteral \n. Carriage returns and new lines are transformed to a single \n
+	/**
+     * Get a string where slashes are escaped, and newlines are escaped with a litteral \n. Carriage returns and new lines are transformed to a single \n
+     *
+     * @param string $s String to escape
+     * @return string The string with special characters and newlines escaped
+     */
 	static function escape($s)
 	{
 		return str_replace(array("\r\n", "\n"), "\\n", addslashes($s));
 	}
 	
 	
-	// encode French accented characters to html entities
+	/**
+     * Encode French accented characters to html entities
+     * 
+     * @param string $s String to encode
+     * @return string String encoded with html entities
+     */
 	static function fr_entities_encode($s)
 	{
 		//$s = str_replace("&", "&amp;", $s);
@@ -57,7 +69,12 @@ class EncodingHelper {
 	
 	
     
-    // decode html entities and euro symbol
+    /** 
+     * Decode html entities and euro symbol
+     * 
+     * @param string $s Decode a string encoded with HTML entities
+     * @return string Decoded string
+     */
 	static function fr_entities_decode($s)
 	{
 		return str_replace("&euro;", "€", html_entity_decode($s));
@@ -65,7 +82,12 @@ class EncodingHelper {
 	
 	
 	
-	// replace accented characters by their non-accented equivalent
+	/**
+     * Replace accented characters by their non-accented equivalent
+     * 
+     * @param string $s String to process
+     * @return string String with accents removed and replaced with non-accented characters
+     */
 	static function noAccents($s)
 	{
 		$s = str_replace(array('É', 'È', 'Ë', 'Ê'), 'E', $s);

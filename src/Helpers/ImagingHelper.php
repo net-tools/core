@@ -5,11 +5,22 @@ namespace Nettools\Core\Helpers;
 
 
 
-// helper class to deal with pictures
+/** 
+ * Helper class to deal with pictures
+ */
 class ImagingHelper
 {
-	// resize an image (width x height) to a squared image (with a width/height of $imgw) ;
-    // aspect ratio is preserved
+	/**
+     * Resize an image (width x height) to a squared image (with a width/height of $imgw) ; aspect ratio is preserved
+     *
+     * @param resource $source Image resource to process
+     * @param int $width Width of source image
+     * @param int $height Height of source image
+     * @param resource $img Image resource that will contain the resized image
+     * @param int $imgw Width/height of the resized image (square)
+     * @param int $imgbkcolor Color of background
+     * @retun bool Return true or false depending on the success of the resampling
+     */
 	static function image_resize_boxed($source, $width, $height, &$img, $imgw, $imgbkcolor)
 	{
 		// which orientation : landscape or portrait ?
@@ -35,9 +46,19 @@ class ImagingHelper
 	
 	
 
-	// resize an image (width x height) to a small image (with a max with and/or height) ;
-    // if we don't want to set a max width/height, just pass NULL as parameter
-    // aspect ratio is preserved
+	/**
+     * Resize an image (width x height) to a small image (with a max with and/or height)
+     * 
+     * If we don't want to set a max width/height, just pass NULL as parameter ;
+     * Note that aspect ratio is preserved
+     *
+     * @param resource $source Image resource to process
+     * @param int $width Width of source image
+     * @param int $height Height of source image
+     * @param int $wmax Max width of resized image
+     * @param int $hmax Max height of resized image
+     * @return mixed Return an image resource with a new image resized, or FALSE if an error occured
+     */
     static function image_resize($source, $width, $height, $wmax, $hmax)
 	{
 		// if max width AND height are defined

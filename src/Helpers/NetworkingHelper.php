@@ -6,11 +6,17 @@ namespace Nettools\Core\Helpers;
 
 
 
-// helper cass to deal with web-specific stuff (json, url, etc.)
-
+/** 
+ * Helper cass to deal with web-specific stuff (json, url, etc.)
+ */
 class NetworkingHelper {
 		
-	// output http headers suitable for xmlhttp
+	/** 
+     * Output http headers suitable for xmlhttp
+     * 
+     * @param string $contenttype Content-type to output
+     * @param string $charset Charset of content
+     */
 	static function sendXmlHttpResponseHeaders($contenttype = "application/json", $charset = 'utf-8')
 	{
 		if ( is_null($charset) )
@@ -27,7 +33,13 @@ class NetworkingHelper {
 	}
 	
 		
-	// append a parameter to an url
+	/**
+     * Append a parameter to an url
+     * 
+     * @param string $url Url string to process
+     * @param string $append Querystring to append to $url
+     * @return string Return a new url with appended string
+     */
 	static function appendToUrl($url, $append)
 	{
 		if ( $append )
@@ -56,7 +68,12 @@ class NetworkingHelper {
 	}
 
 
-	// get a explanation for a file upload error ($FILE is either the PHP file record array or the error code)
+	/**
+     * Get a explanation for a file upload error ($FILE is either the PHP file record array or the error code)
+     * 
+     * @param array $file File record 
+     * @return string Error message for upload
+     */
 	static function file_upload_error($file)
 	{
 		if ( is_array($file) )	
@@ -80,7 +97,12 @@ class NetworkingHelper {
 	}
 	
 	
-    // get path from web root (not server root) for a given file (e.g. for home/user/www/mydir/myfile.html we return '/mydir')
+    /**
+     * Gget path from web root (not server root) for a given file (e.g. for home/user/www/mydir/myfile.html we return '/mydir')
+     *
+     * @param string $file File whose relative folder will be extracted
+     * @return string Folder of $file, relative to web root
+     */
 	static function relativeFolder($file)
 	{
 		return substr(dirname($file), strlen(rtrim($_SERVER['DOCUMENT_ROOT'], '/')));

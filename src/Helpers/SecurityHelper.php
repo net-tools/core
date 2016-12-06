@@ -6,10 +6,16 @@ namespace Nettools\Core\Helpers;
 
 
 
-// helper class to provide some basic security mechanisms
+/**
+ * Helper class to provide some basic security mechanisms
+ */
 class SecurityHelper {
 		
-	// create a token, based on a unique value and a shared secret ; 64 characters + 13 characters
+	/**
+     * Create a token, based on a unique value and a shared secret ; 64 characters + 13 characters
+     *
+     * @param string $secret Secret to use to create the token
+     * @return string The token (unique value)
 	static function createToken($secret = "stoken")
 	{
 		$unid = uniqid(); 	// 13 characters
@@ -17,7 +23,13 @@ class SecurityHelper {
 	}
 	
 	
-	// check if token has been altered : last 13 characters are used to compute the 64 first characters.
+	/**
+     * Check if token has been altered : last 13 characters are used to compute the 64 first characters.
+     * 
+     * @param string $token The token to check
+     * @param string $secret The secret used to generate the token
+     * @return bool Return true if the token is valid and unaltered, false otherwise
+     */
 	static function checkToken($token, $secret = "stoken")
 	{
 		$unid = substr($token, -13); // extract last 13 characters
@@ -25,9 +37,18 @@ class SecurityHelper {
 	}
 	
 	
-	// create a token with a expiration time ; by default, the token expires 60 seconds later
-    // to create the token, you may provide the validity delay, the unit of the delay (seconds, minutes or hours) and a secret.
-    // if no parameters, default values will be used
+	/**
+    * Create a token with a expiration time
+    * 
+    * By default, the token expires 60 seconds later to create the token, you may provide the validity delay,
+    * the unit of the delay (seconds, minutes or hours) and a secret. If no parameters, default values will be used
+    * 
+    * @param int $graceperiod Number of seconds, minutes or hours of the validity delay
+    * @param string $period Provide either 's', 'm' or 'h' to set the unit for the $graceperiod parameter
+    * @param string $root A secret to use to generate the token
+    * @param string $unid Must not be used by end-user
+    * @param string $ts Must not be used by end-user
+    * @return string A timestamp token with a embedded expiration time
 	static function createTimestampToken($graceperiod = 60, $period = "s", $root = 'token', $unid = NULL, $ts = NULL)
 	{
 		if ( $graceperiod > 255 )
@@ -58,8 +79,14 @@ class SecurityHelper {
 	}
 	
 	
-	// check a timestamp token ; if altered OR expired, returning FALSE
-	static function checkTimestampToken($token, $racine = 'token')
+	/**
+     * Check a timestamp token
+     * 
+     * @param string $token The token to check (valid, not altered, not expired)
+     * @param string $root The secret used to generate the token
+     * @return bool If altered OR expired, returning FALSE
+     */
+	static function checkTimestampToken($token, $root = 'token')
 	{
 		// checking format
 		if ( !preg_match('/^[a-fA-F0-9]{64}[a-fA-F0-9]{2}(h|m|s)[a-fA-F0-9]{13}[a-fA-F0-9]+$/', $token) )
@@ -82,13 +109,18 @@ class SecurityHelper {
 			
 		
 		// create the token with extracted data and check it has not been altered ; then check the time validity 
-		return ($token == self::createTimestampToken($graceperiod, $period, $racine, $unid, $ts))
+		return ($token == self::createTimestampToken($graceperiod, $period, $root, $unid, $ts))
 				&&
 				($ts + $graceperiod_seconds > time());
 	}
 	
 	
-	// sanitize a string (detect html tags, add slashes and remove sql orders)
+	/**
+     * sanitize a string (detect html tags, add slashes and remove sql orders)
+     * 
+     * @param string $data String to sanitize
+     * @return string Sanitized string
+     */
 	static function sanitize($data)
 	{
 		// remove whitespaces (not a must though)
@@ -112,7 +144,12 @@ class SecurityHelper {
 	}
 	
 	
-	// sanitize an array (detect html tags, add slashes and remove sql orders)
+	/** 
+     * Sanitize an array (detect html tags, add slashes and remove sql orders)
+     * 
+     * @param array $arr Sanitize an array of strings
+     * @return array The sanitized array is returned
+     */
 	static function sanitize_array(&$arr)
 	{
 		foreach ( $arr as $k => $v )
@@ -122,9 +159,16 @@ class SecurityHelper {
 	}
 	
 	
-	// clean a string by replacing all accented letters with their corresponding non-accented letters
-    // and replacing all non letters and digits by a default character. Useful for removing quotes and spaces
-	// which are not allowed on some filesystems.
+	/**
+     * Clean a string by replacing all accented letters with their corresponding non-accented letters
+     * and replacing all non letters and digits by a default character.
+     *
+     * Useful for removing quotes and spaces which are not allowed on some filesystems.
+     * 
+     * @param string $s String to clean
+     * @param string $replacement Character to use instead of the removed characters
+     * @return string Cleaned string (only digits, letters, underscore, dot, hyphen)
+     */
 	static function cleanString($s, $replacement = '-')
 	{
 		return preg_replace('/[^a-zA-Z0-9_.-]/', '-', EncodingHelper::noAccents($s));

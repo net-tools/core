@@ -5,17 +5,31 @@ namespace Nettools\Core\Helpers;
 
 
 
-// helper class to deal with files
+/** 
+ * Helper class to deal with files
+ */
 class FileHelper {
 	
-	// guess a file type (image, video, text, ...) from it's name
+	/**
+     * Guess a file type (image, video, text, ...) from it's name
+     * 
+     * @param string $file Filename to process
+     * @param string $default Default file type in case the file type can't be identified
+     * @return string File type identified
+     */
 	static function guessFileType($file, $default = '')
 	{
 		return self::guessFileTypeFromMimeType(self::guessMimeType($file), $default);
 	}
 	
 	
-	// guess file type (image, video, text, ...) from Mime type
+	/**
+     * Guess file type (image, video, text, ...) from Mime type
+     *
+     * @param string $mt Mime type to process
+     * @param string $def Default file type to return if Mime type is unknown
+     * @return string File type identified
+     */
 	static function guessFileTypeFromMimeType($mt, $def = '')
 	{
 		// for audio, image, videos, this is simple, the Mime type is explicit
@@ -57,7 +71,13 @@ class FileHelper {
 	}
 	
 	
-	// guess Mime type from file name
+	/**
+     * Guess Mime type from file name
+     *
+     * @param string $file Filename to process
+     * @param string $def Default value for Mime type
+     * @return string The Mime type guessed from the filename
+     */
 	static function guessMimeType($file, $def = 'application/octet-stream')
 	{
 		// extract file extension (after . symbol)
