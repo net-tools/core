@@ -4,37 +4,47 @@ namespace Nettools\Core\Helpers;
 
 
 
-// helper class extending PDO class to deal with tables
+/**
+ * Helper class extending PDO class to deal with tables
+ */
 class PdoHelper extends \PDO
 {
 	// [------- PROTECTED DECLARATIONS 
 	
-	/*
-	FK_TABLES = [
-					'Towns' => 	[
-									'primarykey' => 'idTown',
-									'tables' =>	[
-													'Customer',
-													
-													'Vendor',
-													
-													[
-														'table' 	=> 'Merchants',
-														'sqlcond'	=> 'active=1'
-													]
-												]
-									
-								]
-				]
-	*/
+	/**
+     * Schema for foreign keys
+     *
+     * This is a simple schema : Towns being a foreign key for 3 tables, Customer, Vendor and Merchants
+     *  [
+     *      'Towns' => 	[
+     *                      'primarykey' => 'idTown',
+     *              		'tables' =>	[
+     *                              'Customer',
+     *              													
+     *                              'Vendor',
+     *              													
+     *              				[
+     *              				    'table' 	=> 'Merchants',
+     *              					'sqlcond'	=> 'active=1'
+     *              			    ]
+     *              		]
+     *              									
+     *              	]
+     *  ]
+	 */
 	protected $_foreignKeys = array();
-	
-	
+		
 	// PROTECTED DECLARATIONS   -------]
 	
     
     
-	// add some config data for a new foreign key ; $TABLE is the foreign key table, $PKNAME the name of its primary key, and $TABLES is an array of tables referencing $TABLE
+	/**
+     * Add some config data for a new foreign key
+     * 
+     * @param string $table Name of the foreign key table
+     * @param string $pkname Name of its primary key
+     * @param string[] $tables Array of tables referencing $table parameter
+     */
 	function addForeignKey($table, $pkname, $tables)
 	{
 		if ( is_string($tables) )
@@ -48,21 +58,37 @@ class PdoHelper extends \PDO
 	}
 	
 	
-	// remove config data about a foreign key
+	/**
+     * Remove config data about a foreign key
+     *
+     * @param string $table Table name to remove
+     */
 	function deleteForeignKey($table)
 	{
 		unset($this->_foreignKeys[$table]);
 	}
 	
 	
-	// get a config definition for a foreign key with a SQL condition
+	/**
+     * Get a config definition for a foreign key with a SQL condition
+     * 
+     * @param string $table Table name
+     * @param string $sql SQL condtion ; if true, the foreign key is valid and you may not delete the row
+     */
 	static function foreignKeySQLWhere($table, $sql)
 	{
 		return array('table'=>$table, 'sqlcond'=>$sql);
 	}
 	
 	
-	// sql request (DELETE, INSERT, UPDATE)
+	/** 
+     * Helper query method to prepare and execute a sql request (DELETE, INSERT, UPDATE)
+     * 
+     * @param string $query The SQL query
+     * @param array $values An array of parameters for the query (? and :xxx placeholders concrete values)
+     * @return bool Returns true if query OK
+     * @throws \PDOException If an error occured, a exception is thrown
+     */
 	function pdo_query($query, $values = NULL)
 	{
 		if ( !is_null($values) && !is_array($values) )
@@ -72,7 +98,14 @@ class PdoHelper extends \PDO
 	}
 
 	
-	// SQL SELECT request ; returns a PDOStatement if OK, otherwise and exception is thrown
+	/**
+     * Helper query method for a SQL SELECT request 
+     *
+     * @param string $query The SQL query
+     * @param array $values An array of parameters for the query (? and :xxx placeholders concrete values)
+     * @return \PDOStatement A PDOStatement object with rows to fetch
+     * @throws \PDOException If an error occured, a exception is thrown
+     */
 	function pdo_query_select($query, $values = NULL)
 	{
 		if ( !is_null($values) && !is_array($values) )
@@ -85,8 +118,16 @@ class PdoHelper extends \PDO
 	}
 
 	
-	// get a single value fetched with a SELECT query (first column) ; if more than one line is returned by the request, only the first one is used
-    // if an exception is thrown by PDO, it is intercepted and false is returned
+	/** 
+     * Get a single value fetched with a SELECT query (first column) 
+     * 
+     * If more than one line is returned by the request, only the first one is used ;
+     * If an exception is thrown by PDO, it is intercepted and false is returned
+     * 
+     * @param string $query The SQL query
+     * @param array $values An array of parameters for the query (? and :xxx placeholders concrete values)
+     * @return int|float|string|bool The value selected by the SQL $query or FALSE if an error occured
+     */
     function pdo_dbexists($query, $values = NULL)
 	{
 		try
@@ -107,8 +148,16 @@ class PdoHelper extends \PDO
 	}
 
 	
-	// get a value (first column of row) from a PDO Statement (to be executed with values, if given)
-    // if an exception is thrown by PDO, it is intercepted and false is returned
+	/** 
+     * Gt a value (first column of row) from a PDO Statement (to be executed with values, if given)
+     * 
+     * If more than one line is returned by the request, only the first one is used ;
+     * If an exception is thrown by PDO, it is intercepted and false is returned
+     * 
+     * @param \PDOStatement $st The PDO statement, already prepared
+     * @param array $values An array of parameters for the query (? and :xxx placeholders concrete values)
+     * @return int|float|string|bool The value selected by the SQL $query or FALSE if an error occured
+     */
 	static function pdo_value(\PDOStatement $st, $values = NULL)
 	{
 		try
@@ -128,7 +177,13 @@ class PdoHelper extends \PDO
 	}
 
 	
-	// get the next available INTERGER primary key
+	/**
+     * Get the next available INTERGER primary key
+     * 
+     * @param string $table Table name
+     * @param col $col Primary key column name
+     * @return int Next available integer primary key for this table
+     */
 	function pdo_dbincrement($table, $col)
 	{
 		$result = $this->pdo_dbexists("SELECT MAX($col)+1 FROM $table");
@@ -141,7 +196,13 @@ class PdoHelper extends \PDO
 	}
 
 
-	// sum rows on one column from a PDO statement (to be executed with parametered values, if given)
+	/** 
+     * Sum rows on one column from a PDO statement (to be executed with parametered values, if given)
+     * 
+     * @param \PDOStatement $result SQL statement, already prepared
+     * @param int|string $col The column to sum (a column name or a column index)
+     * @param array $values An array of parameters for the query (? and :xxx placeholders concrete values)
+     */
 	static function pdo_dbsum(\PDOStatement $result, $col, $values = NULL)
 	{
 		$tot = 0.0;
@@ -159,7 +220,13 @@ class PdoHelper extends \PDO
 	}
 	
 	
-	// test if a given primary key value from a table is referenced by other tables (foreign key is used)
+	/**
+     * Test if a given primary key value from a table is referenced by other tables (foreign key is used)
+     * 
+     * @param string $tablefk Table name of the table being foreign key
+     * @param string $keyvalue Value of the primary key to look for
+     * @return string[] Array describing the result ; ['statut'=>true] if the foreign key is not used, ['statut'=>false, 'cause'=>['message'=>'...', 'tables'=>[...]]] otherwise
+     */
 	function pdo_foreignkeys($tablefk, $keyvalue)
 	{
 		$fk_tables = $this->_foreignKeys;

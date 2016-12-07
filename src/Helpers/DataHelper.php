@@ -61,7 +61,7 @@ class DataHelper {
      *
      * Srings in array are enclosed with a given delimiter, number are outputed directly
      *
-     * @param array $params An associative array to convert to a string
+     * @param string[] $params An associative array to convert to a string
      * @param string $stringdelim Delimiters for strings (usually ' or ")
      * @return string Return a string with the array imploded (values separated by ,)
      */
@@ -125,7 +125,7 @@ class DataHelper {
 	/**
      * Test if a given array is associative or has only numeric keys
      *
-     * @param array $a Array to test
+     * @param string[] $a Array to test
      * @return bool True if array $a is associative, false otherwise
      */
 	static function is_associative_array($a)
@@ -175,8 +175,9 @@ class DataHelper {
      * returned array is in fact an array of array : first index is the n-substring matching, second index is the named parenthesis data
      * @param string $pattern PCRE regular expression
      * @param string $buffer String to be searched 
-     * @param string $vars Array of strings, naming capturing parenthesis in their order of appearance in the pattern
-     * @param array $matches Array of matches (passed by reference)
+     * @param string[] $vars Array of strings, naming capturing parenthesis in their order of appearance in the pattern
+     * @param string[] $matches Array of matches (passed by reference)
+     * @return bool Return true of false (no match)
      */
     static function matchAll($pattern, $buffer, $vars, &$matches)
 	{
@@ -215,7 +216,7 @@ class DataHelper {
      * @param string $sep Separator of values (e.g. '&' in a querystring)
      * @param string $sepval Separator between key and value (e.g. '=' in a querystring)
      * @param string $valIfEmpty Default value if value is empty
-     * @return array String converted to an associative array
+     * @return string[] String converted to an associative array
      */
 	static function string2associativeArray($str, $sep, $sepval, $valIfEmpty = NULL)
 	{
@@ -241,7 +242,7 @@ class DataHelper {
      * @param string $sep Separator of values (e.g. '&' in a querystring)
      * @param string $sepval Separator between key and value (e.g. '=' in a querystring)
      * @param string $valIfEmpty Default value if value is empty
-     * @return array String converted to an associative array
+     * @return string[] String converted to an associative array
     */
 	static function explodeAssociativeArray($str, $sep = ';', $sepval = '=', $valIfEmpty = NULL)
 	{
@@ -255,7 +256,7 @@ class DataHelper {
      * @param string $input String to pad
      * @param int $pad_length Length of final string
      * @param string $pad_string Character to use for padding
-     * @param $pad_type Pad left or right
+     * @param int $pad_type Pad left or right
      */
 	static function mb_str_pad($input, $pad_length, $pad_string=' ', $pad_type=STR_PAD_RIGHT)
 	{

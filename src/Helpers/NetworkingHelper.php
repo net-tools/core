@@ -71,7 +71,7 @@ class NetworkingHelper {
 	/**
      * Get a explanation for a file upload error ($FILE is either the PHP file record array or the error code)
      * 
-     * @param array $file File record 
+     * @param string[] $file File record 
      * @return string Error message for upload
      */
 	static function file_upload_error($file)

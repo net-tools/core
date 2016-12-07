@@ -49,6 +49,7 @@ class SecurityHelper {
     * @param string $unid Must not be used by end-user
     * @param string $ts Must not be used by end-user
     * @return string A timestamp token with a embedded expiration time
+    */
 	static function createTimestampToken($graceperiod = 60, $period = "s", $root = 'token', $unid = NULL, $ts = NULL)
 	{
 		if ( $graceperiod > 255 )
@@ -147,8 +148,8 @@ class SecurityHelper {
 	/** 
      * Sanitize an array (detect html tags, add slashes and remove sql orders)
      * 
-     * @param array $arr Sanitize an array of strings
-     * @return array The sanitized array is returned
+     * @param string[] $arr Sanitize an array of strings
+     * @return string[] The sanitized array is returned
      */
 	static function sanitize_array(&$arr)
 	{
