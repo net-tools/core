@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @author Pierre - dev@net-tools.ovh
+ * @license MIT
+ */
+
+
+
 // namespace
 namespace Nettools\Core\Helpers;
 
