@@ -15,7 +15,7 @@ class PdoHelper extends \PDO
      * Schema for foreign keys
      *
      * This is a simple schema : Towns being a foreign key for 3 tables, Customer, Vendor and Merchants
-     *  [
+     *    [
      *      'Towns' => 	[
      *                      'primarykey' => 'idTown',
      *              		'tables' =>	[
@@ -30,7 +30,7 @@ class PdoHelper extends \PDO
      *              		]
      *              									
      *              	]
-     *  ]
+     *    ]
 	 */
 	protected $_foreignKeys = array();
 		
@@ -85,7 +85,7 @@ class PdoHelper extends \PDO
      * Helper query method to prepare and execute a sql request (DELETE, INSERT, UPDATE)
      * 
      * @param string $query The SQL query
-     * @param array $values An array of parameters for the query (? and :xxx placeholders concrete values)
+     * @param string[] $values An array of parameters for the query (? and :xxx placeholders concrete values)
      * @return bool Returns true if query OK
      * @throws \PDOException If an error occured, a exception is thrown
      */
@@ -102,7 +102,7 @@ class PdoHelper extends \PDO
      * Helper query method for a SQL SELECT request 
      *
      * @param string $query The SQL query
-     * @param array $values An array of parameters for the query (? and :xxx placeholders concrete values)
+     * @param string[] $values An array of parameters for the query (? and :xxx placeholders concrete values)
      * @return \PDOStatement A PDOStatement object with rows to fetch
      * @throws \PDOException If an error occured, a exception is thrown
      */
@@ -125,7 +125,7 @@ class PdoHelper extends \PDO
      * If an exception is thrown by PDO, it is intercepted and false is returned
      * 
      * @param string $query The SQL query
-     * @param array $values An array of parameters for the query (? and :xxx placeholders concrete values)
+     * @param string[] $values An array of parameters for the query (? and :xxx placeholders concrete values)
      * @return int|float|string|bool The value selected by the SQL $query or FALSE if an error occured
      */
     function pdo_dbexists($query, $values = NULL)
@@ -155,10 +155,10 @@ class PdoHelper extends \PDO
      * If an exception is thrown by PDO, it is intercepted and false is returned
      * 
      * @param \PDOStatement $st The PDO statement, already prepared
-     * @param array $values An array of parameters for the query (? and :xxx placeholders concrete values)
+     * @param string[] $values An array of parameters for the query (? and :xxx placeholders concrete values)
      * @return int|float|string|bool The value selected by the SQL $query or FALSE if an error occured
      */
-	static function pdo_value(\PDOStatement $st, $values = NULL)
+	function pdo_value(\PDOStatement $st, $values = NULL)
 	{
 		try
 		{
@@ -181,7 +181,7 @@ class PdoHelper extends \PDO
      * Get the next available INTERGER primary key
      * 
      * @param string $table Table name
-     * @param col $col Primary key column name
+     * @param string $col Primary key column name
      * @return int Next available integer primary key for this table
      */
 	function pdo_dbincrement($table, $col)
@@ -201,9 +201,9 @@ class PdoHelper extends \PDO
      * 
      * @param \PDOStatement $result SQL statement, already prepared
      * @param int|string $col The column to sum (a column name or a column index)
-     * @param array $values An array of parameters for the query (? and :xxx placeholders concrete values)
+     * @param string[] $values An array of parameters for the query (? and :xxx placeholders concrete values)
      */
-	static function pdo_dbsum(\PDOStatement $result, $col, $values = NULL)
+	function pdo_dbsum(\PDOStatement $result, $col, $values = NULL)
 	{
 		$tot = 0.0;
 		$result->execute($values);
