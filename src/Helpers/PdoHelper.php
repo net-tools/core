@@ -14,8 +14,9 @@ class PdoHelper extends \PDO
 	/**
      * Schema for foreign keys
      *
-     * This is a simple schema : Towns being a foreign key for 3 tables, Customer, Vendor and Merchants
-     *    [
+     * This is a simple schema : Towns being a foreign key for 3 tables, Customer, Vendor and Merchants :
+     *
+     *     [
      *      'Towns' => 	[
      *                      'primarykey' => 'idTown',
      *              		'tables' =>	[
@@ -30,7 +31,8 @@ class PdoHelper extends \PDO
      *              		]
      *              									
      *              	]
-     *    ]
+     *     ]
+     *
 	 */
 	protected $_foreignKeys = array();
 		
@@ -225,9 +227,11 @@ class PdoHelper extends \PDO
      * 
      * @param string $tablefk Table name of the table being foreign key
      * @param string $keyvalue Value of the primary key to look for
-     * @return string[] Array describing the result
-                        ['statut'=>true] if the foreign key is not used, 
-                        ['statut'=>false, 'cause'=>['message'=>'...', 'tables'=>[...]]] otherwise
+     * @return string[] {
+     *     Array describing the result
+     *     @var bool $statut True if the foreign key is not used, false otherwise
+     *     @var string[] $cause Provides the user with an error message ('message') and a list of tables ('tables[]') using this primary key
+     * }
      */
 	function pdo_foreignkeys($tablefk, $keyvalue)
 	{
