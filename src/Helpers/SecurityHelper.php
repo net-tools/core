@@ -15,7 +15,8 @@ class SecurityHelper {
      * Create a token, based on a unique value and a shared secret ; 64 characters + 13 characters
      *
      * @param string $secret Secret to use to create the token
-     * @return string The token (unique value)
+     * @return string The token created (unique value)
+     */
 	static function createToken($secret = "stoken")
 	{
 		$unid = uniqid(); 	// 13 characters

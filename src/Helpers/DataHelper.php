@@ -12,7 +12,7 @@ namespace Nettools\Core\Helpers;
 class DataHelper {
 	
 	/**
-     * get a number with ',' as decimal separator, with DEC digits after decimal
+     * Get a number with ',' as decimal separator, with DEC digits after decimal
      *
      * @param string $n Number to format
      * @param int $dec Number of digits after decimal separator
@@ -169,10 +169,12 @@ class DataHelper {
 	
 		
 	/**
-     * Convenient function to extract data from a string through a regular expression, and get data in an associative array (instead of numeric indexes for capturing parenthesis).
-     * 
+     * Convenient function to extract data from a string through a regular expression.
+     *
+     * We get data in an associative array (instead of numeric indexes for capturing parenthesis). 
      * The function set all matching substrings (preg_match_all) in the matches paremeters (passed by reference), so the
-     * returned array is in fact an array of array : first index is the n-substring matching, second index is the named parenthesis data
+     * returned array is in fact an array of array : first index is the n-substring matching, second index is the named parenthesis data.
+     
      * @param string $pattern PCRE regular expression
      * @param string $buffer String to be searched 
      * @param string[] $vars Array of strings, naming capturing parenthesis in their order of appearance in the pattern

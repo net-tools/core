@@ -225,7 +225,9 @@ class PdoHelper extends \PDO
      * 
      * @param string $tablefk Table name of the table being foreign key
      * @param string $keyvalue Value of the primary key to look for
-     * @return string[] Array describing the result ; ['statut'=>true] if the foreign key is not used, ['statut'=>false, 'cause'=>['message'=>'...', 'tables'=>[...]]] otherwise
+     * @return string[] Array describing the result
+                        ['statut'=>true] if the foreign key is not used, 
+                        ['statut'=>false, 'cause'=>['message'=>'...', 'tables'=>[...]]] otherwise
      */
 	function pdo_foreignkeys($tablefk, $keyvalue)
 	{
