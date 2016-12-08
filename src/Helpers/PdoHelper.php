@@ -14,6 +14,24 @@ namespace Nettools\Core\Helpers;
 
 /**
  * Helper class extending PDO class to deal with tables
+ * This is a simple schema : Towns being a foreign key for 3 tables, Customer, Vendor and Merchants :
+ *
+ *     [
+ *      'Towns' => 	[
+ *                      'primarykey' => 'idTown',
+ *              		'tables' =>	[
+ *                              'Customer',
+ *              													
+ *                              'Vendor',
+ *              													
+ *              				[
+ *              				    'table' 	=> 'Merchants',
+ *              					'sqlcond'	=> 'active=1'
+ *              			    ]
+ *              		]
+ *              									
+ *              	]
+ *     ]
  */
 class PdoHelper extends \PDO
 {
@@ -21,26 +39,6 @@ class PdoHelper extends \PDO
 	
 	/**
      * Schema for foreign keys
-     *
-     * This is a simple schema : Towns being a foreign key for 3 tables, Customer, Vendor and Merchants :
-     *
-     *     [
-     *      'Towns' => 	[
-     *                      'primarykey' => 'idTown',
-     *              		'tables' =>	[
-     *                              'Customer',
-     *              													
-     *                              'Vendor',
-     *              													
-     *              				[
-     *              				    'table' 	=> 'Merchants',
-     *              					'sqlcond'	=> 'active=1'
-     *              			    ]
-     *              		]
-     *              									
-     *              	]
-     *     ]
-     *
 	 */
 	protected $_foreignKeys = array();
 		
