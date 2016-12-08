@@ -34,9 +34,6 @@ class FormatterFileOutputStrategy extends FormatterOutputStrategy
 	}
 	
 	
-    /**
-     * {@inheritDoc}
-     */
 	public function output($data)
 	{
 		fwrite($this->_file, $data);

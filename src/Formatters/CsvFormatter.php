@@ -19,29 +19,13 @@ namespace Nettools\Core\Formatters;
  */
 class CsvFormatter extends Formatter
 {
-    /** write header */
 	function header(){}
-
-    /** write footer */
     function footer(){}
-
-
-    /** begin a new row */
 	function beginRow(){}
-
-    /** end the row */
 	function endRow(){}
-
-    /** get column separator */
     function rowSeparator(){ return "\r\n"; }
-
-    /** begin new column */
     function beginColumn(){}
-
-    /** end column */
 	function endColumn(){}
-
-    /** get column separator */
     function columnSeparator(){ return ";"; }
 }
 
