@@ -34,11 +34,6 @@ class FormatterFileOutputStrategy extends FormatterOutputStrategy
 	}
 	
 	
-	/**
-     * Write data to the file handle
-     * 
-     * @param string $data Data to output
-     */
 	public function output($data)
 	{
 		fwrite($this->_file, $data);
