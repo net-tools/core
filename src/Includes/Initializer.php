@@ -22,7 +22,7 @@ final class Initializer
      * 
      * @param string $std Set this parameter to 'stdout' to output errors on screen or 'stderr' to output errors to error log
      */
-    function initDisplayErrors($std)
+    static function initDisplayErrors($std)
     {
         ini_set('display_errors', $std);        
     }
@@ -33,7 +33,7 @@ final class Initializer
      *
      * @param string $tz Indicates the timezone to use for date/time calculations, e.g. 'Europe/Paris'
      */
-    function initTimeZone($tz)
+    static function initTimeZone($tz)
     {
         ini_set('date.timezone', $tz);
     }
@@ -44,7 +44,7 @@ final class Initializer
      * 
      * @param string $charset Set this parameter to any valid charset, such as 'utf-8'
      */
-    function initInternalEncoding($charset)
+    static function initInternalEncoding($charset)
     {
         mb_internal_encoding($charset);
     }
@@ -55,7 +55,7 @@ final class Initializer
      * 
      * @param string $locale Set this parameter to any valid locale, such as 'fr_FR'
      */
-    function initLocale($locale)
+    static function initLocale($locale)
     {
         setlocale(LC_TIME, $locale);
     }
