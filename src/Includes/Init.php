@@ -1,11 +1,12 @@
 <?php
 /**
+ * Init ; called automatically at Composer autoloading
+ *
  * Standard initializations :
  * - display errors on standard output (by default)
  * - timezone init (none by default, using the timezone from PHP config file)
  * - internal encoding for multibyte functions (defaults to UTF-8)
  * - locale (none by default)
- * 
  * To provide values for those initializations, define the following constants :
  * - K_NETTOOLS_DISPLAY_ERRORS (to stderr or stdout)
  * - K_NETTOOLS_INIT_TIMEZONE (to the appropriate timezone)
@@ -17,6 +18,8 @@
  */
 
 
+// namespace
+namespace Nettools\Core\Includes;
 
 
 
@@ -28,12 +31,12 @@ if ( !defined('K_NETTOOLS_DISPLAY_ERRORS') )
 	// by default, errors are displayed in the standard output, unless the user
 	// defines a K_NETTOOLS_DISPLAY_ERRORS constant to 'stderr' value.
 	define('K_NETTOOLS_DISPLAY_ERRORS', 'stdout');
-ini_set('display_errors', K_NETTOOLS_DISPLAY_ERRORS);
+Initializer::initDisplayErrors(K_NETTOOLS_DISPLAY_ERRORS);
 
 
 // set default timezone
 if ( defined('K_NETTOOLS_INIT_TIMEZONE') )
-	ini_set('date.timezone', K_NETTOOLS_INIT_TIMEZONE);
+    Initializer::initTimeZone(K_NETTOOLS_INIT_TIMEZONE);
 
 
 // set default encoding for mb_* functions ; since PHP 5.6, it's utf-8 by default. 
@@ -42,11 +45,11 @@ if ( defined('K_NETTOOLS_INIT_TIMEZONE') )
 // the right charset is defined, whichever is the php config file
 if ( !defined('K_NETTOOLS_INIT_MB_INTERNAL_ENCODING') )
 	define('K_NETTOOLS_INIT_MB_INTERNAL_ENCODING', 'utf-8');
-mb_internal_encoding(K_NETTOOLS_INIT_MB_INTERNAL_ENCODING);
+Initializer::initInternalEncoding(K_NETTOOLS_INIT_MB_INTERNAL_ENCODING);
 
 
 // set default locale, if not defined by user before including the vendor autoload.php
 if ( defined('K_NETTOOLS_INIT_LOCALE') )
-	setlocale(LC_TIME, K_NETTOOLS_INIT_LOCALE);
+    Initializer::initLocale(K_NETTOOLS_INIT_LOCALE);
 
 ?>
