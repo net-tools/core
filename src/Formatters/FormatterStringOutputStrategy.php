@@ -33,6 +33,9 @@ class FormatterStringOutputStrategy extends FormatterOutputStrategy
 	}
 	
 	
+    /**
+     * {@inheritDoc}
+     */
 	public function output($data)
 	{
 		$this->_data .= $data;
