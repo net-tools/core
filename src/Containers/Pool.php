@@ -1,25 +1,59 @@
 <?php
+/**
+ * Pool
+ *
+ * @author Pierre - dev@net-tools.ovh
+ * @license MIT
+ */
+
 
 // namespace
 namespace Nettools\Core\Containers;
 
 
 
-// pool handling
+/**
+ * Pool handling
+ */
 final class Pool
 {
 	// [---- PROTECTED DECLARATIONS ----
 
+    /** 
+     * @var array Pool items array
+     */
 	protected $_poolItems = NULL;
+    
+    /**
+     * @var array Array of items used from pool
+     */    
 	protected $_inUseItems = NULL;
+    
+    /** 
+     * @var callable Name of factory method to create a new item
+     */
 	protected $_factorymethod = NULL;
+    
+    /**
+     * @var array Array of factory method parameters 
+     */
 	protected $_factorymethodparams = NULL;
+    
+    /**
+     * @var string Init method name to wipe a pool item before re-using it 
+     */
 	protected $_initmethod = NULL;
 
 	// ---- PROTECTED DECLARATIONS ----]
 	
 
-	// constructor : we must provide a factory method (to create a new fresh item), its parameters and an init method (used to wipe a re-used item before extracting it from the pool)
+	/**
+     * Pool constructor
+     * 
+     * @param callable $factorymethod Factory method (to create a new fresh item)
+     * @param array $factorymethodparams Factory method parameters 
+     * @param string $initmethod Method name to wipe a re-used item before extracting it from the pool
+     */
 	public function __construct($factorymethod, $factorymethodparams = NULL, $initmethod = NULL)
 	{
 		$this->_poolItems = array();
@@ -30,7 +64,11 @@ final class Pool
 	}
 	
 	
-	// get an instance from the pool (new one or available one reused)
+	/**
+     * Get an instance from the pool (new one or available one reused)
+     * 
+     * @return object An instance from the pool
+     */
 	public function get()
 	{
 		// if at least an item is available in the pool
@@ -52,7 +90,11 @@ final class Pool
 	}
 	
 		
-	// free an item, and replace it in the pool
+	/** 
+     * Free an item, and replace it in the pool
+     * 
+     * @param object $item Item to release and replace in the pool
+     */
 	public function release($item)
 	{
 		// search the item in the used items array

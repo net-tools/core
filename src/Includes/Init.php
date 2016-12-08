@@ -1,4 +1,24 @@
 <?php
+/**
+ * Standard initializations :
+ * - display errors on standard output (by default)
+ * - timezone init (none by default, using the timezone from PHP config file)
+ * - internal encoding for multibyte functions (defaults to UTF-8)
+ * - locale (none by default)
+ * 
+ * To provide values for those initializations, define the following constants :
+ * - K_NETTOOLS_DISPLAY_ERRORS (to stderr or stdout)
+ * - K_NETTOOLS_INIT_TIMEZONE (to the appropriate timezone)
+ * - K_NETTOOLS_INIT_MB_INTERNAL_ENCODING (to the appropriate charset)
+ * - K_NETTOOLS_INIT_LOCALE (to the locale to use)
+ *
+ * @author Pierre - dev@net-tools.ovh
+ * @license MIT
+ */
+
+
+
+
 
 // display errors on screen (stdout) rather than on the error log (stderr)
 // As the error log may not be easily accessible on some hosts, errors

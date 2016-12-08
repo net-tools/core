@@ -1,28 +1,49 @@
 <?php
+/**
+ * Cache
+ *
+ * @author Pierre - dev@net-tools.ovh
+ * @license MIT
+ */
+
+
 
 // namespace
 namespace Nettools\Core\Containers;
 
 
 
-// cache handling
+/**
+ * Base class for cache handling
+ */
 class Cache
 {
 	// [---- PROTECTED DECLARATIONS ----
 
+    /** 
+     * @var array Cache items in an array
+     */
 	protected $_items = NULL;
 
 	// ---- PROTECTED DECLARATIONS ----]
 	
 
-	// constructor
+	/**
+     * Cache constructor
+     */
 	public function __construct()
 	{
 		$this->_items = array();
 	}
 	
 	
-	// register new item in cache
+	/**
+     * Register new item in cache
+     * 
+     * @param string $k Key for registered item
+     * @param mixed $item Item value
+     * @return mixed Returns $îtem
+     */
 	public function register($k, $item)
 	{
 		$this->_items[$k] = $item;
@@ -30,7 +51,12 @@ class Cache
 	}
 
 
-	// delete an item from cache
+	/**
+     * Delete an item from cache
+     * 
+     * @param string $k Item key to remove
+     * @return bool|mixed $item Returns the item removed or FALSE if item not found in cache
+     */
 	public function unregister($k)
 	{
 		if ( array_key_exists($k, $this->_items) )
@@ -44,7 +70,12 @@ class Cache
 	}
 	
 	
-	// fetch an item from cache
+	/** 
+     * Fetch an item from cache
+     *
+     * @param string $k Item to fetch
+     * @return bool|mixed $item Returns the item or FALSE if item not found in cache
+     */
 	public function get($k)
 	{
 		if ( array_key_exists($k, $this->_items) )
@@ -54,21 +85,32 @@ class Cache
 	}
 	
 	
-	// test if an item exists in cache
+	/**
+     * Test if an item exists in cache
+     * 
+     * @param string $k Item to test
+     * @return bool Returns whether the item exists in the cache
+     */
 	public function test($k)
 	{
 		return array_key_exists($k, $this->_items);
 	}
 	
 	
-	// get the amount of items in cache
+	/**
+     * Get the amount of items in cache
+     * 
+     * @return int Number of items registered
+     */
 	public function getCount()
 	{
 		return count($this->_items);
 	}
 	
 	
-	// empty cache
+	/**
+     * Empty cache
+     */
 	public function clear()
 	{
 		$this->_items = array();

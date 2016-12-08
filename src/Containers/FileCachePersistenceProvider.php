@@ -1,13 +1,26 @@
 <?php
+/**
+ * FileCachePersistentProvider
+ *
+ * @author Pierre - dev@net-tools.ovh
+ * @license MIT
+ */
+
+
 
 // namespace
 namespace Nettools\Core\Containers;
 
 
 
-// strategy class implementing read/write operations a persistent FILE cache 
+/** 
+ * Strategy interface to implement read/save operations for a persistent cache on a file
+ */
 class FileCachePersistenceProvider implements CachePersistenceProvider
 {
+    /** 
+    * @var string Filename of cache content storage on disk 
+    */
 	protected $_filename = NULL;
 	
 	
@@ -28,6 +41,11 @@ class FileCachePersistenceProvider implements CachePersistenceProvider
 	}
 	
 	
+    /** 
+     * Constructor of strategy
+     * 
+     * @param string $f Filename for file storage on disk
+     */
 	public function __construct($f)
 	{
 		$this->_filename = $f;

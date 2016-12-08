@@ -33,11 +33,6 @@ class FormatterStringOutputStrategy extends FormatterOutputStrategy
 	}
 	
 	
-	/**
-     * Output data to the string
-     * 
-     * @param string $data Data to concatenate to the string being built
-     */
 	public function output($data)
 	{
 		$this->_data .= $data;
@@ -49,7 +44,7 @@ class FormatterStringOutputStrategy extends FormatterOutputStrategy
      * 
      * @return string The string built with calls to `FormatterFileOutputStrategy::output`
      */
-	function getOutput()
+	public function getOutput()
 	{
 		return $this->_data;
 	}

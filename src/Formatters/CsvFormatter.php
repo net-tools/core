@@ -6,6 +6,7 @@
  * @license MIT
  */
 
+
 // namespace
 namespace Nettools\Core\Formatters;
 
