@@ -14,7 +14,7 @@ namespace Nettools\Core\Includes;
 
 /** 
  * Class to do some init stuff at autoloading
- */
+*/
 final class Initializer
 {
     /**
