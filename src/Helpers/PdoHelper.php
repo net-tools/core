@@ -1,6 +1,7 @@
 <?php
-
 /**
+ * PdoHelper
+ *
  * @author Pierre - dev@net-tools.ovh
  * @license MIT
  */

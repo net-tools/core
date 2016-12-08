@@ -1,24 +1,44 @@
 <?php
+/**
+ * FormatterFileOutputStrategy
+ *
+ * @author Pierre - dev@net-tools.ovh
+ * @license MIT
+ */
+
 
 // namespace
 namespace Nettools\Core\Formatters;
 
 
 
-// output strategy to a file
+/**
+* Output strategy to a file
+*/
 class FormatterFileOutputStrategy extends FormatterOutputStrategy
 {
-	protected $_file = NULL;
+    /**
+     * @var resource File handle to write to 
+     */
+    protected $_file = NULL;
 	
 	
-	// constructor with an opened file handle
+	/**
+     * Constructor for the file output strategy
+     * 
+     * @param resource $filehandler Set this parameter to an opened file handle
+     */
 	public function __construct($filehandler)
 	{
 		$this->_file = $filehandler;
 	}
 	
 	
-	// write to file
+	/**
+     * Write data to the file handle
+     * 
+     * @param string $data Data to output
+     */
 	public function output($data)
 	{
 		fwrite($this->_file, $data);

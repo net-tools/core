@@ -1,4 +1,11 @@
 <?php
+/**
+ * FormatterStringOutputStrategy
+ *
+ * @author Pierre - dev@net-tools.ovh
+ * @license MIT
+ */
+
 
 // namespace
 namespace Nettools\Core\Formatters;
@@ -6,27 +13,42 @@ namespace Nettools\Core\Formatters;
 
 
 
-// output strategy to a string
+/**
+* Output strategy to a string
+*/
 class FormatterFileOutputStrategy extends FormatterOutputStrategy
 {
-	protected $_data = NULL;
+    /**
+    * @var string String being built
+    */
+    protected $_data = NULL;
 	
 	
-	// constructor
+	/**
+     * Constructor of the string output strategy
+     */
 	public function __construct()
 	{
 		$this->_data = '';
 	}
 	
 	
-	// output data
+	/**
+     * Output data to the string
+     * 
+     * @param string $data Data to concatenate to the string being built `FormatterFileOutputStrategy::output`
+     */
 	public function output($data)
 	{
 		$this->_data .= $data;
 	}
 	
 	
-	// get the output string
+	/**
+     * Get the string built
+     * 
+     * @return string The string built with calls to FormatterFileOutputStrategy::output
+     */
 	public function getOutput()
 	{
 		return $this->_data;
