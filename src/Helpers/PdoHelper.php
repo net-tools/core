@@ -16,8 +16,8 @@ namespace Nettools\Core\Helpers;
  * Helper class extending PDO class to deal with tables
  * This is a simple schema : Towns being a foreign key for 3 tables, Customer, Vendor and Merchants :
  *
- *     [
- *      'Towns' => 	[
+ *       [
+ *           'Towns' => [
  *                      'primarykey' => 'idTown',
  *              		'tables' =>	[
  *                              'Customer',
@@ -31,7 +31,7 @@ namespace Nettools\Core\Helpers;
  *              		]
  *              									
  *              	]
- *     ]
+ *       ]
  */
 class PdoHelper extends \PDO
 {
