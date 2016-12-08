@@ -23,9 +23,22 @@ class CsvFormatter extends Formatter
     function footer(){}
 	function beginRow(){}
 	function endRow(){}
+    
+    /** 
+     * Get row separator for CSV
+     * 
+     * @return string Returns carriage return and newline string
+     */ 
     function rowSeparator(){ return "\r\n"; }
     function beginColumn(){}
 	function endColumn(){}
+
+
+    /** 
+     * Get column separator for CSV
+     * 
+     * @return string Returns ';'
+     */ 
     function columnSeparator(){ return ";"; }
 }
 
