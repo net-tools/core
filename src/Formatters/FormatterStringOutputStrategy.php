@@ -16,7 +16,7 @@ namespace Nettools\Core\Formatters;
 /**
 * Output strategy to a string
 */
-class FormatterFileOutputStrategy extends FormatterOutputStrategy
+class FormatterStringOutputStrategy extends FormatterOutputStrategy
 {
     /**
     * @var string String being built
