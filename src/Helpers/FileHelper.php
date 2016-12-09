@@ -19,7 +19,7 @@ namespace Nettools\Core\Helpers;
 class FileHelper {
 	
 	/**
-     * Guess a file type (image, video, text, ...) from it's name
+     * Guess a file type (image, video, text, etc) from it's name
      * 
      * @param string $file Filename to process
      * @param string $default Default file type in case the file type can't be identified
@@ -32,7 +32,7 @@ class FileHelper {
 	
 	
 	/**
-     * Guess file type (image, video, text, ...) from Mime type
+     * Guess file type (image, video, text, etc) from Mime type
      *
      * @param string $mt Mime type to process
      * @param string $def Default file type to return if Mime type is unknown
