@@ -160,16 +160,16 @@ class PdoHelper extends \PDO
 
 	
 	/** 
-     * Gt a value (first column of row) from a PDO Statement (to be executed with values, if given)
+     * Get a value (first column of row) from a PDO Statement (to be executed with values, if given)
      * 
      * If more than one line is returned by the request, only the first one is used ;
      * If an exception is thrown by PDO, it is intercepted and false is returned
      * 
      * @param \PDOStatement $st The PDO statement, already prepared
      * @param string[] $values An array of parameters for the query (? and :xxx placeholders concrete values)
-     * @return int|float|string|bool The value selected by the SQL $query or FALSE if an error occured
+     * @return mixed|bool The value selected by the SQL $query or FALSE if an error occured
      */
-	function pdo_value(\PDOStatement $st, $values = NULL)
+	static function pdo_value(\PDOStatement $st, $values = NULL)
 	{
 		try
 		{
@@ -214,7 +214,7 @@ class PdoHelper extends \PDO
      * @param int|string $col The column to sum (a column name or a column index)
      * @param string[] $values An array of parameters for the query (? and :xxx placeholders concrete values)
      */
-	function pdo_dbsum(\PDOStatement $result, $col, $values = NULL)
+	static function pdo_dbsum(\PDOStatement $result, $col, $values = NULL)
 	{
 		$tot = 0.0;
 		$result->execute($values);
