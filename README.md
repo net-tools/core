@@ -109,6 +109,11 @@ else
 ```   
 
 
+## API Reference
+
+To read the entire API reference, please refer to the PHPDoc here : 
+http://net-tools.ovh/api-reference/net-tools/Nettools/Core.html
+
 
 
 
