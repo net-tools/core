@@ -8,12 +8,12 @@ The package contains classes for :
 - helpers (to help processing data in requests, to sanitize user data, to encode/decode data, etc.)
 
 
-### Setup instructions
+## Setup instructions
 
 To install net-tools/core package, just require it through composer : `require net-tools/core:^1.0.0`
 
 
-### How to use ?
+## How to use ?
 
 The classes provided in the helpers are rather self-explanatory, each class and method dealing with only one purpose. All helper classes are not meant to be instantiated (all methods are static), **except PdoHelper which MUST be instantiated**. The Containers and Formatters class must also be instantiated.
 
@@ -46,11 +46,11 @@ K_NETTOOLS_INIT_LOCALE               | None (PHP uses US locale by default)   | 
 
 
 
-### Samples 
+## Samples 
 
 For most classes, the function names and their parameters are self-explanatory.
 
-#### Sample : CsvFormatter
+### Sample : CsvFormatter
 
 The Formatters namespace has some classes to help export tabular data. 
 
@@ -76,7 +76,7 @@ fclose($fhandle);
 ```
 
 
-#### Sample : PdoHelper
+### Sample : PdoHelper
 
 PdoHelper is a subclass of PHP Pdo class (instantiation needed, use the same constructor parameters as the Pdo constructor). So you may use any usual method of Pdo (such as `prepare` and `execute`).
 
@@ -115,6 +115,9 @@ To read the entire API reference, please refer to the PHPDoc here :
 http://net-tools.ovh/api-reference/net-tools/Nettools/Core.html
 
 
+## PHPUnit
+
+To test with PHPUnit, point the -c configuration option to the /phpunit.xml configuration file.
 
 
 
