@@ -22,7 +22,7 @@ class DataHelper {
 	/**
      * Get a number with ',' as decimal separator, with DEC digits after decimal
      *
-     * @param string $n Number to format
+     * @param float $n Number to format
      * @param int $dec Number of digits after decimal separator
      * @return string The number formatted
      */
@@ -71,7 +71,7 @@ class DataHelper {
      *
      * @param string[] $params An associative array to convert to a string
      * @param string $stringdelim Delimiters for strings (usually ' or ")
-     * @return string Return a string with the array imploded (values separated by ,)
+     * @return string Return a string with the array imploded (values separated by ", ")
      */
 	static function array2Parameters($params, $stringdelim)
 	{
@@ -133,11 +133,17 @@ class DataHelper {
 	/**
      * Test if a given array is associative or has only numeric keys
      *
-     * @param string[] $a Array to test
+     * @param mixed[] $a Array to test
+     * @param bool $ifEmptyAssociativeArray If $a is an empty array, we can return true or false, depending on this optionnal parameter
      * @return bool True if array $a is associative, false otherwise
      */
-	static function is_associative_array($a)
+	static function is_associative_array($a, $ifEmptyAssociativeArray = false)
 	{
+        if( !is_array($a) )
+            return false;
+        if ( count($a) == 0 )
+            return $ifEmptyAssociativeArray;
+        
 		// firstly, verify that all keys are ints ; if not, the array is associative
 		$keys = array_keys($a);
 		foreach ( $keys as $k )

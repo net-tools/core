@@ -114,6 +114,8 @@ class EncodingHelper {
 	
 		return $s;
 	}
+    
+    
 }
 
 ?>

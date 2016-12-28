@@ -53,7 +53,7 @@ final class Initializer
     /** 
      * Set the locale (used to output dates in the correct language)
      * 
-     * @param string $locale Set this parameter to any valid locale, such as 'fr_FR'
+     * @param string $locale Set this parameter to any valid locale, such as 'fr_FR.utf8'
      */
     static function initLocale($locale)
     {
