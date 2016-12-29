@@ -53,7 +53,9 @@ class EncodingHelperTest extends PHPUnit_Framework_TestCase
     
     public function testnoAccents()
     {    
-    	$this->assertEquals('accents:aaa;eeee;ii;oo;uuu;c;AAA;EEEE;II;OO;UUU;C', \Nettools\Core\Helpers\EncodingHelper::noAccents('accents:àäâ;ëêéè;ïî;öô;ùüû;ç;ÀÄÂ;ÉÈËÊ;ÏÎ;ÖÔ;ÙÜÛ;Ç'));
+    	$this->assertEquals('accents:aaa;eeee;ii;oo;uuu;c;AAA;EEEE;II;OO;UUU;C', 
+                            \Nettools\Core\Helpers\EncodingHelper::noAccents('accents:àäâ;ëêéè;ïî;öô;ùüû;ç;ÀÄÂ;ÉÈËÊ;ÏÎ;ÖÔ;ÙÜÛ;Ç')
+                        );
     }
 }
 

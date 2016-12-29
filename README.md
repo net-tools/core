@@ -33,7 +33,7 @@ Formatters| Formatter          | Base class to handle a tabular output (rows and
 Formatters| CsvFormatter       | Handle CSV output (subclass of `Formatter`)
 Formatters| FormatterOutputStrategy    | Strategy pattern to implement concrete output (to a file or a string) ; provide one of the `FormatterOutputStrategy` subclass.
 
-When the package is mentionned in you composer.json, it will automatically require `Includes/Init.php` which will perform some initialization stuff, such as the default charset, locale and timezones. Currently, if not specified, the errors are displayed in the standard output, and the `mb_xxx` functions default encoding is set to UTF_8, as this is the most easy way to deal with foreign characters.
+When the package is mentionned in your composer.json, it will automatically require `Includes/Init.php` which will perform some initialization stuff, such as the default charset, locale and timezones. Currently, if not specified, the errors are displayed in the standard output, and the `mb_xxx` functions default encoding is set to UTF_8, as this is the most easy way to deal with foreign characters.
 
 You may set other values, by defining the following constants BEFORE including your vendor/autoload.php :
 

@@ -43,7 +43,7 @@ class DataHelperTest extends PHPUnit_Framework_TestCase
     {
         $this->assertSame(10, \Nettools\Core\Helpers\DataHelper::trimLeadingZero(10));
         $this->assertSame(0, \Nettools\Core\Helpers\DataHelper::trimLeadingZero('0'));
-        $this->assertSame(1, \Nettools\Core\Helpers\DataHelper::trimLeadingZero('1'));
+        $this->assertSame(1, \Nettools\Core\Helpers\DataHelper::trimLeadingZero('01'));
         $this->assertSame(10, \Nettools\Core\Helpers\DataHelper::trimLeadingZero('10'));
     }
 
