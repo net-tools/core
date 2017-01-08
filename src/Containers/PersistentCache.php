@@ -86,13 +86,22 @@ class PersistentCache extends Cache
 	
 	
 	/** 
-     * Is cache dirty ?
-     * 
-     * @return bool Returns true if cache has been updated and must be committed to storage
+     * Sets cache to dirty (it has been updated and we need to commit updates to storage)
      */
 	public function setDirty()
 	{
 		$this->_dirty = true;
+	}
+	
+	
+	/** 
+     * Is cache dirty ?
+     * 
+     * @return bool Returns true if cache has been updated and must be committed to storage
+     */
+	public function isDirty()
+	{
+		return $this->_dirty;
 	}
 	
 	
