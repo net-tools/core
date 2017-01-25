@@ -72,6 +72,9 @@ class PersistentCacheTest extends PHPUnit_Framework_TestCase
         $c->commit();
         $this->assertEquals(1, $c->getCount());
         $this->assertEquals(false, $c->isDirty());
+        
+        // in order to have the new value of filesize, we need to clear the stat cache
+        clearstatcache();
         $this->assertNotEquals($size, filesize(self::$_cacheFile));
         
         return $c;
@@ -104,12 +107,18 @@ class PersistentCacheTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $c->getCount());
         $this->assertEquals(true, $c->isDirty());
 
+        // in order to have the new value of filesize, we need to clear the stat cache
+        clearstatcache();
+
         // assert that dirty cache is not committed to disk yet
         $this->assertEquals($size, filesize(self::$_cacheFile));
         
         // commit updates and check that the cache is no longer dirty and the cache file is smaller (now contains 0 item)
         $c->commit();
         $this->assertEquals(false, $c->isDirty());
+
+        // in order to have the new value of filesize, we need to clear the stat cache
+        clearstatcache();
         $this->assertNotEquals($size, filesize(self::$_cacheFile));
         
         return $c;
@@ -127,6 +136,9 @@ class PersistentCacheTest extends PHPUnit_Framework_TestCase
         
         // commit updates to disk
         $c->commit();
+
+        // in order to have the new value of filesize, we need to clear the stat cache
+        clearstatcache();
         $size = filesize(self::$_cacheFile);
         
         // clear cache (not committed to disk yet)
@@ -137,6 +149,9 @@ class PersistentCacheTest extends PHPUnit_Framework_TestCase
         // commit updates and check that the cache is no longer dirty and the cache file is smaller (now contains 0 item)
         $c->commit();
         $this->assertEquals(false, $c->isDirty());
+
+        // in order to have the new value of filesize, we need to clear the stat cache
+        clearstatcache();
         $this->assertNotEquals($size, filesize(self::$_cacheFile));
     }    
 
