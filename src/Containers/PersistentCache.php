@@ -90,6 +90,7 @@ class PersistentCache extends Cache
      */
 	public function setDirty()
 	{
+		$this->_initCache();
 		$this->_dirty = true;
 	}
 	
