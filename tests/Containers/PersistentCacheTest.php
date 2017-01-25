@@ -25,9 +25,53 @@ class PersistentCacheTest extends PHPUnit_Framework_TestCase
 	}
     
     
+    public function testNewCache()
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'phpunit') . 'persistentNewCache';
+		$c = new PersistentCache(new FileCachePersistenceProvider($tmp));
+       
+        // cache not committed to disk yet
+        $this->assertFileNotExists($tmp);
+        
+        // assert get method returns FALSE (cache file does not exists)
+        $this->assertEquals(false, $c->get('key'));
+
+        // cache GET method does not commit cache to disk
+        $this->assertFileNotExists($tmp);
+    }
+    
+    
     public function testRegister()
     {
 		$c = new PersistentCache(self::$_persistentCacheProvider);
+        
+        // cache not committed to disk yet
+        $this->assertFileNotExists(self::$_cacheFile);
+        
+        // commit cache (currently empty) to disk
+        $c->commit();
+        
+        // assert cache file exists
+        $this->assertFileExists(self::$_cacheFile);
+        $size = filesize(self::$_cacheFile);
+        
+        // assert init values
+        $this->assertEquals(0, $c->getCount());
+        $this->assertEquals(false, $c->isDirty());
+        
+        // register an item in cache, check that the persistent cache is now dirty
+        $this->assertEquals('value1', $c->register('k1', 'value1'));
+        $this->assertEquals(1, $c->getCount());
+        $this->assertEquals(true, $c->isDirty());
+        
+        // assert that dirty cache is not committed to disk yet
+        $this->assertEquals($size, filesize(self::$_cacheFile));
+        
+        // commit updates and check that the cache is no longer dirty and the cache file is bigger (contains 1 item)
+        $c->commit();
+        $this->assertEquals(1, $c->getCount());
+        $this->assertEquals(false, $c->isDirty());
+        $this->assertNotEquals($size, filesize(self::$_cacheFile));
         
         return $c;
     }
@@ -38,16 +82,63 @@ class PersistentCacheTest extends PHPUnit_Framework_TestCase
      */
     public function testGet($c)
     {
-		$this->assertEquals('val1 updated', $c->get('k1'));
+		$this->assertEquals('value1', $c->get('k1'));
 		$this->assertFalse($c->get('k0'));
-		$r = $c->register('knull', NULL);
-		$this->assertNull($c->get('knull'));
-		$this->assertNull($r);    
+        $this->assertEquals(false, $c->isDirty());
         
         return $c;
     }
 
+
+    /**
+     * @depends testGet
+     */
+    public function testUnregister($c)
+    {
+        $size = filesize(self::$_cacheFile);
+
+        $this->assertEquals(1, $c->getCount());
+        $this->assertEquals('value1', $c->unregister('k1'));
+        $this->assertFalse($c->get('k1'));
+        $this->assertEquals(0, $c->getCount());
+        $this->assertEquals(true, $c->isDirty());
+
+        // assert that dirty cache is not committed to disk yet
+        $this->assertEquals($size, filesize(self::$_cacheFile));
+        
+        // commit updates and check that the cache is no longer dirty and the cache file is smaller (now contains 0 item)
+        $c->commit();
+        $this->assertEquals(false, $c->isDirty());
+        $this->assertNotEquals($size, filesize(self::$_cacheFile));
+        
+        return $c;
+    }
     
+    
+    /** 
+     * @depends testGet
+     */
+    public function testClear($c)
+    {
+        $c->register('k2', 'value to be deleted');
+        $this->assertEquals(1, $c->getCount());
+        $this->assertEquals(true, $c->isDirty());
+        
+        // commit updates to disk
+        $c->commit();
+        $size = filesize(self::$_cacheFile);
+        
+        // clear cache (not committed to disk yet)
+        $c->clear();
+        $this->assertEquals(0, $c->getCount());
+        $this->assertEquals(true, $c->isDirty());
+
+        // commit updates and check that the cache is no longer dirty and the cache file is smaller (now contains 0 item)
+        $c->commit();
+        $this->assertEquals(false, $c->isDirty());
+        $this->assertNotEquals($size, filesize(self::$_cacheFile));
+    }    
+
 }
 
 ?>
