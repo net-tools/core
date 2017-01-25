@@ -48,7 +48,8 @@ class PersistentCacheTest extends PHPUnit_Framework_TestCase
         // cache not committed to disk yet
         $this->assertFileNotExists(self::$_cacheFile);
         
-        // commit cache (currently empty) to disk
+        // commit cache (currently empty) to disk ; setting Dirty to TRUE (a cache not dirty is not committed to disk)
+        $c->setDirty(true);
         $c->commit();
         
         // assert cache file exists
