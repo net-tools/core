@@ -157,7 +157,7 @@ class SecurityHelper {
 	/** 
      * Sanitize an array (detect html tags, add slashes and remove sql orders)
      * 
-     * @param string[] $arr Sanitize an array of strings ; original array is modified and returned for convenience
+     * @param string[] &$arr Sanitize an array of strings ; original array is modified and returned for convenience
      * @return string[] The sanitized array is returned
      */
 	static function sanitize_array(&$arr)
