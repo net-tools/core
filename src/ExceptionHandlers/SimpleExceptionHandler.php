@@ -8,7 +8,7 @@ use \Nettools\Core\Helpers\NetworkingHelper;
 
 
 /**
- * Abstract class to format exception so that error lines could be displayed on screen and easily read
+ * Extends ExceptionHandler and implements CSS and HTML output of exception
  */
 class SimpleExceptionHandler extends ExceptionHandler
 {
