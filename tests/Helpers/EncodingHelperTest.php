@@ -1,7 +1,7 @@
 <?php
 
 
-class EncodingHelperTest extends PHPUnit_Framework_TestCase
+class EncodingHelperTest extends PHPUnit\Framework\TestCase
 {
     
     public function testEscape()

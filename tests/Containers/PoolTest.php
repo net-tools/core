@@ -33,7 +33,7 @@ class PoolUnitTestObject
 
 
 
-class PoolTest extends PHPUnit_Framework_TestCase
+class PoolTest extends PHPUnit\Framework\TestCase
 {
     public function testPool()
     {

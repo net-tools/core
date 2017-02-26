@@ -4,7 +4,7 @@ use \Nettools\Core\Helpers\NetworkingHelper;
 
 
 
-class NetworkingHelperTest extends PHPUnit_Framework_TestCase
+class NetworkingHelperTest extends PHPUnit\Framework\TestCase
 {
     
     public function testAppendToUrl()

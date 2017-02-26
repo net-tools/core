@@ -5,7 +5,7 @@ use \Nettools\Core\Containers\FileCachePersistenceProvider;
 
 
 
-class PersistentCacheTest extends PHPUnit_Framework_TestCase
+class PersistentCacheTest extends PHPUnit\Framework\TestCase
 {
     protected static $_persistentCacheProvider = NULL;
     protected static $_cacheFile = NULL;

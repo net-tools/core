@@ -1,7 +1,7 @@
 <?php
 
 
-class DataHelperTest extends PHPUnit_Framework_TestCase
+class DataHelperTest extends PHPUnit\Framework\TestCase
 {
     private $_locale = NULL;
 

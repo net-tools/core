@@ -4,7 +4,7 @@ use \Nettools\Core\Helpers\FileHelper;
 
 
 
-class FileHelperTest extends PHPUnit_Framework_TestCase
+class FileHelperTest extends PHPUnit\Framework\TestCase
 {
     
     public function testGuessMimeType()

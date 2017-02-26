@@ -4,7 +4,7 @@ use \Nettools\Core\Helpers\SecurityHelper;
 
 
 
-class SecurityHelperTest extends PHPUnit_Framework_TestCase
+class SecurityHelperTest extends PHPUnit\Framework\TestCase
 {
     
     public function testCreateToken()
