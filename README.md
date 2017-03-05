@@ -29,6 +29,8 @@ Helpers   | PdoHelper          | Provide convenient functions to make queries wi
 Containers| Pool               | Manage a pool of objects (refer to 'Pool' design pattern)
 Containers| Cache              | Manage a cache of objects 
 Containers| PersistentCache    | Manage a cache of objects which is meant to be serialized (to disk) ; provide one of the `CachePersistentProvider` subclass as a strategy pattern to handle persistence.
+ExceptionHandlers|ExceptionHandler|Abstract class to handle exceptions and output some nicely formatted exception trace 
+ExceptionHandlers|SimpleExceptionHandler|Concrete implementation providing default CSS and exception formatting
 Formatters| Formatter          | Base class to handle a tabular output (rows and columns)
 Formatters| CsvFormatter       | Handle CSV output (subclass of `Formatter`)
 Formatters| FormatterOutputStrategy    | Strategy pattern to implement concrete output (to a file or a string) ; provide one of the `FormatterOutputStrategy` subclass.
@@ -48,7 +50,7 @@ K_NETTOOLS_INIT_LOCALE               | None (PHP uses US locale by default)   | 
 
 ## Samples 
 
-For most classes, the function names and their parameters are self-explanatory.
+For most classes, the function names and their parameters are self-explanatory, please refer to the API reference link below.
 
 ### Sample : CsvFormatter
 
@@ -108,6 +110,21 @@ else
    echo "deletion is not safe : " . $test['cause']['message'];
 ```   
 
+### Sample : SimpleExceptionHandler
+
+If you encounter an exception, you may catch it and call a `ExceptionHandler` class to format it and send the output to stdout :
+
+```php
+try
+{
+   // some bad code here
+}
+catch (\Exception $e)
+{
+   (new \Nettools\Core\ExceptionHandlers\SimpleExceptionHandler())->handleException($e);
+   // the script is halted here
+}
+```
 
 ## API Reference
 
