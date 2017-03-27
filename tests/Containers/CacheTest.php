@@ -8,6 +8,7 @@ use \Nettools\Core\Containers\Cache;
 
 
 
+
 class CacheTest extends \PHPUnit\Framework\TestCase
 {
     public function testRegister()

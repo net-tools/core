@@ -42,11 +42,11 @@ class PoolTest extends \PHPUnit\Framework\TestCase
 {
     public function testPool()
     {
-		$p = new Pool(array('PoolUnitTestObject', 'create'), array(), 'initialize');
+		$p = new Pool(array(PoolUnitTestObject::class, 'create'), array(), 'initialize');
 		$o = $p->get();
 		$o->data = 'data-o';
 		
-        $this->assertInstanceOf('PoolUnitTestObject', $o);
+        $this->assertInstanceOf(PoolUnitTestObject::class, $o);
 		$this->assertEquals(1, PoolUnitTestObject::$creationCount);
 		$o2 = $p->get();
 		$o2->data = 'data-o2';
