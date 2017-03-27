@@ -1,10 +1,16 @@
 <?php
 
+namespace \Nettools\Core\Tests;
+
+
+
+
 use \Nettools\Core\Helpers\NetworkingHelper;
 
 
 
-class NetworkingHelperTest extends PHPUnit\Framework\TestCase
+
+class NetworkingHelperTest extends \PHPUnit\Framework\TestCase
 {
     
     public function testAppendToUrl()

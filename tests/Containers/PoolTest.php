@@ -1,5 +1,10 @@
 <?php
 
+namespace \Nettools\Core\Tests;
+
+
+
+
 use \Nettools\Core\Containers\Pool;
 
 
@@ -33,7 +38,7 @@ class PoolUnitTestObject
 
 
 
-class PoolTest extends PHPUnit\Framework\TestCase
+class PoolTest extends \PHPUnit\Framework\TestCase
 {
     public function testPool()
     {

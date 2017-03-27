@@ -1,7 +1,11 @@
 <?php
 
+namespace \Nettools\Core\Tests;
 
-class DataHelperTest extends PHPUnit\Framework\TestCase
+
+
+
+class DataHelperTest extends \PHPUnit\Framework\TestCase
 {
     private $_locale = NULL;
 

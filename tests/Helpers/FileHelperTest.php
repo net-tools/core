@@ -1,10 +1,15 @@
 <?php
 
+namespace \Nettools\Core\Tests;
+
+
+
+
 use \Nettools\Core\Helpers\FileHelper;
 
 
 
-class FileHelperTest extends PHPUnit\Framework\TestCase
+class FileHelperTest extends \PHPUnit\Framework\TestCase
 {
     
     public function testGuessMimeType()

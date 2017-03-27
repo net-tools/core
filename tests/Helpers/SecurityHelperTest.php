@@ -1,10 +1,16 @@
 <?php
 
+namespace \Nettools\Core\Tests;
+
+
+
+
 use \Nettools\Core\Helpers\SecurityHelper;
 
 
 
-class SecurityHelperTest extends PHPUnit\Framework\TestCase
+
+class SecurityHelperTest extends \PHPUnit\Framework\TestCase
 {
     
     public function testCreateToken()

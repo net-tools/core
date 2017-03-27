@@ -1,10 +1,14 @@
 <?php
 
+namespace \Nettools\Core\Tests;
+
+
+
 use \Nettools\Core\Containers\Cache;
 
 
 
-class CacheTest extends PHPUnit\Framework\TestCase
+class CacheTest extends \PHPUnit\Framework\TestCase
 {
     public function testRegister()
     {

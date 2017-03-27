@@ -1,7 +1,11 @@
 <?php
 
+namespace \Nettools\Core\Tests;
 
-class EncodingHelperTest extends PHPUnit\Framework\TestCase
+
+
+
+class EncodingHelperTest extends \PHPUnit\Framework\TestCase
 {
     
     public function testEscape()

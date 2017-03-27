@@ -1,11 +1,17 @@
 <?php
 
+namespace \Nettools\Core\Tests;
+
+
+
+
 use \Nettools\Core\Containers\PersistentCache;
 use \Nettools\Core\Containers\FileCachePersistenceProvider;
 
 
 
-class PersistentCacheTest extends PHPUnit\Framework\TestCase
+
+class PersistentCacheTest extends \PHPUnit\Framework\TestCase
 {
     protected static $_persistentCacheProvider = NULL;
     protected static $_cacheFile = NULL;
