@@ -1,6 +1,6 @@
 <?php
 
-namespace \Nettools\Core\Tests;
+namespace Nettools\Core\Tests;
 
 
 
