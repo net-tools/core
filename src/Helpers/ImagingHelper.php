@@ -19,6 +19,59 @@ namespace Nettools\Core\Helpers;
 class ImagingHelper
 {
 	/**
+	 * If exif data indicates a rotated image, we apply the transformation to the image and set back orientation to normal
+	 *
+	 * @param string $path Path to image
+	 * @return bool
+	 */
+	static function imageAdjustOrientation($path)
+	{
+		// read image
+		$image = new \imagick();
+		if ( !$image->readImage($path) )
+			return FALSE;
+		
+		
+		// read exif orientation
+		$orientation = $image->getImageOrientation(); 
+		$rotated = false;
+
+		switch($orientation)
+		{ 
+			case \imagick::ORIENTATION_BOTTOMRIGHT: 
+				$image->rotateimage("#000", 180); // rotate 180 degrees 
+				$rotated = true;
+			break; 
+
+			case \imagick::ORIENTATION_RIGHTTOP: 
+				$image->rotateimage("#000", 90); // rotate 90 degrees CW 
+				$rotated = true;
+			break; 
+
+			case \imagick::ORIENTATION_LEFTBOTTOM: 
+				$image->rotateimage("#000", -90); // rotate 90 degrees CCW 
+				$rotated = true;
+			break; 
+		} 
+
+		// Now that it's auto-rotated, make sure the EXIF data is correct in case the EXIF gets saved with the image! 
+		$image->setImageOrientation(\imagick::ORIENTATION_TOPLEFT); 
+		
+		
+		if ( $rotated )
+		{
+			$image->setImageCompressionQuality(90);
+			$image->writeImage($path); 
+		}
+
+		
+		return TRUE;
+	}
+	
+	
+	
+	
+	/**
      * Resize an image (width x height) to a squared image (with a width/height of $imgw) ; aspect ratio is preserved
      *
      * @param resource $source Image resource to process
