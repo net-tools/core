@@ -178,7 +178,7 @@ class DataHelper {
 	static function abbreviate($s)
 	{
 		// ecrire les initiales du prénom en majuscules
-		return mb_ereg_replace_callback('([^. -])[^. -]*(\\. -)?', create_function('$match','return mb_strtoupper($match[1]).".";'), $s);
+		return mb_ereg_replace_callback('([^. -])[^. -]*(\\. -)?', function($match){return mb_strtoupper($match[1]).".";}, $s);
 	}
 	
 		
