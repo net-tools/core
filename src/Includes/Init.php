@@ -12,6 +12,7 @@
  * - K_NETTOOLS_INIT_TIMEZONE (to the appropriate timezone)
  * - K_NETTOOLS_INIT_MB_INTERNAL_ENCODING (to the appropriate charset)
  * - K_NETTOOLS_INIT_LOCALE (to the locale to use)
+ * - K_NETTOOLS_POSTMASTER (email to send exception stack trace to ; defaults to $_SERVER['SERVER_ADMIN'])
  *
  * @author Pierre - dev@net-tools.ovh
  * @license MIT
@@ -51,5 +52,16 @@ Initializer::initInternalEncoding(K_NETTOOLS_INIT_MB_INTERNAL_ENCODING);
 // set default locale, if not defined by user before including the vendor autoload.php
 if ( defined('K_NETTOOLS_INIT_LOCALE') )
     Initializer::initLocale(K_NETTOOLS_INIT_LOCALE);
+
+
+// display errors on screen (stdout) rather than on the error log (stderr)
+// As the error log may not be easily accessible on some hosts, errors
+// could be printed on default display to help debug (if a system is well
+// designed, errors should be catched with exceptions and throwables handling).
+if ( !defined('K_NETTOOLS_POSTMASTER') )
+	// by default, errors are displayed in the standard output, unless the user
+	// defines a K_NETTOOLS_DISPLAY_ERRORS constant to 'stderr' value.
+	define('K_NETTOOLS_POSTMASTER', $_SERVER['SERVER_ADMIN']);
+
 
 ?>

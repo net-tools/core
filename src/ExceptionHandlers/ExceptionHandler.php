@@ -13,13 +13,25 @@ use \Nettools\Core\Helpers\NetworkingHelper;
 abstract class ExceptionHandler
 {
     /**
-     * Get a string with exception properly formatted
-     * 
-     * @param \Throwable $e Exception object
-     * @param string $h1 The title displayed on the error page
-     * @return string Returns a string with $e exception object properly formatted to be human-readable
+     * Get a strategy object of class StackTraceFormatter that will handle conversion of stack trace to a string
+	 *
+	 * @return StackTraceFormatters\StackTraceFormatter
      */
-    abstract protected function _getException(\Throwable $e, $h1 = 'An error occured');	
+    abstract protected function _getStackTraceFormatterStrategy();	
+	
+	
+	
+	/**
+	 * Get exception stack trace as a string 
+	 *
+     * @param \Throwable $e Exception to handle
+     * @param string $h1 The title displayed on the error page
+	 * @return string Exception stack trace as a string
+	 */
+	protected function _getException(\Throwable $e, $h1)
+	{
+		return $this->_getStackTraceFormatterStrategy()->format($e, $h1);
+	}
 	
     
 	
@@ -105,7 +117,7 @@ LINK;
     {
         header("Content-Type: text/html; charset=utf-8");
 
-		// get exception string
+		// get exception string (stack trace)
 		$ex = $this->_getException($e, 'Error during request');
 		
         echo '<!DOCTYPE html><html><body>';
@@ -166,7 +178,7 @@ HTML;
 		header("Pragma: no-cache"); 
         
         
-        // get exception as string
+		// get exception string (stack trace)
         $ex = $this->_getException($e, 'Error during async request');
         
         echo json_encode(array('statut'=>false, 'message'=>'Error during async request', 'exception'=>$ex));
