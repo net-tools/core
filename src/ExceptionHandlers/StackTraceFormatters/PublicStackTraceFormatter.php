@@ -44,7 +44,7 @@ class PublicStackTraceFormatter extends HtmlStackTraceFormatter
 	 */
 	protected function getSubject(\Throwable $e, $h1 = 'An error occured')
 	{
-		return "Exception $h1 on " . $_SERVER['SCRIPT_URI'];
+		return "Exception $h1 on " . $_SERVER['HTTP_HOST'];
 	}
 	
 	
@@ -61,14 +61,15 @@ class PublicStackTraceFormatter extends HtmlStackTraceFormatter
 		// get stack trace as HTML
 		$html = parent::format($e, $h1);
 
-		// format email
-		$msg =	"Content-Type: text/html; charset=UTF-8\r\n" .
-				"Content-Transfer-Encoding: quoted-printable\r\n" .
-				"\r\n" .
-				trim(str_replace("=0A", "\n", str_replace("=0D", "\r", imap_8bit($html))));
+		$sep = sha1(uniqid());    
+		$headers = ["Content-Type" => "multipart/mixed; boundary=\"$sep\"",
+					"From" => $this->getSender()];
+		$msg = 	"--$sep\r\nContent-Type: text/plain;\r\n\r\nSee attachment.\r\n\r\n" .
+				"--$sep\r\nContent-Type: text/html; name=\"stack-trace.html\"\r\nContent-Transfer-Encoding: base64\r\nContent-Disposition: attachment; filename=\"stack-trace.html\"\r\n\r\n" . trim(chunk_split(base64_encode($html))) . "\r\n\r\n" .
+				"--$sep--";
 		
 		// send mail
-		mail($this->getRecipient(), $this->getSubject($e, $h1), $msg, "From: " . $this->getSender());
+		mail($this->getRecipient(), $this->getSubject($e, $h1), $msg, $headers);
 		
 		
 		// return simple message
