@@ -34,9 +34,9 @@ abstract class ExceptionHandler
 		{
 			return $this->_getStackTraceFormatterStrategy()->format($e, $h1);
 		}
-		catch (\Throwable $e)
+		catch (\Throwable $e2)
 		{
-			return "Error during processing of exception '" . get_class($e) . "'.";
+			return "Error '" . get_class($e2) . "' during processing of exception '" . get_class($e) . "'.";
 		}
 	}
 	
