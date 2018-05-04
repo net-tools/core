@@ -14,27 +14,36 @@ class HtmlStackTraceFormatter extends StackTraceFormatter
 	/**
 	 * @var bool Should the stack trace function parameters be included in output ? 
 	 */
-	protected $_includeFunctionParameters;
+	protected $_includeStackTrace;
 	
 	
 	
 	/**
-	 * @var bool Should the stack trace function parameters be hidden by default ?
+	 * @var bool Should the stack trace function parameters be hidden by default (but can be displayed on demand) ?
 	 */
-	protected $_hideFunctionParameters;
+	protected $_hideFunctionParametersByDefault;
+	
+	
+	
+	/**
+	 * @var bool Should the stack trace function parameters column be outputted ?
+	 */
+	protected $_hideFunctionParametersColumn;
 	
 	
 	
 	/**
 	 * Constructor
 	 * 
-	 * @param bool $includeFunctionParameters
-	 * @param bool $hideFunctionParameters
+	 * @param bool $includeStackTrace
+	 * @param bool $hideFunctionParametersByDefault
+	 * @param bool $hideFunctionParametersColumn
 	 */
-	function __construct($includeFunctionParameters = true, $hideFunctionParameters = true)
+	function __construct($includeStackTrace = true, $hideFunctionParametersByDefault = true, $hideFunctionParametersColumn = false)
 	{
-		$this->_includeFunctionParameters = $includeFunctionParameters;
-		$this->_hideFunctionParameters = $hideFunctionParameters;
+		$this->_includeStackTrace = $includeStackTrace;
+		$this->_hideFunctionParametersByDefault = $hideFunctionParametersByDefault;
+    	$this->_hideFunctionParametersColumn = $hideFunctionParametersColumn;
 	}
 	
 	
@@ -111,16 +120,13 @@ HTML;
         // exception class
         $kind = get_class($e);
         
-        
-        $path_to_root = $_SERVER['DOCUMENT_ROOT'];
-        
-        
+                
         // output CSS
         $ret = $this->_outputCSS();
         
         
         // if we want function parameters of stack trace to be hidden by default, create CSS and JS to show parameters on demand
-		if ( $this->_hideFunctionParameters )
+		if ( $this->_includeStackTrace && !$this->_hideFunctionParametersColumn && $this->_hideFunctionParametersByDefault )
         	$ret .= <<<HTML
 		
 <style>
@@ -145,37 +151,65 @@ HTML;
 		$ret .= "<div id=\"bootstrap_exception_body\"><h1>$h1</h1><h2>$kind</h2><code>{$e->getMessage()}</code>";
 
 		
-		// si affichage pile d'appels
-		if ( $this->_includeFunctionParameters )
-		{
-			// table header
-			$ret .= "<table id=\"bootstrap_exception\"><tr><th>File</th><th>Line</th><th>Function</th>".
-						"<th>Parameters" . ($this->_hideFunctionParameters?" <a href=\"javascript:void(0)\" onclick=\"funParameters(); return false;\">Display parameters</a>":"") . "</th></tr>";
-
-
-			// handle stack trace
-			$ret .= "<tr><td>" . str_replace($path_to_root . '/', '', $e->getFile()) . "</td><td>" . $e->getLine() . "</td><td>throw new " . get_class($e) . " </td><td></td></tr>\n";
-			foreach ( $e->getTrace() as $trace )
-			{
-				$file = str_replace($path_to_root . '/', '', $trace['file']);
-				$line = $trace['line'];
-
-				if ( $trace['class'] )
-					$function = $trace['class'] . '::' . $trace['function'];
-				else
-					$function = $trace['function'];
-
-				$args = htmlspecialchars(print_r($trace['args'], true));
-
-				$ret .= "<tr><td>$file</td><td>$line</td><td>$function</td><td>$args</td></tr>\n";
-			}
-
-			$ret .= "</table>";
-		}
-			
+		// if stack trace must be outputted
+		if ( $this->_includeStackTrace )
+			$ret .= self::_getStackTrace($e, $this->_hideFunctionParametersByDefault, $this->_hideFunctionParametersColumn);			
 		
+    
 		$ret .= "</div>";
         return $ret;   
+    }
+    
+    
+    
+    /**
+     * Get a table with stack trace data
+     * 
+     * @param \Throwable $e Exception to handle
+     * @param bool $hideFunctionParametersByDefault
+     * @param bool $hideFunctionParametersColumn
+     * @return string
+     */
+    protected static function _getStackTrace(\Throwable $e, $hideFunctionParametersByDefault, $hideFunctionParametersColumn)
+    {
+		$path_to_root = $_SERVER['DOCUMENT_ROOT'];
+
+		// table header
+		$ret = "<table id=\"bootstrap_exception\"><tr><th>File</th><th>Line</th><th>Function</th>";
+		if ( !$hideFunctionParametersColumn )
+			$ret .= "<th>Parameters" . ($hideFunctionParametersByDefault?" <a href=\"javascript:void(0)\" onclick=\"funParameters(); return false;\">Display parameters</a>":"") . "</th>";
+
+		$ret .= "</tr>";
+
+
+		// handle stack trace
+		$ret .= "<tr><td>" . str_replace($path_to_root . '/', '', $e->getFile()) . "</td><td>" . $e->getLine() . "</td><td>throw new " . get_class($e) . " </td>";
+		if ( !$hideFunctionParametersColumn )
+			$ret .= "<td></td>";
+
+		$ret .= "</tr>\n";
+		foreach ( $e->getTrace() as $trace )
+		{
+			$file = str_replace($path_to_root . '/', '', $trace['file']);
+			$line = $trace['line'];
+
+			if ( $trace['class'] )
+				$function = $trace['class'] . '::' . $trace['function'];
+			else
+				$function = $trace['function'];
+
+			$args = htmlspecialchars(print_r($trace['args'], true));
+
+			$ret .= "<tr><td>$file</td><td>$line</td><td>$function</td>";
+
+			if ( !$hideFunctionParametersColumn )
+				$ret .= "<td>$args</td>";
+
+			$ret .= "</tr>\n";
+		}
+
+		$ret .= "</table>";
+		return $ret;
     }
 
 	

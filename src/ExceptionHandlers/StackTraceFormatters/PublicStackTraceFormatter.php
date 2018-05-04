@@ -70,20 +70,27 @@ class PublicStackTraceFormatter extends HtmlStackTraceFormatter
     public function format(\Throwable $e, $h1 = 'An error occured')
     {
 		// get exception details WITH stack trace for emailing;
-		// we create another Formatter but with different constructor arguments to 1) show function parameters 2) don't hide parameters by default
-		$html = (new HtmlStackTraceFormatter(true, false))->format($e, $h1);
+		// we create another Formatter but with different constructor arguments to 0) show stack trace 1) don't show parameters column now 
+		$html = (new HtmlStackTraceFormatter(true, true, true))->format($e, $h1);
 
+		
+		// add another table with parameters column
+		$html .= "<p>&nbsp;</p><hr><p>&nbsp;</p><div id=\"bootstrap_exception_body\"><h3>Detailed stack trace</h3>" .
+					self::_getStackTrace($e, false, false) .
+					"</div>"; 
+
+		
 		$sep = sha1(uniqid());  
 		$headers = "Content-Type: multipart/mixed; boundary=\"$sep\"\r\n" .
 					"From: {$this->getSender()};";
 		$msg = 	"--$sep\r\nContent-Type: text/plain;\r\n\r\nSee attachment.\r\n\r\n" .
 				"--$sep\r\nContent-Type: text/html; name=\"stack-trace.html\"\r\nContent-Transfer-Encoding: base64\r\nContent-Disposition: attachment; filename=\"stack-trace.html\"\r\n\r\n" . trim(chunk_split(base64_encode($html))) . "\r\n\r\n" .
 				"--$sep--";
-		
+
 		// send mail
 		mail($this->getRecipient(), $this->getSubject($e, $h1), $msg, $headers);
-		
-		
+
+
 		// get exception string as HTML, with no stack trace
 		return parent::format($e, $h1);	
 	}
