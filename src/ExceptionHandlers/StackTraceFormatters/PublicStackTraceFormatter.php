@@ -12,6 +12,17 @@ namespace Nettools\Core\ExceptionHandlers\StackTraceFormatters;
 class PublicStackTraceFormatter extends HtmlStackTraceFormatter
 {
 	/**
+	 * Constructor
+	 */
+	function __construct()
+	{
+		// hide stack trace
+		parent::__construct(false);
+	}
+	
+	
+	
+	/**
 	 * Get mail recipient ; by default, send error to postmaster@domain.tld
 	 *
 	 * @return string
@@ -58,10 +69,10 @@ class PublicStackTraceFormatter extends HtmlStackTraceFormatter
      */
     public function format(\Throwable $e, $h1 = 'An error occured')
     {
-		// get stack trace as HTML
-		$html = parent::format($e, $h1);
+		// get exception details WITH stack trace for emailing
+		$html = (new HtmlStackTraceFormatter(true))->format($e, $h1);
 
-		$sep = sha1(uniqid());    
+		$sep = sha1(uniqid());  
 		$headers = ["Content-Type" => "multipart/mixed; boundary=\"$sep\"",
 					"From" => $this->getSender()];
 		$msg = 	"--$sep\r\nContent-Type: text/plain;\r\n\r\nSee attachment.\r\n\r\n" .
@@ -72,11 +83,9 @@ class PublicStackTraceFormatter extends HtmlStackTraceFormatter
 		mail($this->getRecipient(), $this->getSubject($e, $h1), $msg, $headers);
 		
 		
-		// return simple message
-		return "<h1>$h1</h1><h2>" . get_class($e) . "</h2>";
-    }
-
-	
+		// get exception string as HTML, with no stack trace
+		return parent::format($e, $h1);	
+	}
 }
 
 ?>

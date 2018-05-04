@@ -17,7 +17,7 @@ class SimpleExceptionHandler extends ExceptionHandler
      */
     protected function _getStackTraceFormatterStrategy()
 	{
-		return new StackTraceFormatters\HtmlStackTraceFormatter();
+		return new StackTraceFormatters\HtmlStackTraceFormatter(true);
 	}
 }
 

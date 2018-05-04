@@ -11,6 +11,24 @@ namespace Nettools\Core\ExceptionHandlers\StackTraceFormatters;
  */
 class HtmlStackTraceFormatter extends StackTraceFormatter
 {
+	/**
+	 * @var bool
+	 */
+	protected $_displayStackTrace;
+	
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param bool $displayStackTrace
+	 */
+	function __construct($displayStackTrace = true)
+	{
+		$this->_displayStackTrace = $displayStackTrace;
+	}
+	
+	
+	
     /**
      * Get CSS code
      *
@@ -106,6 +124,13 @@ HTML;
 <h1>$h1</h1>
 <h2>$kind</h2>
 <code>{$e->getMessage()}</code>
+HTML;
+
+		
+		// si affichage pile d'appels
+		if ( $this->_displayStackTrace )
+		{
+			$ret .= <<<HTML
 
 <table id="bootstrap_exception">
     <tr>
@@ -117,24 +142,28 @@ HTML;
 HTML;
 
 
-        // handle stack trace
-        $ret .= "<tr><td>" . str_replace($path_to_root . '/', '', $e->getFile()) . "</td><td>" . $e->getLine() . "</td><td>throw new " . get_class($e) . " </td><td></td></tr>\n";
-        foreach ( $e->getTrace() as $trace )
-        {
-            $file = str_replace($path_to_root . '/', '', $trace['file']);
-            $line = $trace['line'];
+			// handle stack trace
+			$ret .= "<tr><td>" . str_replace($path_to_root . '/', '', $e->getFile()) . "</td><td>" . $e->getLine() . "</td><td>throw new " . get_class($e) . " </td><td></td></tr>\n";
+			foreach ( $e->getTrace() as $trace )
+			{
+				$file = str_replace($path_to_root . '/', '', $trace['file']);
+				$line = $trace['line'];
 
-            if ( $trace['class'] )
-                $function = $trace['class'] . '::' . $trace['function'];
-            else
-                $function = $trace['function'];
+				if ( $trace['class'] )
+					$function = $trace['class'] . '::' . $trace['function'];
+				else
+					$function = $trace['function'];
 
-            $args = htmlspecialchars(print_r($trace['args'], true));
+				$args = htmlspecialchars(print_r($trace['args'], true));
 
-            $ret .= "<tr><td>$file</td><td>$line</td><td>$function</td><td>$args</td></tr>\n";
-        }
+				$ret .= "<tr><td>$file</td><td>$line</td><td>$function</td><td>$args</td></tr>\n";
+			}
 
-        $ret .= "</table></div>";
+			$ret .= "</table>";
+		}
+			
+		
+		$ret .= "</div>";
         return $ret;   
     }
 
