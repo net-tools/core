@@ -30,7 +30,14 @@ abstract class ExceptionHandler
 	 */
 	protected function _getException(\Throwable $e, $h1)
 	{
-		return $this->_getStackTraceFormatterStrategy()->format($e, $h1);
+		try
+		{
+			return $this->_getStackTraceFormatterStrategy()->format($e, $h1);
+		}
+		catch (\Throwable $e)
+		{
+			return "Error during processing of exception '" . get_class($e) . "'.";
+		}
 	}
 	
     
