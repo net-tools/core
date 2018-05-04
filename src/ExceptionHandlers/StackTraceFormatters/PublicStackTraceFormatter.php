@@ -69,8 +69,9 @@ class PublicStackTraceFormatter extends HtmlStackTraceFormatter
      */
     public function format(\Throwable $e, $h1 = 'An error occured')
     {
-		// get exception details WITH stack trace for emailing
-		$html = (new HtmlStackTraceFormatter(true))->format($e, $h1);
+		// get exception details WITH stack trace for emailing;
+		// we create another Formatter but with different constructor arguments to 1) show function parameters 2) don't hide parameters by default
+		$html = (new HtmlStackTraceFormatter(true, false))->format($e, $h1);
 
 		$sep = sha1(uniqid());  
 		$headers = "Content-Type: multipart/mixed; boundary=\"$sep\"\r\n" .

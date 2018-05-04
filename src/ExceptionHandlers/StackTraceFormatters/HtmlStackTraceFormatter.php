@@ -12,19 +12,29 @@ namespace Nettools\Core\ExceptionHandlers\StackTraceFormatters;
 class HtmlStackTraceFormatter extends StackTraceFormatter
 {
 	/**
-	 * @var bool
+	 * @var bool Should the stack trace function parameters be included in output ? 
 	 */
-	protected $_displayStackTrace;
+	protected $_includeFunctionParameters;
+	
+	
+	
+	/**
+	 * @var bool Should the stack trace function parameters be hidden by default ?
+	 */
+	protected $_hideFunctionParameters;
+	
 	
 	
 	/**
 	 * Constructor
 	 * 
-	 * @param bool $displayStackTrace
+	 * @param bool $includeFunctionParameters
+	 * @param bool $hideFunctionParameters
 	 */
-	function __construct($displayStackTrace = true)
+	function __construct($includeFunctionParameters = true, $hideFunctionParameters = true)
 	{
-		$this->_displayStackTrace = $displayStackTrace;
+		$this->_includeFunctionParameters = $includeFunctionParameters;
+		$this->_hideFunctionParameters = $hideFunctionParameters;
 	}
 	
 	
@@ -77,7 +87,6 @@ class HtmlStackTraceFormatter extends StackTraceFormatter
 
     table#bootstrap_exception td:nth-child(4){
         white-space: pre;
-        display:none;
     }
 
     table#bootstrap_exception tr:nth-child(2n){
@@ -88,6 +97,7 @@ HTML;
 
     }
     
+	
     
     /**
      * Get a string with exception stack trace properly formatted
@@ -109,8 +119,16 @@ HTML;
         $ret = $this->_outputCSS();
         
         
-        // output JS / raw HTML
-        $ret .= <<<HTML
+        // if we want function parameters of stack trace to be hidden by default, create CSS and JS to show parameters on demand
+		if ( $this->_hideFunctionParameters )
+        	$ret .= <<<HTML
+		
+<style>
+    table#bootstrap_exception td:nth-child(4){
+        display:none;
+    }
+</style>
+		
 <script>
     function funParameters()
     {
@@ -120,26 +138,19 @@ HTML;
             tds[i].style.display = "block";
     }
 </script>
-<div id="bootstrap_exception_body">
-<h1>$h1</h1>
-<h2>$kind</h2>
-<code>{$e->getMessage()}</code>
+
 HTML;
+
+		// outputting titles and message
+		$ret .= "<div id=\"bootstrap_exception_body\"><h1>$h1</h1><h2>$kind</h2><code>{$e->getMessage()}</code>";
 
 		
 		// si affichage pile d'appels
-		if ( $this->_displayStackTrace )
+		if ( $this->_includeFunctionParameters )
 		{
-			$ret .= <<<HTML
-
-<table id="bootstrap_exception">
-    <tr>
-        <th>File</th>
-        <th>Line</th>
-        <th>Function</th>
-        <th>Parameters <a href="javascript:void(0)" onclick="funParameters(); return false;">Display parameters</a></th>
-    </tr>
-HTML;
+			// table header
+			$ret .= "<table id=\"bootstrap_exception\"><tr><th>File</th><th>Line</th><th>Function</th>".
+						"<th>Parameters" . ($this->_hideFunctionParameters?" <a href=\"javascript:void(0)\" onclick=\"funParameters(); return false;\">Display parameters</a>":"") . "</th></tr>";
 
 
 			// handle stack trace
