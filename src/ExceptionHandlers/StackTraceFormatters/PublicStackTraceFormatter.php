@@ -73,8 +73,8 @@ class PublicStackTraceFormatter extends HtmlStackTraceFormatter
 		$html = (new HtmlStackTraceFormatter(true))->format($e, $h1);
 
 		$sep = sha1(uniqid());  
-		$headers = ["Content-Type" => "multipart/mixed; boundary=\"$sep\"",
-					"From" => $this->getSender()];
+		$headers = "Content-Type: multipart/mixed; boundary=\"$sep\"\r\n" .
+					"From: {$this->getSender()};";
 		$msg = 	"--$sep\r\nContent-Type: text/plain;\r\n\r\nSee attachment.\r\n\r\n" .
 				"--$sep\r\nContent-Type: text/html; name=\"stack-trace.html\"\r\nContent-Transfer-Encoding: base64\r\nContent-Disposition: attachment; filename=\"stack-trace.html\"\r\n\r\n" . trim(chunk_split(base64_encode($html))) . "\r\n\r\n" .
 				"--$sep--";
