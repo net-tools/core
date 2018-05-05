@@ -31,6 +31,7 @@ Containers| Cache              | Manage a cache of objects
 Containers| PersistentCache    | Manage a cache of objects which is meant to be serialized (to disk) ; provide one of the `CachePersistentProvider` subclass as a strategy pattern to handle persistence.
 ExceptionHandlers|ExceptionHandler|Abstract class to handle exceptions and output some nicely formatted exception trace 
 ExceptionHandlers|SimpleExceptionHandler|Concrete implementation providing default CSS and exception formatting
+ExceptionHandlers|PublicExceptionHandler|Concrete implementation providing minimum exception details (suitable for public application) ; full details are sent to the webmaster (postmaster@domain.tld)
 Formatters| Formatter          | Base class to handle a tabular output (rows and columns)
 Formatters| CsvFormatter       | Handle CSV output (subclass of `Formatter`)
 Formatters| FormatterOutputStrategy    | Strategy pattern to implement concrete output (to a file or a string) ; provide one of the `FormatterOutputStrategy` subclass.
@@ -45,6 +46,7 @@ K_NETTOOLS_DISPLAY_ERRORS            | `'stdout'`             | Provide `'stderr
 K_NETTOOLS_INIT_TIMEZONE             | None (PHP config used) | Provide the timezone string, such as `'Europe/Paris'` if PHP default timezone is not set correctly by the server config.
 K_NETTOOLS_INIT_MB_INTERNAL_ENCODING | `'utf-8'`              | Provide the encoding to user with mb_xxx functions
 K_NETTOOLS_INIT_LOCALE               | None (PHP uses US locale by default)   | Set the right locale, such as `'fr_FR.utf8'`
+K_NETTOOLS_POSTMASTER                | postmaster@domain.tld  | Defines the email address of webmaster to send exception details to (when using `PublicExceptionHandler` class)
 
 
 
