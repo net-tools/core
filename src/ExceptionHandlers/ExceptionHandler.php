@@ -36,7 +36,7 @@ abstract class ExceptionHandler
 		}
 		catch (\Throwable $e2)
 		{
-			return "Error '" . get_class($e2) . "' during processing of exception '" . get_class($e) . "'.";
+			return "Error '" . get_class($e2) . "' during processing of exception '" . get_class($e) . "' with message '{$e2->getMessage()}'.";
 		}
 	}
 	

@@ -64,15 +64,17 @@ class PublicFormatter extends HtmlFormatter
 	 */
 	protected function body(\Throwable $e, $h1, $stackTraceContent)
 	{
-		// prepare email body with appropriate formatters : html body + minimum stack first + hr + complete stack
+		// prepare email attachment with appropriate formatters : html body + minimum stack first + hr + complete stack
 		$html_email = (new HtmlFormatter(new MinimumAndFullHtmlStackTraceFormatter()))->format($e, $h1);
 		
+		// prepare email body as plain text, with a mimimum stack trace
+		$plaintext = (new PlainTextFormatter(new MinimumPlainTextStackTraceFormatter()))->format($e, $h1);
 		
 		// send email
 		$sep = sha1(uniqid());  
 		$headers = "Content-Type: multipart/mixed; boundary=\"$sep\"\r\n" .
 					"From: {$this->_getSender()};";
-		$msg = 	"--$sep\r\nContent-Type: text/plain;\r\n\r\nSee attachment.\r\n\r\n" .
+		$msg = 	"--$sep\r\nContent-Type: text/html;\r\n\r\n<pre>{$plaintext}</pre>\r\n\r\n" .
 				"--$sep\r\nContent-Type: text/html; name=\"stack-trace.html\"\r\nContent-Transfer-Encoding: base64\r\nContent-Disposition: attachment; filename=\"stack-trace.html\"\r\n\r\n" . trim(chunk_split(base64_encode($html_email))) . "\r\n\r\n" .
 				"--$sep--";
 
