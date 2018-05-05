@@ -11,13 +11,14 @@ namespace Nettools\Core\ExceptionHandlers;
 class SimpleExceptionHandler extends ExceptionHandler
 {
     /**
-     * Get a strategy object of class StackTraceFormatter that will handle conversion of stack trace to a string
+     * Get a strategy object of class Formatter that will handle conversion of exception body + stack trace to a string
 	 *
-	 * @return StackTraceFormatters\StackTraceFormatter
+	 * @return Formatters\Formatter
      */
-    protected function _getStackTraceFormatterStrategy()
+    protected function _getFormatterStrategy()
 	{
-		return new StackTraceFormatters\HtmlStackTraceFormatter(true);
+		// create an HTML formatter for exception body, with a stack trace having function parameters hidden by default
+		return new Formatters\HtmlFormatter(new Formatters\HiddenParametersHtmlStackTraceFormatter());
 	}
 }
 

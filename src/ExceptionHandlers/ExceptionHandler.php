@@ -13,11 +13,11 @@ use \Nettools\Core\Helpers\NetworkingHelper;
 abstract class ExceptionHandler
 {
     /**
-     * Get a strategy object of class StackTraceFormatter that will handle conversion of stack trace to a string
+     * Get a strategy object of class Formatter that will handle conversion of exception body + stack trace to a string
 	 *
-	 * @return StackTraceFormatters\StackTraceFormatter
+	 * @return Formatters\Formatter
      */
-    abstract protected function _getStackTraceFormatterStrategy();	
+    abstract protected function _getFormatterStrategy();	
 	
 	
 	
@@ -32,7 +32,7 @@ abstract class ExceptionHandler
 	{
 		try
 		{
-			return $this->_getStackTraceFormatterStrategy()->format($e, $h1);
+			return $this->_getFormatterStrategy()->format($e, $h1);
 		}
 		catch (\Throwable $e2)
 		{
