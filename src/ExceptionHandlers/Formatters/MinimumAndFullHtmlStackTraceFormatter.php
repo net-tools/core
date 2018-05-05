@@ -10,9 +10,9 @@ use \Nettools\Core\ExceptionHandlers\Res\StackTrace;
 
 
 /**
- * Class to get the stack trace as HTML, with no parameters column
+ * Class to get the stack trace as HTML, with first a simple stack trace with no parameters, then a full stack trace
  */
-class MinimumHtmlStackTraceFormatter extends HtmlStackTraceFormatter
+class MinimumAndFullHtmlStackTraceFormatter extends StackTraceFormatter
 {
     /**
      * Format a stack trace as a string with suitable format
@@ -22,13 +22,9 @@ class MinimumHtmlStackTraceFormatter extends HtmlStackTraceFormatter
      */
 	public function format(StackTrace $stack)
 	{
-		$ret = $css . "<table class=\"nettools_core_exceptionhandlers_exception\"><tr><th>File</th><th>Line</th><th>Function</th></tr>";
-		
-		foreach ( $stack->stack as $item )
-			$ret .= '<tr><td>' . implode('</td><td>', array_slice($item, 0, 3)) . '</td></tr>';
-		
-		$ret .= "</table>";
-		return $ret;
+		return (new MinimumHtmlStackTraceFormatter())->format($stack) .
+			"<p>&nbsp;</p><hr><p>&nbsp;</p><h3>Detailed stack trace</h3>" .
+			(new HtmlStackTraceFormatter())->format($stack);
 	}
 
 }

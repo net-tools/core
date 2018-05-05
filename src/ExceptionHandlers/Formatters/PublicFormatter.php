@@ -76,7 +76,7 @@ class PublicFormatter extends HtmlFormatter
 				"--$sep\r\nContent-Type: text/html; name=\"stack-trace.html\"\r\nContent-Transfer-Encoding: base64\r\nContent-Disposition: attachment; filename=\"stack-trace.html\"\r\n\r\n" . trim(chunk_split(base64_encode($html_email))) . "\r\n\r\n" .
 				"--$sep--";
 
-		mail($this->_getRecipient(), $this->_getSubject($e, $h1), $html_email, $headers);
+		mail($this->_getRecipient(), $this->_getSubject($e, $h1), $msg, $headers);
 		
 		
 		// no stack track for public output
