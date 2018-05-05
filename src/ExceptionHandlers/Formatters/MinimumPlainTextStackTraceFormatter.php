@@ -48,7 +48,7 @@ class MinimumPlainTextStackTraceFormatter extends StackTraceFormatter
 			$ret .= implode(' | ', $row) . "\r\n";
 		}
 		
-		return $ret;
+		return "<small>$ret</small>";
 	}
 }
 
