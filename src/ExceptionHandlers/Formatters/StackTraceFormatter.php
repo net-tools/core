@@ -10,7 +10,7 @@ use \Nettools\Core\ExceptionHandlers\Res\StackTrace;
 /**
  * Abstract Class to get the stack trace as a string with suitable format
  */
-class StackTraceFormatter
+abstract class StackTraceFormatter
 {
     /**
      * Format a stack trace as a string with suitable format

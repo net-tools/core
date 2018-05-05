@@ -40,10 +40,7 @@ function _unhideParameters()
 	var tds = document.querySelectorAll('table.nettools_core_exceptionhandlers_exception td:nth-child(4)');
 	var tdsl = tds.length;
 	for ( var i = 0 ; i < tdsl ; i++ )
-		if ( tds[i].style.display == 'none' )
-			tds[i].style.display = "block";
-		else
-			tds[i].style.display = "none";
+		tds[i].style.display = "block";
 }
 </script>
 

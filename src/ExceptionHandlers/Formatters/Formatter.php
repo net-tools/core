@@ -53,8 +53,7 @@ abstract class Formatter
 	public function format(\Throwable $e, $h1)
 	{
 		// get body content with stack trace content (stack formatted with strategy passed as constructor parameter)
-		$ret = $this->body($e, $h1, $this->_stackTraceFormatter->format(new StackTrace($e)));
-		
+		return $this->body($e, $h1, $this->_stackTraceFormatter->format(new StackTrace($e)));
 	}
 
 }
