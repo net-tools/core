@@ -15,11 +15,11 @@ class PublicExceptionHandler extends ExceptionHandler
     /**
      * Get a strategy object of class StackTraceFormatter that will handle conversion of stack trace to a string
 	 *
-	 * @return StackTraceFormatters\StackTraceFormatter
+	 * @return Formatters\Formatter
      */
-    protected function _getStackTraceFormatterStrategy()
+    protected function _getFormatterStrategy()
 	{
-		return new StackTraceFormatters\PublicStackTraceFormatter();
+		return new Formatters\PublicFormatter(new Formatters\NullStackTraceFormatter());
 	}
 }
 
