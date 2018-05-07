@@ -78,7 +78,7 @@ class SecureRequestHelper {
 	/** 
 	 * Initialize security layer (sends a CSRF cookie to the browser)
 	 */
-	public function initialize()
+	public function CSRFInitialize()
 	{
 		// create a CSRF value
 		$value = bin2hex(random_bytes(32));
@@ -89,12 +89,12 @@ class SecureRequestHelper {
 	
 	
 	/** 
-	 * Authorize a request with CSRF security
+	 * Authorize a request with CSRF security (double-submitted CSRF cookie pattern)
 	 * 
 	 * @param string[] $request
 	 * @return bool Returns TRUE if request is authorized, false if not (either the CSRF cookie does not exist, or the submitted value does not equal the CSRF cookie)
 	 */
-	public function authorize(array $request)
+	public function CSRFAuthorize(array $request)
 	{
 		// checking the CSRF cookie exists
 		$cookie = $this->getCSRFCookie();
