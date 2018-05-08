@@ -102,7 +102,8 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 	public function testRevokeCSRF()
 	{
 		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
-		$intf->expects($this->exactly(2))->method('setCookie');
+		$intf->expects($this->once())->method('setCookie');
+		$intf->expects($this->once())->method('deleteCookie');
 		$cookie = 'abcdef';
 		$intf->method('getCookie')->will($this->onConsecutiveCalls($cookie, ''));
 		
