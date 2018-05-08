@@ -1,148 +1,124 @@
 <?php
-/**
- * SecureRequestHelper
- *
- * @author Pierre - dev@net-tools.ovh
- * @license MIT
- */
 
-
-
-// namespace
-namespace Nettools\Core\Helpers;
+namespace Nettools\Core\Tests;
 
 
 
 
-/** 
- * Helper cass to deal with secure requests
- */
-class SecureRequestHelper {
+use \Nettools\Core\Helpers\SecureRequestHelper;
+use \Nettools\Core\Helpers\SecureRequestHelper\AbstractBrowserInterface;
 
-	
-	protected $_csrf_cookiename;
-	protected $_csrf_submittedvaluename;
-	protected $_browserInterface;
-	
-	
-	
-	/** 
-	 * Constructor 
-	 *
-	 * @param string $csrf_cookiename Name of CSRF cookie
-	 * @param string $csrf_submittedvaluename Name of CSRF value submitted along the request (double CSRF cookie submit pattern)
-	 */
-	public function __construct($csrf_cookiename = '_CSRF_', $csrf_submittedvaluename = '_FORM_CSRF_')
-	{
-		$this->_csrf_cookiename = $csrf_cookiename;
-		$this->_csrf_submittedvaluename = $csrf_submittedvaluename;
-		$this->_browserInterface = new SecureRequestHelper\BrowserInterface();
-	}
-	
-	
-	
-	/** 
-	 * Set the browser interface ; used in unit testing
-	 *
-	 * @param SecureRequestHelper\AbstractBrowserInterface $intf
-	 */
-	public function setBrowserInterface(SecureRequestHelper\AbstractBrowserInterface $intf)
-	{
-		$this->_browserInterface = $intf;
-	}
-	
-	
-	
-	/**
-	 * Get CSRF cookie name
-	 *
-	 * @return string
-	 */
-	public function getCSRFCookieName()
-	{
-		return $this->_csrf_cookiename;
-	}
-	
-	
-	
-	/**
-	 * Get CSRF cookie value
-	 * 
-	 * @return string
-	 * @throws SecureRequestHelper\CSRFException Thrown if the CSRF layer has not been initialized
-	 */
-	public function getCSRFCookie()
-	{
-		$cookie = $this->_browserInterface->getCookie($this->_csrf_cookiename);
-		if ( !$cookie )
-			throw new SecureRequestHelper\CSRFException('CSRF cookie has not been initialized');
+
+
+class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
+{
+    
+    public function testCSRF()
+    {
+		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
+		$intf->expects($this->once())->method('setCookie');
+		$cookie = 'abcdef';
+		$intf->method('getCookie')->will($this->returnValue($cookie));
 		
-		return $cookie;
-	}
-	
-	
-	
-	/**
-	 * Get CSRF submitted value name
-	 *
-	 * @return string
-	 */
-	public function getCSRFSubmittedValueName()
-	{
-		return $this->_csrf_submittedvaluename;
-	}
-	
-	
-	
-	/** 
-	 * Initialize security layer (sends a CSRF cookie to the browser)
-	 */
-	public function initializeCSRF()
-	{
-		// create a CSRF value
-		$this->_browserInterface->setCookie($this->_csrf_cookiename, bin2hex(random_bytes(32)), 0, '/');
-	}
-	
-	
-	
-	/**
-	 * Revoke CSRF cookie
-	 */
-	public function revokeCSRF()
-	{
-		$this->_browserInterface->deleteCookie($this->_csrf_cookiename, '/');
-	}
-	
-	
-	
-	/** 
-	 * Authorize a request with CSRF security (double-submitted CSRF cookie pattern)
-	 * 
-	 * @param string[] $request
-	 * @return bool Returns TRUE if request is authorized
-	 * @throws SecureRequestHelper\CSRFException Thrown if the request has not been authorized
-	 */
-	public function authorizeCSRF(array $request)
-	{
-		// if CSRF cookie exists, comparing with double-submitted cookie as a request value
-		if ( !hash_equals($this->getCSRFCookie(), $request[$this->_csrf_submittedvaluename]) )
-			throw new SecureRequestHelper\CSRFException('CSRF security validation failed');
+		$sec = new SecureRequestHelper('_cname_', '_fcname_');
+		$sec->setBrowserInterface($intf);
+		$sec->initializeCSRF();
 		
-		return true;
+		$this->assertEquals('_cname_', $sec->getCSRFCookieName());
+		$this->assertEquals('_fcname_', $sec->getCSRFSubmittedValueName());
+		$this->assertEquals($cookie, $sec->getCSRFCookie());
+		$this->assertEquals("<input type=\"hidden\" name=\"_fcname_\" value=\"$cookie\">", $sec->addCSRFHiddenInput());
+		
+		
+		$req = ['input1'=>'value1', '_fcname_'=>$cookie];
+		$this->assertEquals(true, $sec->authorizeCSRF($req));
+    }
+	
+	
+	
+	/**
+	 * @expectedException \Nettools\Core\Helpers\SecureRequestHelper\CSRFException
+	 * @expectedExceptionMessage CSRF security validation failed
+	 */
+	public function testAuthorizeCSRF()
+	{
+		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
+		$intf->expects($this->once())->method('setCookie');
+		$cookie = 'abcdef';
+		$intf->method('getCookie')->will($this->returnValue($cookie));
+		
+		$sec = new SecureRequestHelper('_cname_', '_fcname_');
+		$sec->setBrowserInterface($intf);
+		$sec->initializeCSRF();
+		$req = ['input1'=>'value1', '_fcname_'=>'dummy value'];
+		$sec->authorizeCSRF($req);
 	}
 	
 	
 	
 	/**
-	 * Get the HTML for an hidden CSRF field
-	 *
-	 * @return string
-	 * @throws Exceptions\CSRFException Thrown if the CSRF layer has not been initialized
+	 * @expectedException \Nettools\Core\Helpers\SecureRequestHelper\CSRFException
+	 * @expectedExceptionMessage CSRF cookie has not been initialized
 	 */
-	public function addCSRFHiddenInput()
+	public function testAuthorizeCSRFNoCookie()
 	{
-		return "<input type=\"hidden\" name=\"{$this->_csrf_submittedvaluename}\" value=\"{$this->getCSRFCookie()}\">";
+		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
+		$intf->expects($this->never())->method('setCookie');
+		$intf->method('getCookie')->will($this->returnValue(''));
+		
+		$sec = new SecureRequestHelper('_cname_', '_fcname_');
+		$sec->setBrowserInterface($intf);
+
+		// no init
+		$req = ['input1'=>'value1', '_fcname_'=>'dummy value'];
+		$sec->authorizeCSRF($req);
 	}
+	
+	
+	
+	/**
+	 * @expectedException \Nettools\Core\Helpers\SecureRequestHelper\CSRFException
+	 * @expectedExceptionMessage CSRF cookie has not been initialized
+	 */
+	public function testNotInitializeCSRF()
+	{
+		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
+		$intf->expects($this->never())->method('setCookie');
+		$intf->method('getCookie')->will($this->returnValue(''));
+		
+		$sec = new SecureRequestHelper('_cname_', '_fcname_');
+		$sec->setBrowserInterface($intf);
+		
+		// calling getCSRFCookie will throw an exception since cookie has not been initialized
+		$sec->getCSRFCookie();
+	}
+	
+	
+	
+	/**
+	 * @expectedException \Nettools\Core\Helpers\SecureRequestHelper\CSRFException
+	 * @expectedExceptionMessage CSRF cookie has not been initialized
+	 */
+	public function testRevokeCSRF()
+	{
+		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
+		$intf->expects($this->once())->method('setCookie');
+		$intf->expects($this->once())->method('deleteCookie');
+		$cookie = 'abcdef';
+		$intf->method('getCookie')->will($this->onConsecutiveCalls($cookie, ''));
+		
+		$sec = new SecureRequestHelper('_cname_', '_fcname_');
+		$sec->setBrowserInterface($intf);
+		$sec->initializeCSRF();
+		$this->assertEquals($cookie, $sec->getCSRFCookie());	// returning cookie
+		
+		$sec->revokeCSRF();
+		
+		// calling getCSRFCookie will throw an exception since cookie has been revoked
+		$sec->getCSRFCookie();									// returning ''
+	}
+
+    
 }
 
 ?>
