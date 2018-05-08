@@ -31,7 +31,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 		
 		
 		$req = ['input1'=>'value1', '_fcname_'=>$cookie];
-		$this->assertEquals(true, $this->authorizeCSRF($req));
+		$this->assertEquals(true, $sec->authorizeCSRF($req));
     }
 	
 	
