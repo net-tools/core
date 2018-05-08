@@ -51,7 +51,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 		$sec->setBrowserInterface($intf);
 		$sec->initializeCSRF();
 		$req = ['input1'=>'value1', '_fcname_'=>'dummy value'];
-		$this->authorizeCSRF($req);
+		$sec->authorizeCSRF($req);
 	}
 	
 	
@@ -71,7 +71,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 
 		// no init
 		$req = ['input1'=>'value1', '_fcname_'=>'dummy value'];
-		$this->authorizeCSRF($req);
+		$sec->authorizeCSRF($req);
 	}
 	
 	
@@ -83,7 +83,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 	public function testNotInitializeCSRF()
 	{
 		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
-		$intf->expects($this->once())->method('setCookie');
+		$intf->expects($this->never())->method('setCookie');
 		$intf->method('getCookie')->will($this->returnValue(''));
 		
 		$sec = new SecureRequestHelper('_cname_', '_fcname_');
@@ -102,7 +102,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 	public function testRevokeCSRF()
 	{
 		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
-		$intf->expects($this->once())->method('setCookie');
+		$intf->expects($this->exactly(2))->method('setCookie');
 		$cookie = 'abcdef';
 		$intf->method('getCookie')->will($this->onConsecutiveCalls($cookie, ''));
 		
