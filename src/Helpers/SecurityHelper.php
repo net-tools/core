@@ -20,20 +20,20 @@ namespace Nettools\Core\Helpers;
 class SecurityHelper {
 		
 	/**
-     * Create a token, based on a unique value and a shared secret ; 64 characters + 13 characters
+     * Create a token, based on a unique value and a shared secret ; 64 characters + bin2hex characters
      *
      * @param string $secret Secret to use to create the token
      * @return string The token created (unique value)
      */
 	static function createToken($secret = "stoken")
 	{
-		$unid = uniqid(); 	// 13 characters
-		return hash('sha256', $unid . $secret) . $unid;
+		$unid = bin2hex(random_bytes(32));
+		return hash_hmac('sha256', $unid . $secret) . $unid;
 	}
 	
 	
 	/**
-     * Check if token has been altered : last 13 characters are used to compute the 64 first characters.
+     * Check if token has been altered : last characters are used to compute the 64 first characters.
      * 
      * @param string $token The token to check
      * @param string $secret The secret used to generate the token
@@ -41,9 +41,11 @@ class SecurityHelper {
      */
 	static function checkToken($token, $secret = "stoken")
 	{
-		$unid = substr($token, -13); // extract last 13 characters
-		return (hash('sha256', $unid . $secret) . $unid) == $token;
+		$unid = substr($token, 64); // extract characters from 64 to string end
+		return hash_equals(hash_hmac('sha256', $unid . $secret) . $unid, $token);
 	}
+	
+	
 	/**
      * sanitize a string (detect html tags, add slashes and remove sql orders)
      * 
