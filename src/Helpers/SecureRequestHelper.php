@@ -124,8 +124,19 @@ class SecureRequestHelper {
 	 */
 	public function authorizeCSRF(array $request)
 	{
+		try
+		{
+			$b = hash_equals($this->getCSRFCookie(), $request[$this->_csrf_submittedvaluename]);
+		}
+		// catching when one of hash_equals parameters is null (E_WARNING)
+		catch(\ErrorException $e)
+		{
+			throw new SecureRequestHelper\CSRFException('CSRF security validation failed (missing parameter)');
+		}
+		
+		
 		// if CSRF cookie exists, comparing with double-submitted cookie as a request value
-		if ( !hash_equals($this->getCSRFCookie(), $request[$this->_csrf_submittedvaluename]) )
+		if ( !$b )
 			throw new SecureRequestHelper\CSRFException('CSRF security validation failed');
 		
 		return true;
