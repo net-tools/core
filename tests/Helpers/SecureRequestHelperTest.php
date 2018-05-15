@@ -36,6 +36,27 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 	
 	
 	
+    public function testHashedCSRF()
+    {
+		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
+		$intf->expects($this->once())->method('setCookie');
+		$cookie = 'abcdef';
+		$intf->method('getCookie')->will($this->returnValue($cookie));
+		
+		$sec = new SecureRequestHelper('_cname_', '_fcname_', 'secret');
+		$sec->setBrowserInterface($intf);
+		$sec->initializeCSRF();
+		
+		$this->assertNotEquals($cookie, $sec->getHashedCSRFCookie());
+		$this->assertEquals(true, strpos($sec->getHashedCSRFCookie(), '!') === 0);
+		
+		
+		$req = ['input1'=>'value1', '_fcname_'=>$sec->getHashedCSRFCookie()];
+		$this->assertEquals(true, $sec->authorizeCSRF($req));
+    }
+	
+	
+	
 	/**
 	 * @expectedException \Nettools\Core\Helpers\SecureRequestHelper\CSRFException
 	 * @expectedExceptionMessage CSRF security validation failed
