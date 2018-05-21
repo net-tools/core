@@ -14,7 +14,7 @@
  * - K_NETTOOLS_INIT_LOCALE (to the locale to use)
  * - K_NETTOOLS_POSTMASTER (email to send exception stack trace to ; defaults to $_SERVER['SERVER_ADMIN'])
  *
- * @author Pierre - dev@net-tools.ovh
+ * @author Pierre - dev@nettools.ovh
  * @license MIT
  */
 
