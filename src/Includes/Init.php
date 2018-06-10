@@ -54,13 +54,8 @@ if ( defined('K_NETTOOLS_INIT_LOCALE') )
     Initializer::initLocale(K_NETTOOLS_INIT_LOCALE);
 
 
-// display errors on screen (stdout) rather than on the error log (stderr)
-// As the error log may not be easily accessible on some hosts, errors
-// could be printed on default display to help debug (if a system is well
-// designed, errors should be catched with exceptions and throwables handling).
+// defines the email address to send exceptions details to
 if ( !defined('K_NETTOOLS_POSTMASTER') )
-	// by default, errors are displayed in the standard output, unless the user
-	// defines a K_NETTOOLS_DISPLAY_ERRORS constant to 'stderr' value.
 	define('K_NETTOOLS_POSTMASTER', $_SERVER['SERVER_ADMIN']);
 
 
