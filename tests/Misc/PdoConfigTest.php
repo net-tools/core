@@ -52,7 +52,7 @@ class PdoConfigTest extends \PHPUnit\Framework\TestCase
 	
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Config value 'sqlerr' can't be read (SQL error : unknown error) 
+     * @expectedExceptionMessage Config value 'sqlerr' can't be read (SQL error unknown error) 
      */
     public function testSqlError()
     {
