@@ -48,7 +48,7 @@ HTML;
 		
 		
 		$ret .= "<table class=\"nettools_core_exceptionhandlers_exception\"><tr><th>File</th><th>Line</th><th>Function</th>" .
-				"<th>Paramètres <a href=\"javascript:void(0)\" onclick=\"_unhideParameters(); return false;\">(unhide)</a></th></tr>";
+				"<th>Parameters <a href=\"javascript:void(0)\" onclick=\"_unhideParameters(); return false;\">(unhide)</a></th></tr>";
 		
 		foreach ( $stack->stack as $item )
 			$ret .= '<tr><td>' . implode('</td><td>', $item) . '</td></tr>';
