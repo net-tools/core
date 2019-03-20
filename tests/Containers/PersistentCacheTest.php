@@ -17,14 +17,14 @@ class PersistentCacheTest extends \PHPUnit\Framework\TestCase
     protected static $_cacheFile = NULL;
     
     
-    static public function setUpBeforeClass()
+    static public function setUpBeforeClass() :void
     {
         self::$_cacheFile = tempnam(sys_get_temp_dir(), 'phpunit') . 'persistentCache';
         self::$_persistentCacheProvider = new FileCachePersistenceProvider(self::$_cacheFile);
     }
 
     
-	static public function tearDownBeforeClass()
+	static public function tearDownBeforeClass() :void
 	{
 		if ( file_exists(self::$_cacheFile) )
 			unlink(self::$_cacheFile);

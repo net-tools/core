@@ -34,12 +34,12 @@ class PdoConfigTest extends \PHPUnit\Framework\TestCase
 	
 	
 	
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Config value 'novalue' does not exist
-     */
     public function testInexistantValue()
     {
+     	$this->expectException(\Exception::class);
+     	$this->expectExceptionMessage('Config value \'novalue\' does not exist');
+		 
+		 
 		$qst_stub = $this->createMock(\PDOStatement::class);
 		$qst_stub->method('execute')->with($this->equalTo(['novalue']))->willReturn(true);
 		$qst_stub->method('fetchColumn')->with($this->equalTo(0))->willReturn(FALSE);
@@ -50,12 +50,12 @@ class PdoConfigTest extends \PHPUnit\Framework\TestCase
 	
 	
 	
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Config value 'sqlerr' can't be read (SQL error unknown error) 
-     */
     public function testSqlError()
     {
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage("Config value 'sqlerr' can't be read (SQL error unknown error)");
+		
+		
 		$qst_stub = $this->createMock(\PDOStatement::class);
 		$qst_stub->method('execute')->with($this->equalTo(['sqlerr']))->will($this->throwException(new \PDOException('unknown error')));
 		

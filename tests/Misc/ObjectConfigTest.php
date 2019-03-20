@@ -8,11 +8,11 @@ namespace Nettools\Core\Misc\Tests;
 class ObjectConfigTest extends \PHPUnit\Framework\TestCase
 {
 	
-    /**
-     * @expectedException \ArgumentCountError
-     */
     public function testMissingArgumentConstructor()
     {
+     	$this->expectException(\ArgumentCountError::class);
+		
+		
         $cfg = new \Nettools\Core\Misc\ObjectConfig();
     }
     
@@ -38,11 +38,11 @@ class ObjectConfigTest extends \PHPUnit\Framework\TestCase
 	
 	
 	
-    /**
-     * @expectedException \Exception
-     */
     public function testInexistantProperty()
     {
+		$this->expectException(\Exception::class);
+		
+		
         $cfg = new \Nettools\Core\Misc\ObjectConfig((object)
 											array(
 												'value1'	=> 1

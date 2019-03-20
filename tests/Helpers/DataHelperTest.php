@@ -10,14 +10,14 @@ class DataHelperTest extends \PHPUnit\Framework\TestCase
     private $_locale = NULL;
 
     
-    public function setUp()
+    public function setUp() :void
     {
         // backup current locale
         $this->_locale = setlocale(LC_TIME, 0);
     }
     
     
-    public function tearDown()
+    public function tearDown() :void
     {
         // restore locale
         setlocale(LC_TIME, $this->_locale);

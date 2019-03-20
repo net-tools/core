@@ -57,12 +57,12 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 	
 	
 	
-	/**
-	 * @expectedException \Nettools\Core\Helpers\SecureRequestHelper\CSRFException
-	 * @expectedExceptionMessage CSRF security validation failed
-	 */
 	public function testAuthorizeCSRF()
 	{
+		$this->expectException(\Nettools\Core\Helpers\SecureRequestHelper\CSRFException::class);
+		$this->expectExceptionMessage('CSRF security validation failed');
+		
+		
 		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
 		$intf->expects($this->once())->method('setCookie');
 		$cookie = 'abcdef';
@@ -77,12 +77,12 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 	
 	
 	
-	/**
-	 * @expectedException \Nettools\Core\Helpers\SecureRequestHelper\CSRFException
-	 * @expectedExceptionMessage CSRF cookie has not been initialized
-	 */
 	public function testAuthorizeCSRFNoCookie()
 	{
+	 	$this->expectException(\Nettools\Core\Helpers\SecureRequestHelper\CSRFException::class);
+	 	$this->expectExceptionMessage('CSRF cookie has not been initialized');
+		 
+		 
 		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
 		$intf->expects($this->never())->method('setCookie');
 		$intf->method('getCookie')->will($this->returnValue(''));
@@ -97,12 +97,12 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 	
 	
 	
-	/**
-	 * @expectedException \Nettools\Core\Helpers\SecureRequestHelper\CSRFException
-	 * @expectedExceptionMessage CSRF cookie has not been initialized
-	 */
 	public function testNotInitializeCSRF()
 	{
+		$this->expectException(\Nettools\Core\Helpers\SecureRequestHelper\CSRFException::class);
+		$this->expectExceptionMessage('CSRF cookie has not been initialized');
+
+			 
 		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
 		$intf->expects($this->never())->method('setCookie');
 		$intf->method('getCookie')->will($this->returnValue(''));
@@ -116,12 +116,13 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 	
 	
 	
-	/**
-	 * @expectedException \Nettools\Core\Helpers\SecureRequestHelper\CSRFException
-	 * @expectedExceptionMessage CSRF cookie has not been initialized
-	 */
 	public function testRevokeCSRF()
 	{
+	 	$this->expectException(\Nettools\Core\Helpers\SecureRequestHelper\CSRFException::class);
+	 	$this->expectExceptionMessage('CSRF cookie has not been initialized');
+
+		
+		
 		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
 		$intf->expects($this->once())->method('setCookie');
 		$intf->expects($this->once())->method('deleteCookie');

@@ -25,11 +25,11 @@ class PrefixConfigTest extends \PHPUnit\Framework\TestCase
 	
 	
 	
-    /**
-     * @expectedException \Exception
-     */
     public function testInexistantProperty()
     {
+     	$this->expectException(\Exception::class);
+
+		
 		$ocfg = new \Nettools\Core\Misc\ObjectConfig((object)
 											array(
 												'value1'	=> 12,
