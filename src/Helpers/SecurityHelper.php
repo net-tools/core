@@ -92,7 +92,7 @@ class SecurityHelper {
 		try {
 			$salt = hex2bin($jsondata["s"]);
 			$iv  = hex2bin($jsondata["iv"]);
-		} catch(Exception $e) { return null; }
+		} catch(\Exception $e) { return null; }
 		$ct = base64_decode($jsondata["ct"]);
 		$concatedPassphrase = $passphrase.$salt;
 		$md5 = array();

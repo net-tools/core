@@ -166,7 +166,7 @@ class SecureRequestHelper {
 	 * Get the HTML for an hidden CSRF field
 	 *
 	 * @return string
-	 * @throws Exceptions\CSRFException Thrown if the CSRF layer has not been initialized
+	 * @throws SecureRequestHelper\CSRFException Thrown if the CSRF layer has not been initialized
 	 */
 	public function addCSRFHiddenInput()
 	{

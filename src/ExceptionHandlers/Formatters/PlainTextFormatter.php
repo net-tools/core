@@ -3,8 +3,6 @@
 namespace Nettools\Core\ExceptionHandlers\Formatters;
 
 
-use \Nettools\Core\ExceptionHandlers\Res\StackTrace;
-
 
 
 /**

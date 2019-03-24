@@ -22,7 +22,7 @@ class MinimumHtmlStackTraceFormatter extends HtmlStackTraceFormatter
      */
 	public function format(StackTrace $stack)
 	{
-		$ret = $css . "<table class=\"nettools_core_exceptionhandlers_exception\"><tr><th>File</th><th>Line</th><th>Function</th></tr>";
+		$ret = "<table class=\"nettools_core_exceptionhandlers_exception\"><tr><th>File</th><th>Line</th><th>Function</th></tr>";
 		
 		foreach ( $stack->stack as $item )
 			$ret .= '<tr><td>' . implode('</td><td>', array_slice($item, 0, 3)) . '</td></tr>';

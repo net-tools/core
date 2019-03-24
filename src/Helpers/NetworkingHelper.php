@@ -52,6 +52,7 @@ class NetworkingHelper {
 	{
 		if ( $append )
 		{
+		    $regs = [];
 			if ( preg_match('|^(.+?)(?:\?(.*?))?(#.*)?$|', $url, $regs) )
 			{
 				$u = $regs[1];  // URL part

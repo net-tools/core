@@ -3,9 +3,6 @@
 namespace Nettools\Core\ExceptionHandlers\Formatters;
 
 
-use \Nettools\Core\ExceptionHandlers\Res\StackTrace;
-
-
 
 /**
  * Class to get the exception details in HTML format for public application (don't show stack trace), and
