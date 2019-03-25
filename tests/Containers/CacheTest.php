@@ -5,11 +5,12 @@ namespace Nettools\Core\Tests;
 
 
 use \Nettools\Core\Containers\Cache;
+use \PHPUnit\Framework\TestCase;
 
 
 
 
-class CacheTest extends \PHPUnit\Framework\TestCase
+class CacheTest extends TestCase
 {
     public function testRegister()
     {

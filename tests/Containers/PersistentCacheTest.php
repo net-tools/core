@@ -7,11 +7,12 @@ namespace Nettools\Core\Tests;
 
 use \Nettools\Core\Containers\PersistentCache;
 use \Nettools\Core\Containers\FileCachePersistenceProvider;
+use \PHPUnit\Framework\TestCase;
 
 
 
 
-class PersistentCacheTest extends \PHPUnit\Framework\TestCase
+class PersistentCacheTest extends TestCase
 {
     protected static $_persistentCacheProvider = NULL;
     protected static $_cacheFile = NULL;

@@ -6,6 +6,7 @@ namespace Nettools\Core\Tests;
 
 
 use \Nettools\Core\Containers\Pool;
+use \PHPUnit\Framework\TestCase;
 
 
 
@@ -38,7 +39,7 @@ class PoolUnitTestObject
 
 
 
-class PoolTest extends \PHPUnit\Framework\TestCase
+class PoolTest extends TestCase
 {
     public function testPool()
     {

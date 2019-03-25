@@ -1,11 +1,12 @@
 <?php
 
 namespace Nettools\Core\Tests;
+use \PHPUnit\Framework\TestCase;
 
 
 
 
-class DataHelperTest extends \PHPUnit\Framework\TestCase
+class DataHelperTest extends TestCase
 {
     private $_locale = NULL;
 

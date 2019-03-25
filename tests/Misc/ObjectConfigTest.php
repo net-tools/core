@@ -14,6 +14,7 @@ class ObjectConfigTest extends \PHPUnit\Framework\TestCase
 		
 		
         $cfg = new \Nettools\Core\Misc\ObjectConfig();
+        $cfg = $cfg;
     }
     
 	
