@@ -52,9 +52,6 @@ class PersistentCacheTest extends TestCase
         // cache not committed to disk yet
         $this->assertFileNotExists(self::$_cacheFile);
         
-		// creating cache file in vfs
-		//$f = vfsStream::newFile('persistentCache')->at(self::$_vfs)->withContent('');
-        
         // commit cache (currently empty) to disk ; setting Dirty to TRUE (a cache not dirty is not committed to disk)
         $c->setDirty(true);
         $c->commit();
