@@ -7,6 +7,8 @@ namespace Nettools\Core\Tests;
 
 use \Nettools\Core\Containers\PersistentCache;
 use \Nettools\Core\Containers\FileCachePersistenceProvider;
+use \org\bovigo\vfs\vfsStream;
+use \org\bovigo\vfs\vfsStreamDirectory;
 use \PHPUnit\Framework\TestCase;
 
 
@@ -16,25 +18,20 @@ class PersistentCacheTest extends TestCase
 {
     protected static $_persistentCacheProvider = NULL;
     protected static $_cacheFile = NULL;
+	protected static $_vfs = NULL;
     
     
     static public function setUpBeforeClass() :void
     {
-        self::$_cacheFile = tempnam(sys_get_temp_dir(), 'phpunit') . 'persistentCache';
+		self::$_vfs = vfsStream::setup('root');
+		self::$_cacheFile = vfsStream::url('root/persistentCache');
         self::$_persistentCacheProvider = new FileCachePersistenceProvider(self::$_cacheFile);
     }
 
     
-	static public function tearDownBeforeClass() :void
-	{
-		if ( file_exists(self::$_cacheFile) )
-			unlink(self::$_cacheFile);
-	}
-    
-    
     public function testNewCache()
     {
-        $tmp = tempnam(sys_get_temp_dir(), 'phpunit') . 'persistentNewCache';
+		$tmp = vfsStream::url('root/persistentNewCache');
 		$c = new PersistentCache(new FileCachePersistenceProvider($tmp));
        
         // cache not committed to disk yet
@@ -55,6 +52,9 @@ class PersistentCacheTest extends TestCase
         // cache not committed to disk yet
         $this->assertFileNotExists(self::$_cacheFile);
         
+		// creating cache file in vfs
+		//$f = vfsStream::newFile('persistentCache')->at(self::$_vfs)->withContent('');
+        
         // commit cache (currently empty) to disk ; setting Dirty to TRUE (a cache not dirty is not committed to disk)
         $c->setDirty(true);
         $c->commit();
@@ -62,7 +62,7 @@ class PersistentCacheTest extends TestCase
         // assert cache file exists
         $this->assertFileExists(self::$_cacheFile);
         $size = filesize(self::$_cacheFile);
-        
+		
         // assert init values
         $this->assertEquals(0, $c->getCount());
         $this->assertEquals(false, $c->isDirty());
