@@ -62,21 +62,21 @@ class TimestampTokenTest extends TestCase
 		
 		// testing hash : 64 hex values
 		$this->assertEquals(64, strlen($t->h), 'Wrong length for hash token part');
-		$this->assertRegExp('/^[a-fA-F0-9]{64}$/', $t->h, 'Wrong pattern for hash token part');
+		$this->assertMatchesRegularExpression('/^[a-fA-F0-9]{64}$/', $t->h, 'Wrong pattern for hash token part');
 
 		// testing delay (token validity) ; 2 digits hex values
 		$this->assertEquals(2, strlen($t->d), 'Wrong length for delay token part');
-		$this->assertRegExp('/^[a-fA-F0-9]{2}$/', $t->d, 'Wrong pattern for delay token part');
+		$this->assertMatchesRegularExpression('/^[a-fA-F0-9]{2}$/', $t->d, 'Wrong pattern for delay token part');
 
 		// testing token validity unit (h/m/s) ; 1 letter
 		$this->assertEquals(1, strlen($t->u), 'Wrong length for unit token part');
-		$this->assertRegExp('/^h|m|s$/', $t->u, 'Wrong pattern for unit token part');
+		$this->assertMatchesRegularExpression('/^h|m|s$/', $t->u, 'Wrong pattern for unit token part');
 		
 		// testing unique ID ; hex digits
-		$this->assertRegExp('/^[a-fA-F0-9]+$/', $t->i, 'Wrong pattern for unique id token part');
+		$this->assertMatchesRegularExpression('/^[a-fA-F0-9]+$/', $t->i, 'Wrong pattern for unique id token part');
 		
 		// testing timestamp ; hex digits
-		$this->assertRegExp('/^[a-fA-F0-9]+$/', $t->t, 'Wrong pattern for timestamp token part');
+		$this->assertMatchesRegularExpression('/^[a-fA-F0-9]+$/', $t->t, 'Wrong pattern for timestamp token part');
 		
 	}
 	
