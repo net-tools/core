@@ -35,13 +35,13 @@ class PersistentCacheTest extends TestCase
 		$c = new PersistentCache(new FileCachePersistenceProvider($tmp));
        
         // cache not committed to disk yet
-        $this->assertFileNotExists($tmp);
+        $this->assertFileDoesNotExist($tmp);
         
         // assert get method returns FALSE (cache file does not exists)
         $this->assertEquals(false, $c->get('key'));
 
         // cache GET method does not commit cache to disk
-        $this->assertFileNotExists($tmp);
+        $this->assertFileDoesNotExist($tmp);
     }
     
     
@@ -50,7 +50,7 @@ class PersistentCacheTest extends TestCase
 		$c = new PersistentCache(self::$_persistentCacheProvider);
         
         // cache not committed to disk yet
-        $this->assertFileNotExists(self::$_cacheFile);
+        $this->assertFileDoesNotExist(self::$_cacheFile);
         
         // commit cache (currently empty) to disk ; setting Dirty to TRUE (a cache not dirty is not committed to disk)
         $c->setDirty(true);
