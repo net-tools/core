@@ -31,9 +31,9 @@ class SecurityHelper {
 		//$data = filter_var(trim($data), FILTER_SANITIZE_STRING, !FILTER_FLAG_STRIP_LOW);
 		$data = trim(strip_tags($data));
 		
-		// apply stripslashes if magic_quotes_gpc is enabled
-		if(get_magic_quotes_gpc())
-			$data = stripslashes($data);
+		// apply stripslashes if magic_quotes_gpc is enabled // DEPRECATED PHP7.4
+		/*if(get_magic_quotes_gpc())
+			$data = stripslashes($data);*/ 
 			
 		// SQL commands are forbidden
 		$banlist = array
