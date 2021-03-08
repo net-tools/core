@@ -29,7 +29,16 @@ abstract class AbstractConfig {
 	{
 		return $this->get($k);
 	}
-    
+	
+	
+	
+	/** 
+	 * Test config value key exists
+	 * @param string $k Config value key name
+	 *
+	 * @return bool
+	 */
+	public function test($k);
 }
 
 

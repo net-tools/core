@@ -52,6 +52,31 @@ class PdoConfig extends AbstractConfig{
 			throw new \Exception("Config value '$k' can't be read (SQL error {$e->getMessage()})");
 		}		
 	}
+	
+	
+	
+	/**
+	 * Test config value key exists
+	 * @param string $k Config value key name
+	 *
+	 * @return bool
+	 */
+	public function test($k)
+	{
+		try
+		{
+			$this->_qst->execute(array($this->_prefix . $k));
+			$value = $this->_qst->fetchColumn(0);
+			if ( $value === FALSE )
+				return false;
+			else
+				return true;
+		}
+		catch (\PDOException $e)
+		{
+			return false;
+		}		
+	}
 }
 
 

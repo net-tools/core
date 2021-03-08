@@ -36,10 +36,23 @@ class ObjectConfig extends AbstractConfig{
 	 */
 	public function get($k)
 	{
-		if ( !property_exists($this->_object, $k) )
+		if ( !$this->test($k) )
 			throw new \Exception("Config value '$k' does not exist");
 
 		return $this->_object->{$k};
+	}
+	
+	
+	
+	/** 
+	 * Test config value key exists
+	 * @param string $k Config value key name
+	 *
+	 * @return bool
+	 */
+	public function test($k)
+	{
+		return property_exists($this->_object, $k);
 	}
 }
 

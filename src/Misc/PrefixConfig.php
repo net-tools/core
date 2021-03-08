@@ -38,7 +38,20 @@ class PrefixConfig extends AbstractConfig{
 	 */
 	public function get($k)
 	{
-		return $this->_cfg->{$this->_prefix . $k};
+		return $this->_cfg->get($this->_prefix . $k);
+	}
+	
+	
+	
+	/** 
+	 * Test config value key exists
+	 * @param string $k Config value key name
+	 *
+	 * @return bool
+	 */
+	public function test($k)
+	{
+		return $this->_cfg->test($this->_prefix . $k);
 	}
 }
 
