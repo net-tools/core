@@ -38,7 +38,7 @@ abstract class AbstractConfig {
 	 *
 	 * @return bool
 	 */
-	public function test($k);
+	abstract public function test($k);
 }
 
 
