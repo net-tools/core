@@ -17,6 +17,19 @@ class PdoConfigTest extends \PHPUnit\Framework\TestCase
 		$cfg = new \Nettools\Core\Misc\PdoConfig($qst_stub);
 		
 		$this->assertEquals('myvalue', $cfg->my_value);
+		$this->assertEquals(true, $cfg->test('my_value'));
+	}
+	
+	
+	
+	public function testPdoConfigTestNoValue()
+	{
+		$qst_stub = $this->createMock(\PDOStatement::class);
+		$qst_stub->method('execute')->with($this->equalTo(['value0']))->willReturn(true);
+		$qst_stub->method('fetchColumn')->with($this->equalTo(0))->willReturn(FALSE);
+		
+		$cfg = new \Nettools\Core\Misc\PdoConfig($qst_stub);
+		$this->assertEquals(false, $cfg->test('value0'));
 	}
 	
 	

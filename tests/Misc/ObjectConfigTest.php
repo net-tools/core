@@ -35,6 +35,8 @@ class ObjectConfigTest extends \PHPUnit\Framework\TestCase
 		$this->assertEquals('string', $cfg->value2);
 		$this->assertEquals('', $cfg->emptyval);
 		$this->assertEquals(NULL, $cfg->nullvalue);		
+		$this->assertEquals(true, $cfg->test('value1'));
+		$this->assertEquals(false, $cfg->test('value0'));
 	}
 	
 	
