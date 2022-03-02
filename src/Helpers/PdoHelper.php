@@ -247,7 +247,7 @@ class PdoHelper extends \PDO
 		try
 		{
 			// if we have no data about this table in the foreign key config, we are fine
-			if ( !$fk_tables[$tablefk] )
+			if ( !array_key_exists($tablefk, $fk_tables) )
 				return array('statut'=>true);
 				
 

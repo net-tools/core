@@ -57,7 +57,7 @@ class BrowserInterface extends AbstractBrowserInterface {
 	 */
 	public function getCookie($name)
 	{
-		return $_COOKIE[$name];
+		return array_key_exists($name, $_COOKIE) ? $_COOKIE[$name] : null;
 	}
 	
 }

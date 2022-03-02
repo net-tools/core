@@ -73,7 +73,7 @@ class StackTrace
 					$trace['line'],
 				
 					// function
-					$trace['class'] ? ($trace['class'] . '::' . $trace['function']) : $trace['function'],
+					isset($trace['class']) ? ($trace['class'] . '::' . $trace['function']) : $trace['function'],
 				
 					// args
 					print_r($trace['args'], true)

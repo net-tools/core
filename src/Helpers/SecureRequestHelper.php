@@ -141,7 +141,7 @@ class SecureRequestHelper {
 	 */
 	public function authorizeCSRF(array $request)
 	{
-		$t = $request[$this->_csrf_submittedvaluename];
+		$t = array_key_exists($this->_csrf_submittedvaluename, $request) ? $request[$this->_csrf_submittedvaluename] : null;
 		if ( is_null($t) )
 			$t = '';
 		
