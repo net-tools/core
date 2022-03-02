@@ -56,7 +56,7 @@ if ( defined('K_NETTOOLS_INIT_LOCALE') )
 
 // defines the email address to send exceptions details to
 if ( !defined('K_NETTOOLS_POSTMASTER') )
-	define('K_NETTOOLS_POSTMASTER', $_SERVER['SERVER_ADMIN']);
+	define('K_NETTOOLS_POSTMASTER', array_key_exists('SERVER_ADMIN', $_SERVER) ? $_SERVER['SERVER_ADMIN'] : null);
 
 
 ?>
