@@ -200,7 +200,8 @@ HTML;
 	public function handleException(\Throwable $e)
 	{
         // headers sent by browser are prefixed with 'HTTP' (so that they don't mess with environment variables), and - are replaced by _
-        if ( (strpos($_SERVER['HTTP_USER_AGENT'], 'XMLHTTP') === 0) || (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') === 0) )
+		if ( (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'XMLHTTP') === 0)) 
+			  || (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') === 0) )
             // if XMLHTTP request
             $this->_handleXMLHTTPCommandException($e);
 

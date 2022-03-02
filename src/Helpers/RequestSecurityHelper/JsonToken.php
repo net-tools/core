@@ -79,7 +79,7 @@ class JsonToken
 	 */
 	public function __get($k)
 	{
-		return $this->_token->{$k};
+		return property_exists($this->_token, $k) ? $this->_token->{$k} : null;
 	}
 	
 	

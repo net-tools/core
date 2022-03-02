@@ -56,8 +56,8 @@ class NetworkingHelper {
 			if ( preg_match('|^(.+?)(?:\?(.*?))?(#.*)?$|', $url, $regs) )
 			{
 				$u = $regs[1];  // URL part
-				$q = $regs[2];  // querystring
-				$a = $regs[3];  // anchor #xxxx
+				$q = isset($regs[2]) ? $regs[2] : null;  // querystring
+				$a = isset($regs[3]) ? $regs[3] : null;  // anchor #xxxx
 				
 				// append a new parameter if one or more already exist
 				if ( $q )

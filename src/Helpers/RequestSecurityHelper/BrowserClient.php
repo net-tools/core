@@ -19,7 +19,7 @@ class BrowserClient implements ClientInterface
 	 */
 	public function get($k)
 	{
-		return $_COOKIE[$k];
+		return array_key_exists($k, $_COOKIE) ? $_COOKIE[$k] : null;
 	}
 	
 	

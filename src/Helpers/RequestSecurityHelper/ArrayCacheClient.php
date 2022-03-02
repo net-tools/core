@@ -23,7 +23,7 @@ class ArrayCacheClient implements ClientInterface
 	 */
 	public function get($k)
 	{
-		return $this->cache[$k];
+		return array_key_exists($k, $this->cache) ? $this->cache[$k] : null;
 	}
 	
 	
