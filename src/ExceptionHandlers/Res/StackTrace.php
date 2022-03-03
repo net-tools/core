@@ -67,10 +67,10 @@ class StackTrace
 			$rows[] = [
 					
 					// file
-					str_replace($path_to_root . '/', '', $trace['file']),
+					str_replace($path_to_root . '/', '', isset($trace['file']) ? $trace['file'] : ''),
 				
 					// line
-					$trace['line'],
+					isset($trace['line']) ? $trace['line'] : '',
 				
 					// function
 					isset($trace['class']) ? ($trace['class'] . '::' . $trace['function']) : $trace['function'],
