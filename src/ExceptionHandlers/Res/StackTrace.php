@@ -76,7 +76,7 @@ class StackTrace
 					isset($trace['class']) ? ($trace['class'] . '::' . $trace['function']) : $trace['function'],
 				
 					// args
-					print_r($trace['args'], true)
+					print_r(isset($trace['args']) ? $trace['args'] : '', true)
 				];
 		}
 		
