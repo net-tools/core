@@ -104,6 +104,11 @@ final class Pool
 			
 		// remove it from the used items and adding it to the pool
 		unset($this->_inUseItems[$k]);
+		
+		// reset numeric keys
+		$this->_inUseItems = array_values($this->_inUseItems);
+		
+		// push to array released item
 		$this->_poolItems[] = $item;
 	}
 }
