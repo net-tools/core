@@ -114,7 +114,14 @@ class DataHelper {
 	static function month2str($m)
 	{
         $d = mktime(0, 0, 0, $m, 1, 2000);
-        return strftime('%B', $d);
+        
+		if ( defined('K_NETTOOLS_INIT_LOCALE') )
+   			$loc = substr(\K_NETTOOLS_INIT_LOCALE, 0, 5);
+		else
+			$loc = null;
+
+		return \datefmt_format(\datefmt_create($loc, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, null, 'MMMM'), $d);
+		//return strftime('%B', $d);
 	}
 			
 	
@@ -126,7 +133,14 @@ class DataHelper {
 	static function month2shortstr($m)
 	{
         $d = mktime(0, 0, 0, $m, 1, 2000);
-        return strftime('%b', $d);
+
+		if ( defined('K_NETTOOLS_INIT_LOCALE') )
+   			$loc = substr(\K_NETTOOLS_INIT_LOCALE, 0, 5);
+		else
+			$loc = null;
+		
+		return \datefmt_format(\datefmt_create($loc, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, null, 'MMM'), $d);
+//        return strftime('%b', $d);
 	}
 			
 			
