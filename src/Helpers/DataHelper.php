@@ -111,16 +111,15 @@ class DataHelper {
      * @param int $m Month number (1 to 12)
      * @return string Month number converted to month name, according to locale settings
      */
-	static function month2str($m)
+	static function month2str($m, $locale = null)
 	{
         $d = mktime(0, 0, 0, $m, 1, 2000);
         
-		if ( defined('K_NETTOOLS_INIT_LOCALE') )
-   			$loc = substr(\K_NETTOOLS_INIT_LOCALE, 0, 5);
-		else
-			$loc = null;
+		if ( is_null($locale) )
+			if ( defined('K_NETTOOLS_INIT_LOCALE') )
+				$locale = substr(\K_NETTOOLS_INIT_LOCALE, 0, 5);
 
-		return \datefmt_format(\datefmt_create($loc, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, null, 'MMMM'), $d);
+		return \datefmt_format(\datefmt_create($locale, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, null, 'MMMM'), $d);
 		//return strftime('%B', $d);
 	}
 			
@@ -130,16 +129,15 @@ class DataHelper {
      * @param int $m Month number (1 to 12)
      * @return string Month number converted to a short month name, according to locale settings
      */
-	static function month2shortstr($m)
+	static function month2shortstr($m, $locale = null)
 	{
         $d = mktime(0, 0, 0, $m, 1, 2000);
 
-		if ( defined('K_NETTOOLS_INIT_LOCALE') )
-   			$loc = substr(\K_NETTOOLS_INIT_LOCALE, 0, 5);
-		else
-			$loc = null;
+		if ( is_null($locale) )
+			if ( defined('K_NETTOOLS_INIT_LOCALE') )
+				$locale = substr(\K_NETTOOLS_INIT_LOCALE, 0, 5);
 		
-		return \datefmt_format(\datefmt_create($loc, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, null, 'MMM'), $d);
+		return \datefmt_format(\datefmt_create($locale, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, null, 'MMM'), $d);
 //        return strftime('%b', $d);
 	}
 			
