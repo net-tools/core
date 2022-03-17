@@ -120,7 +120,6 @@ class DataHelper {
 				$locale = substr(\K_NETTOOLS_INIT_LOCALE, 0, 5);
 
 		return \datefmt_format(\datefmt_create($locale, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, null, 'MMMM'), $d);
-		//return strftime('%B', $d);
 	}
 			
 	
@@ -138,7 +137,6 @@ class DataHelper {
 				$locale = substr(\K_NETTOOLS_INIT_LOCALE, 0, 5);
 		
 		return \datefmt_format(\datefmt_create($locale, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, null, 'MMM'), $d);
-//        return strftime('%b', $d);
 	}
 			
 			

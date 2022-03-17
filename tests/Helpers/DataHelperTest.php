@@ -109,7 +109,7 @@ class DataHelperTest extends TestCase
         $this->assertEquals('janv.', \Nettools\Core\Helpers\DataHelper::month2shortstr(1, 'fr_FR'));
         $this->assertEquals('févr.', \Nettools\Core\Helpers\DataHelper::month2shortstr(2, 'fr_FR'));
         $this->assertEquals('mars', \Nettools\Core\Helpers\DataHelper::month2shortstr(3, 'fr_FR'));
-        $this->assertEquals('avril', \Nettools\Core\Helpers\DataHelper::month2shortstr(4, 'fr_FR'));
+        $this->assertEquals('avr.', \Nettools\Core\Helpers\DataHelper::month2shortstr(4, 'fr_FR'));
         $this->assertEquals('mai', \Nettools\Core\Helpers\DataHelper::month2shortstr(5, 'fr_FR'));
         $this->assertEquals('juin', \Nettools\Core\Helpers\DataHelper::month2shortstr(6, 'fr_FR'));
         $this->assertEquals('juil.', \Nettools\Core\Helpers\DataHelper::month2shortstr(7, 'fr_FR'));
