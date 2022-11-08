@@ -49,10 +49,10 @@ class SecurityHelper {
 	
 	
 	/** 
-     * Sanitize an array (detect html tags, add slashes and remove sql orders)
+     * Sanitize an array (detect html tags, add slashes and remove sql orders) ; in-place method
      * 
      * @param string[] &$arr Sanitize an array of strings ; original array is modified and returned for convenience
-     * @return string[] The sanitized array is returned
+     * @return string[] The sanitized array is returned, but also in-place updated
      */
 	static function sanitize_array(&$arr)
 	{
@@ -60,6 +60,22 @@ class SecurityHelper {
 			$arr[$k] = self::sanitize($v);
 			
 		return $arr;
+	}
+	
+	
+	/** 
+     * Sanitize an array (detect html tags, add slashes and remove sql orders) and returns a copy of the array
+     * 
+     * @param string[] $arr Sanitize an array of strings ; array not modified
+     * @return string[] A sanitized copy of the original array is returned
+     */
+	static function sanitize_array_return($arr)
+	{
+		$ret = [];
+		foreach ( $arr as $k => $v )
+			$ret[$k] = self::sanitize($v);
+			
+		return $ret;
 	}
 	
 	
