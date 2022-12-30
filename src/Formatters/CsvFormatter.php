@@ -19,10 +19,10 @@ namespace Nettools\Core\Formatters;
  */
 class CsvFormatter extends Formatter
 {
-	function header(){}
-    function footer(){}
-	function beginRow(){}
-	function endRow(){}
+	function header(){ return ''; }
+    function footer(){ return ''; }
+	function beginRow(){ return ''; }
+	function endRow(){ return ''; }
     
     /** 
      * Get row separator for CSV
@@ -30,8 +30,8 @@ class CsvFormatter extends Formatter
      * @return string Returns carriage return and newline string
      */ 
     function rowSeparator(){ return "\r\n"; }
-    function beginColumn(){}
-	function endColumn(){}
+    function beginColumn(){ return ''; }
+	function endColumn(){ return ''; }
 
 
     /** 
