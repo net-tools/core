@@ -236,7 +236,7 @@ class PdoHelper extends \PDO
      * 
      * @param string $tablefk Table name of the table being foreign key
      * @param string $keyvalue Value of the primary key to look for
-     * @return string[] Array describing the result `['statut'=>true]` if the foreign key is not used, `['statut'=>false]` otherwise
+     * @return string[] Array describing the result `['status'=>true]` if the foreign key is not used, `['status'=>false]` otherwise
      *      In the latter case, the array will contain additionnal data : `['cause'=> ['message'=>'error message', 'tables'=>[...table names...]]`
      */
 	function pdo_foreignkeys($tablefk, $keyvalue)
@@ -248,7 +248,7 @@ class PdoHelper extends \PDO
 		{
 			// if we have no data about this table in the foreign key config, we are fine
 			if ( !array_key_exists($tablefk, $fk_tables) )
-				return array('statut'=>true);
+				return array('status'=>true);
 				
 
 			// get the list of tables having $TABLEFK as a foreign key
@@ -287,17 +287,17 @@ class PdoHelper extends \PDO
 			// we now have a list of tables referencing our foreign key $TABLEFK
 			if ( count($foreignkeys) )
 				return array(
-					'statut'=>false, 
+					'status'=>false, 
 					'cause'=>array(
 								'message'=>"Foreign key '$keyvalue' exists in table(s) : " . implode(", ", $foreignkeys),
 								'tables'=>$foreignkeys
 						));
 			else
-				return array('statut'=>true);
+				return array('status'=>true);
 		}
 		catch (\PDOException $e)
 		{
-			return array('statut'=>false, "cause"=>array("message"=>$e->getMessage()));
+			return array('status'=>false, "cause"=>array("message"=>$e->getMessage()));
 		}
 	}
 }

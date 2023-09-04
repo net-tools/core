@@ -186,7 +186,7 @@ HTML;
 		// get exception string (stack trace)
         $ex = $this->_getException($e, 'Error during async request');
         
-        echo json_encode(array('statut'=>false, 'message'=>'Error during async request', 'exception'=>$ex));
+        echo json_encode(array('status'=>false, 'message'=>'Error during async request', 'exception'=>$ex));
     }
     
     
