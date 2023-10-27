@@ -43,7 +43,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 		$cookie = 'abcdef';
 		$intf->method('getCookie')->will($this->returnValue($cookie));
 		
-		$sec = new SecureRequestHelper('_cname_', '_fcname_', 'secret');
+		$sec = new SecureRequestHelper('_cname_', '_fcname_');
 		$sec->setBrowserInterface($intf);
 		$sec->initializeCSRF();
 		

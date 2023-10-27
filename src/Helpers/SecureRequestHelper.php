@@ -22,7 +22,6 @@ class SecureRequestHelper {
 	
 	protected $_csrf_cookiename;
 	protected $_csrf_submittedvaluename;
-	protected $_csrf_hashsecret;
 	protected $_browserInterface;
 	
 	
@@ -32,13 +31,11 @@ class SecureRequestHelper {
 	 *
 	 * @param string $csrf_cookiename Name of CSRF cookie
 	 * @param string $csrf_submittedvaluename Name of CSRF value submitted along the request (double CSRF cookie submit pattern)
-	 * @param string $csrf_hashsecret Secret to use when computing a hashed CSRF submitted value
 	 */
-	public function __construct($csrf_cookiename = '_CSRF_', $csrf_submittedvaluename = '_FORM_CSRF_', $csrf_hashsecret = '_hash_secret_')
+	public function __construct($csrf_cookiename = '_CSRF_', $csrf_submittedvaluename = '_FORM_CSRF_')
 	{
 		$this->_csrf_cookiename = $csrf_cookiename;
 		$this->_csrf_submittedvaluename = $csrf_submittedvaluename;
-		$this->_csrf_hashsecret = $csrf_hashsecret;
 		$this->_browserInterface = new SecureRequestHelper\BrowserInterface();
 	}
 	
@@ -94,7 +91,7 @@ class SecureRequestHelper {
 	 */
 	public function getHashedCSRFCookie()
 	{
-		return '!' . hash_hmac('sha256', __METHOD__ . $this->getCSRFCookie(), $this->_csrf_hashsecret);
+		return '!' . hash_hmac('sha256', $this->getCSRFCookie(), date('Y'));
 	}
 	
 	
