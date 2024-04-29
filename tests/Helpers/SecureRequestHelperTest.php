@@ -127,7 +127,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 		$intf->expects($this->once())->method('setCookie');
 		$intf->expects($this->once())->method('deleteCookie');
 		$cookie = 'abcdef';
-		$intf->method('getCookie')->will($this->onConsecutiveCalls($cookie, ''));
+		$intf->method('getCookie')->willReturn($cookie, '');
 		
 		$sec = new SecureRequestHelper('_cname_', '_fcname_');
 		$sec->setBrowserInterface($intf);
