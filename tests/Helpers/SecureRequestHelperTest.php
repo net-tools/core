@@ -9,13 +9,24 @@ use \Nettools\Core\Helpers\SecureRequestHelper;
 use \Nettools\Core\Helpers\SecureRequestHelper\AbstractBrowserInterface;
 
 
+class BI extends AbstractBrowserInterface  
+{
+	public function setCookie($name, $value, $expires, $domain) {}
+
+	public function deleteCookie($name, $domain) {}
+
+	public function getCookie($name) {}
+}
+
+
+
 
 class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 {
     
     public function testCSRF()
     {
-		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
+		$intf = $this->getMockBuilder(BI::class)->onlyMethods(['setCookie', 'deleteCookie', 'getCookie'])->getMock();
 		$intf->expects($this->once())->method('setCookie');
 		$cookie = 'abcdef';
 		$intf->method('getCookie')->willReturn($cookie);
@@ -38,7 +49,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 	
     public function testHashedCSRF()
     {
-		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
+		$intf = $this->getMockBuilder(BI::class)->onlyMethods(['setCookie', 'deleteCookie', 'getCookie'])->getMock();
 		$intf->expects($this->once())->method('setCookie');
 		$cookie = 'abcdef';
 		$intf->method('getCookie')->willReturn($cookie);
@@ -63,7 +74,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 		$this->expectExceptionMessage('CSRF security validation failed');
 		
 		
-		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
+		$intf = $this->getMockBuilder(BI::class)->onlyMethods(['setCookie', 'deleteCookie', 'getCookie'])->getMock();
 		$intf->expects($this->once())->method('setCookie');
 		$cookie = 'abcdef';
 		$intf->method('getCookie')->willReturn($cookie);
@@ -83,7 +94,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 	 	$this->expectExceptionMessage('CSRF cookie has not been initialized');
 		 
 		 
-		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
+		$intf = $this->getMockBuilder(BI::class)->onlyMethods(['setCookie', 'deleteCookie', 'getCookie'])->getMock();
 		$intf->expects($this->never())->method('setCookie');
 		$intf->method('getCookie')->willReturn('');
 		
@@ -103,7 +114,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 		$this->expectExceptionMessage('CSRF cookie has not been initialized');
 
 			 
-		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
+		$intf = $this->getMockBuilder(BI::class)->onlyMethods(['setCookie', 'deleteCookie', 'getCookie'])->getMock();
 		$intf->expects($this->never())->method('setCookie');
 		$intf->method('getCookie')->willReturn('');
 		
@@ -123,7 +134,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 
 		
 		
-		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
+		$intf = $this->getMockBuilder(BI::class)->onlyMethods(['setCookie', 'deleteCookie', 'getCookie'])->getMock();
 		$intf->expects($this->once())->method('setCookie');
 		$intf->expects($this->once())->method('deleteCookie');
 		$cookie = 'abcdef';
