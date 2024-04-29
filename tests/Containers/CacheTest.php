@@ -5,6 +5,7 @@ namespace Nettools\Core\Tests;
 
 
 use \Nettools\Core\Containers\Cache;
+use \PHPUnit\Framework\Attributes\Depends;
 use \PHPUnit\Framework\TestCase;
 
 

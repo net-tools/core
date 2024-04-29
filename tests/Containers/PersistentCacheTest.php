@@ -10,6 +10,7 @@ use \Nettools\Core\Containers\FileCachePersistenceProvider;
 use \org\bovigo\vfs\vfsStream;
 use \org\bovigo\vfs\vfsStreamDirectory;
 use \PHPUnit\Framework\TestCase;
+use \PHPUnit\Framework\Attributes\Depends;
 
 
 
