@@ -18,7 +18,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
 		$intf->expects($this->once())->method('setCookie');
 		$cookie = 'abcdef';
-		$intf->method('getCookie')->will($this->returnValue($cookie));
+		$intf->method('getCookie')->willReturn($cookie);
 		
 		$sec = new SecureRequestHelper('_cname_', '_fcname_');
 		$sec->setBrowserInterface($intf);
@@ -41,7 +41,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
 		$intf->expects($this->once())->method('setCookie');
 		$cookie = 'abcdef';
-		$intf->method('getCookie')->will($this->returnValue($cookie));
+		$intf->method('getCookie')->willReturn($cookie);
 		
 		$sec = new SecureRequestHelper('_cname_', '_fcname_');
 		$sec->setBrowserInterface($intf);
@@ -66,7 +66,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
 		$intf->expects($this->once())->method('setCookie');
 		$cookie = 'abcdef';
-		$intf->method('getCookie')->will($this->returnValue($cookie));
+		$intf->method('getCookie')->willReturn($cookie);
 		
 		$sec = new SecureRequestHelper('_cname_', '_fcname_');
 		$sec->setBrowserInterface($intf);
@@ -85,7 +85,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 		 
 		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
 		$intf->expects($this->never())->method('setCookie');
-		$intf->method('getCookie')->will($this->returnValue(''));
+		$intf->method('getCookie')->willReturn('');
 		
 		$sec = new SecureRequestHelper('_cname_', '_fcname_');
 		$sec->setBrowserInterface($intf);
@@ -105,7 +105,7 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 			 
 		$intf = $this->getMockForAbstractClass(AbstractBrowserInterface::class);
 		$intf->expects($this->never())->method('setCookie');
-		$intf->method('getCookie')->will($this->returnValue(''));
+		$intf->method('getCookie')->willReturn('');
 		
 		$sec = new SecureRequestHelper('_cname_', '_fcname_');
 		$sec->setBrowserInterface($intf);
