@@ -26,9 +26,7 @@ class CacheTest extends TestCase
     }
 
     
-    /**
-     * @depends testRegister
-     */
+	#[Depends('testRegister')]
     public function testGet($c)
     {
 		$this->assertEquals('val1 updated', $c->get('k1'));
@@ -41,9 +39,7 @@ class CacheTest extends TestCase
     }
 
     
-    /**
-     * @depends testGet
-     */
+	#[Depends('testGet')]
     public function testUnregister($c)
     {
 		$r = $c->unregister('knull');
@@ -55,9 +51,7 @@ class CacheTest extends TestCase
     }
 
     
-    /**
-     * @depends testUnregister
-     */
+	#[Depends('testUnregister')]
     public function testClear($c)
     {
 		$c->clear();

@@ -85,9 +85,7 @@ class PersistentCacheTest extends TestCase
     }
 
     
-    /**
-     * @depends testRegister
-     */
+	#[Depends('testRegister')]
     public function testGet($c)
     {
 		$this->assertEquals('value1', $c->get('k1'));
@@ -98,9 +96,7 @@ class PersistentCacheTest extends TestCase
     }
 
 
-    /**
-     * @depends testGet
-     */
+	#[Depends('testGet')]
     public function testUnregister($c)
     {
         $size = filesize(self::$_cacheFile);
@@ -129,9 +125,7 @@ class PersistentCacheTest extends TestCase
     }
     
     
-    /** 
-     * @depends testGet
-     */
+	#[Depends('testGet')]
     public function testClear($c)
     {
         $c->register('k2', 'value to be deleted');
