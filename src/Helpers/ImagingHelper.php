@@ -87,12 +87,12 @@ class ImagingHelper
 		// which orientation : landscape or portrait ?
 		if ( $width > $height ) // landscape
 		{            
-			$hc = (integer) round($height * $imgw / $width);	
+			$hc = (int) round($height * $imgw / $width);	
 			$wc = $imgw;
 		}
 		else					// portrait
 		{
-			$wc = (integer) round($width * $imgw / $height);
+			$wc = (int) round($width * $imgw / $height);
 			$hc = $imgw;
 		}
 	
@@ -101,7 +101,7 @@ class ImagingHelper
 		imagefilledrectangle($img, 0, 0, $imgw, $imgw, $imgbkcolor);
 		
 		// $dst_image , $src_image , $dst_x , $dst_y , $src_x , $src_y , $dst_w , $dst_h , $src_w , $src_h
-		$r = imagecopyresampled($img, $source, (integer) floor(($imgw - $wc) / 2), (integer) floor(($imgw - $hc) / 2), 0, 0, $wc, $hc, $width, $height);
+		$r = imagecopyresampled($img, $source, (int) floor(($imgw - $wc) / 2), (int) floor(($imgw - $hc) / 2), 0, 0, $wc, $hc, $width, $height);
 		return $r;
 	}
 	
@@ -127,12 +127,12 @@ class ImagingHelper
 		{
 			// first resize with max height
 			$hc = $hmax;
-			$wc = (integer) round($width * $hmax / $height);
+			$wc = (int) round($width * $hmax / $height);
 			
 			// if width W is greater than max width, go on resize with the max width
 			if ( $wc > $wmax )
 			{
-				$hc = (integer) round($hc * $wmax / $wc);
+				$hc = (int) round($hc * $wmax / $wc);
 				$wc = $wmax;
 			}
 		}
@@ -141,7 +141,7 @@ class ImagingHelper
 		else if ( $hmax )
 		{
 			$hc = $hmax;
-			$wc = (integer) round($width * $hc / $height);
+			$wc = (int) round($width * $hc / $height);
 		}
 	
 	
@@ -149,7 +149,7 @@ class ImagingHelper
 		else 
 		{
 			$wc = $wmax;
-			$hc = (integer) round($height * $wc / $width);
+			$hc = (int) round($height * $wc / $width);
 		}
 		
 		

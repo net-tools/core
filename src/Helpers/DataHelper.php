@@ -58,9 +58,9 @@ class DataHelper {
 	static function trimLeadingZero($n)
 	{
 		if ( substr($n,0,1) == "0" )
-			return (integer)(substr($n, 1));
+			return (int)(substr($n, 1));
 		else
-			return (integer)$n;
+			return (int)$n;
 	}
 	
 	
