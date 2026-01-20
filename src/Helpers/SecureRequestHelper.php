@@ -83,20 +83,6 @@ class SecureRequestHelper {
 	
 	
 	/**
-	 * Get a hashed CSRF value with a secret (useful to pass the CSRF submitted value as a GET parameter, without disclosing the CSRF cookie value in browser history, cache, etc.)
-	 *
-	 * The secret must be passed as a constructor parameter.
-	 *
-	 * @return string Returns the hashed CSRF value prefixed with '!' as a flag
-	 */
-	public function getHashedCSRFCookie()
-	{
-		return '!' . hash_hmac('sha256', $this->getCSRFCookie(), date('Y'));
-	}
-	
-	
-	
-	/**
 	 * Get CSRF submitted value name
 	 *
 	 * @return string
@@ -143,15 +129,8 @@ class SecureRequestHelper {
 			$t = '';
 		
 		
-		// if CSRF submitted value in request begins with '!' it means it has been hashed so that the real CSRF value is not disclosed in GET, history, cache, etc.
-		if ( strpos($t, '!') === 0 )
-			$b = hash_equals($this->getHashedCSRFCookie(), $t);
-		else
-			$b = hash_equals($this->getCSRFCookie(), $t);
-
-		
 		// if CSRF cookie exists, comparing with double-submitted cookie as a request value
-		if ( !$b )
+		if ( !hash_equals($this->getCSRFCookie(), $t) )
 			throw new SecureRequestHelper\CSRFException('CSRF security validation failed');
 		
 		return true;

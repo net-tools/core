@@ -47,27 +47,6 @@ class SecureRequestHelperTest extends \PHPUnit\Framework\TestCase
 	
 	
 	
-    public function testHashedCSRF()
-    {
-		$intf = $this->getMockBuilder(BI::class)->onlyMethods(['setCookie', 'deleteCookie', 'getCookie'])->getMock();
-		$intf->expects($this->once())->method('setCookie');
-		$cookie = 'abcdef';
-		$intf->method('getCookie')->willReturn($cookie);
-		
-		$sec = new SecureRequestHelper('_cname_', '_fcname_');
-		$sec->setBrowserInterface($intf);
-		$sec->initializeCSRF();
-		
-		$this->assertNotEquals($cookie, $sec->getHashedCSRFCookie());
-		$this->assertEquals(true, strpos($sec->getHashedCSRFCookie(), '!') === 0);
-		
-		
-		$req = ['input1'=>'value1', '_fcname_'=>$sec->getHashedCSRFCookie()];
-		$this->assertEquals(true, $sec->authorizeCSRF($req));
-    }
-	
-	
-	
 	public function testAuthorizeCSRF()
 	{
 		$this->expectException(\Nettools\Core\Helpers\SecureRequestHelper\CSRFException::class);
