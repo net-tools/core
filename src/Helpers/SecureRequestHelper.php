@@ -83,6 +83,19 @@ class SecureRequestHelper {
 	
 	
 	/**
+	 * Test if CSRF cookie exists
+	 * 
+	 * @return bool
+	 */
+	public function testCSRFCookie()
+	{
+		$cookie = $this->_browserInterface->getCookie($this->_csrf_cookiename);
+		return $cookie ? true : false;
+	}
+	
+	
+	
+	/**
 	 * Get CSRF submitted value name
 	 *
 	 * @return string
