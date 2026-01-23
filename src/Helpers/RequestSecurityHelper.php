@@ -90,7 +90,7 @@ final class RequestSecurityHelper
 	 * @param string[] $payload If present, this will be set with the token payload as an assocative array
      * @return bool If altered OR expired, returning FALSE
      */
-	static function checkTimestampToken($token, $secret = 'token', array &$payload = NULL)
+	static function checkTimestampToken($token, $secret = 'token', ?array &$payload = NULL)
 	{
 		try
 		{
