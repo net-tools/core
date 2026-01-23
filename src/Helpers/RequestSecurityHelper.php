@@ -77,7 +77,7 @@ final class RequestSecurityHelper
 	static function createTimestampToken($delay = 60, $secret = 'token', $payload = [])
 	{
 		$payload2 = array(["exp" => time() + $delay]);
-		return JWT::encode(array_merge($payload, $payload2), $secret, 'HS256');
+		return JWT::encode(array_merge($payload, $payload2), md5($secret), 'HS256');
 	}
 	
 	
@@ -94,7 +94,7 @@ final class RequestSecurityHelper
 	{
 		try
 		{
-			$dummy = JWT::decode($token, new Key($secret, 'HS256'));
+			$dummy = JWT::decode($token, new Key(md5($secret), 'HS256'));
 			$payload = (array)$dummy;
 			return true;
 		}
