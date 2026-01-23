@@ -5,9 +5,10 @@ namespace Nettools\Core\Helpers;
 
 
 use \Nettools\Core\Helpers\RequestSecurityHelper\FormToken;
-use \Nettools\Core\Helpers\RequestSecurityHelper\TimestampToken;
-use \Nettools\Core\Helpers\RequestSecurityHelper\JsonToken;
 use \Nettools\Core\Helpers\RequestSecurityHelper\BrowserClient;
+use \Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
+
 
 
 
@@ -33,22 +34,6 @@ final class RequestSecurityHelper
 		
 		
 		return self::$_formTokenObject;
-	}
-	
-	
-	
-	/**
-	 * Create a TimestampToken object (singleton pattern)
-	 *
-	 * @return TimestampToken
-	 */
-	private static function _getTimestampTokenObject()
-	{
-		if ( !self::$_timestampTokenObject )
-			self::$_timestampTokenObject = new TimestampToken();
-		
-		
-		return self::$_timestampTokenObject;
 	}
 	
 	
@@ -80,19 +65,19 @@ final class RequestSecurityHelper
 		
 	
 	/**
-    * Create a token with a expiration time
+    * Create a token with an expiration time
     * 
-    * By default, the token expires 60 seconds later to create the token, you may provide the validity delay,
-    * the unit of the delay (seconds, minutes or hours) and a secret. If no parameters, default values will be used
+    * By default, the token expires 60 seconds later ; to create the token, you may provide the validity delay as seconds from now
     * 
-    * @param int $delay Number of seconds, minutes or hours of the validity delay
-    * @param string $unit Provide either 's', 'm' or 'h' to set the unit for the $delay parameter
+    * @param int $delay Number of seconds of the validity delay, counting from now
     * @param string $secret A secret to use to generate the token
-    * @return string A timestamp token with a embedded expiration time
+	* @param string[] $payload Custom payload of token as an associative array
+    * @return string A timestamp token with an embedded expiration time
     */
-	static function createTimestampToken($delay = 60, $unit = "s", $secret = 'token')
+	static function createTimestampToken($delay = 60, $secret = 'token', $payload = [])
 	{
-		return self::_getTimestampTokenObject()->create($delay, $unit, $secret)->toJson();
+		$payload2 = array(["exp" => time() + $delay]);
+		return JWT::encode(array_merge($payload, $payload2), $secret, 'HS256');
 	}
 	
 	
@@ -102,16 +87,21 @@ final class RequestSecurityHelper
      * 
      * @param string $token The token to check (valid, not altered, not expired)
      * @param string $secret The secret used to generate the token
+	 * @param string[] $payload If present, this will be set with the token payload as an assocative array
      * @return bool If altered OR expired, returning FALSE
      */
-	static function checkTimestampToken($token, $secret = 'token')
+	static function checkTimestampToken($token, $secret = 'token', array &$payload = NULL)
 	{
-		// décoder le jeton
-		$token = JsonToken::fromJson($token);
-		if ( is_null($token) )
+		try
+		{
+			$dummy = JWT::decode($token, new Key($secret, 'HS256'));
+			$payload = (array)$dummy;
+			return true;
+		}
+		catch ( \Exception $e )
+		{
 			return false;
-		
-		return self::_getTimestampTokenObject()->check($token, $secret);
+		}
 	}
 	
 }
