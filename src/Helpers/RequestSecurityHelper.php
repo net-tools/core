@@ -4,48 +4,34 @@
 namespace Nettools\Core\Helpers;
 
 
-use \Nettools\Core\Helpers\RequestSecurityHelper\FormToken;
-use \Nettools\Core\Helpers\RequestSecurityHelper\BrowserClient;
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
 
 
 
 
+
+
 /**
- * helper class to deal with tokens in requests
+ * Helper class to deal with tokens in requests
  */
 final class RequestSecurityHelper
 {
-	private static $_formTokenObject;
-	private static $_timestampTokenObject;
-	
-	
-	
-	/**
-	 * Create a FormToken object (singleton pattern)
-	 *
-	 * @return FormToken
-	 */
-	private static function _getFormTokenObject()
-	{
-		if ( !self::$_formTokenObject )
-			self::$_formTokenObject = new FormToken(new BrowserClient());
-		
-		
-		return self::$_formTokenObject;
-	}
-	
-	
-	
 	/** 
 	 * Create a form token (double-submit value pattern)
 	 *
-	 * @return string Returns a string of length 32+64 digits ; a cookie is sent back to the browser
+	 * @param string $tokenName Name of token ; mandatory because a cookie with same name will be sent back to the browser
+	 * @param string $secret A secret to hash the token with
+	 * @return string Returns a string with token created ; a cookie is sent back to the browser with same token
 	 */
-	static function formToken()
+	static function formToken($tokenName, $secret)
 	{
-		return self::_getFormTokenObject()->create();
+		$value = bin2hex(random_bytes(32));
+		
+		setcookie($tokenName, $value);
+		$_COOKIE[$tokenName] = $value;
+		
+		return JWT::encode([ 'tok' => $value, 'tname' => $tokenName ], md5($secret), 'HS256');
 	}
 	
 	
@@ -53,12 +39,37 @@ final class RequestSecurityHelper
 	/**
 	 * Check a form token
 	 *
-	 * @param string $t Token to check
+	 * @param string $token Token to check
+	 * @param string $tokenName Name of token (the name of cookie sent back to browser)
+	 * @param string $secret A secret to hash the token data with
 	 * @return bool
 	 */
-	static function checkFormToken($t)
+	static function checkFormToken($token, $tokenName, $secret)
 	{
-		return self::_getFormTokenObject()->check($t);
+		try
+		{
+			// decode JWT
+			$payload = JWT::decode($token, new Key(md5($secret), 'HS256'));
+			
+			
+			// read cookie
+			if ( !array_key_exists($payload->tname, $_COOKIE) )
+				return false;
+			$cookie = $_COOKIE[$payload->tname];
+			
+			
+			// remove cookie
+			setcookie($payload->tname, '', time()-3600);
+			unset($_COOKIE[$payload->tname]);
+			
+			
+			// compare 
+			return hash_equals($cookie, $payload->tok);
+		}
+		catch ( \Exception $e )
+		{
+			return false;
+		}
 	}
 	
 	
@@ -67,16 +78,14 @@ final class RequestSecurityHelper
 	/**
     * Create a token with an expiration time
     * 
-    * By default, the token expires 60 seconds later ; to create the token, you may provide the validity delay as seconds from now
-    * 
     * @param int $delay Number of seconds of the validity delay, counting from now
     * @param string $secret A secret to use to generate the token
 	* @param string[] $payload Custom payload of token as an associative array
     * @return string A timestamp token with an embedded expiration time
     */
-	static function createTimestampToken($delay = 60, $secret = 'token', $payload = [])
+	static function createTimestampToken($delay, $secret, $payload = [])
 	{
-		$payload2 = array(["exp" => time() + $delay]);
+		$payload2 = [ "exp" => time() + $delay ];
 		return JWT::encode(array_merge($payload, $payload2), md5($secret), 'HS256');
 	}
 	
@@ -90,7 +99,7 @@ final class RequestSecurityHelper
 	 * @param string[] $payload If present, this will be set with the token payload as an assocative array
      * @return bool If altered OR expired, returning FALSE
      */
-	static function checkTimestampToken($token, $secret = 'token', ?array &$payload = NULL)
+	static function checkTimestampToken($token, $secret, ?array &$payload = NULL)
 	{
 		try
 		{
