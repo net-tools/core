@@ -144,8 +144,7 @@ class SecureRequestHelper {
 	 * Authorize a request with CSRF security (double-submitted CSRF cookie pattern)
 	 * 
 	 * @param string[] $request
-	 * @return bool Returns TRUE if request is authorized
-	 * @throws CSRFException Thrown if the request has not been authorized
+	 * @throws CSRFException Thrown if request has not been authorized
 	 */
 	public function authorizeCSRF(array $request)
 	{
@@ -168,8 +167,9 @@ class SecureRequestHelper {
 		// checking payload
 		if ( ($payload->csrf != $this->_csrf_cookiename) || !hash_equals($this->getCSRFCookie(), $token) )
 			throw new CSRFException('CSRF security validation failed');
-
-		return true;
+        
+        
+        return true;
 	}
 	
 	
