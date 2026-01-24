@@ -39,8 +39,9 @@ class SecureRequestHelper {
 	 * @param string $csrf_cookiename Name of CSRF cookie
 	 * @param string $csrf_submittedvaluename Name of CSRF value submitted along the request (double CSRF cookie submit pattern)
 	 * @param string $secret A secret to hash the CSRF token with
+	 * @param bool $cookie_samesite To ensure best security against XSS, set this parameter to True ; false is needed if website is within an iframe inside another URL
 	 */
-	public function __construct($csrf_cookiename = '_CSRF_', $csrf_submittedvaluename = '_FORM_CSRF_', $secret = basename(__FILE__), $cookie_samesite = true)
+	public function __construct($csrf_cookiename, $csrf_submittedvaluename, $secret, $cookie_samesite = true)
 	{
 		$this->_csrf_cookiename = $csrf_cookiename;
 		$this->_csrf_submittedvaluename = $csrf_submittedvaluename;
