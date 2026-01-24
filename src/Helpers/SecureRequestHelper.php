@@ -154,7 +154,7 @@ class SecureRequestHelper {
 
 
 		// checking payload
-		if ( ($payload->csrf != $this->_csrf_cookiename) || !hash_equals($this->getCSRFCookie(), $paylad->tok) )
+		if ( ($payload->csrf != $this->_csrf_cookiename) || !hash_equals($this->getCSRFCookie(), $payload->tok) )
 			throw new CSRFException('CSRF security validation failed');
 
 		return true;
