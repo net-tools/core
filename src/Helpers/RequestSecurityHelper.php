@@ -22,16 +22,20 @@ final class RequestSecurityHelper
 	 *
 	 * @param string $tokenName Name of token ; mandatory because a cookie with same name will be sent back to the browser
 	 * @param string $secret A secret to hash the token with
+	 * @param int $delay The token will expire in $delay seconds from now
 	 * @return string Returns a string with token created ; a cookie is sent back to the browser with same token
 	 */
-	static function formToken($tokenName, $secret)
+	static function formToken($tokenName, $secret, $delay = 0)
 	{
 		$value = bin2hex(random_bytes(32));
 		
 		setcookie($tokenName, $value);
 		$_COOKIE[$tokenName] = $value;
 		
-		return JWT::encode([ 'tok' => $value, 'tname' => $tokenName ], md5($secret), 'HS256');
+		$opt = [ 'tok' => $value, 'tname' => $tokenName ];
+		if ( $delay )
+			$opt['exp'] = time() + $delay;
+		return JWT::encode($opt, md5($secret), 'HS256');
 	}
 	
 	
@@ -53,18 +57,18 @@ final class RequestSecurityHelper
 			
 			
 			// read cookie
-			if ( !array_key_exists($payload->tname, $_COOKIE) )
+			if ( !array_key_exists($tokenName, $_COOKIE) )
 				return false;
-			$cookie = $_COOKIE[$payload->tname];
+			$cookie = $_COOKIE[$tokenName];
 			
 			
 			// remove cookie
-			setcookie($payload->tname, '', time()-3600);
-			unset($_COOKIE[$payload->tname]);
+			setcookie($tokenName, '', time()-3600);
+			unset($_COOKIE[$tokenName]);
 			
 			
 			// compare 
-			return hash_equals($cookie, $payload->tok);
+			return ($payload->tname == $tokenName) && hash_equals($cookie, $payload->tok);
 		}
 		catch ( \Exception $e )
 		{

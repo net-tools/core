@@ -9,7 +9,7 @@
 
 
 // namespace
-namespace Nettools\Core\Helpers\SecureRequestHelper;
+namespace Nettools\Core\Helpers;
 
 
 

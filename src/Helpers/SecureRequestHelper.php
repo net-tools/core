@@ -7,9 +7,15 @@
  */
 
 
-
 // namespace
 namespace Nettools\Core\Helpers;
+
+
+
+use \Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
+
+
 
 
 
@@ -22,7 +28,7 @@ class SecureRequestHelper {
 	
 	protected $_csrf_cookiename;
 	protected $_csrf_submittedvaluename;
-	protected $_browserInterface;
+	protected $_secret;
 	
 	
 	
@@ -32,23 +38,11 @@ class SecureRequestHelper {
 	 * @param string $csrf_cookiename Name of CSRF cookie
 	 * @param string $csrf_submittedvaluename Name of CSRF value submitted along the request (double CSRF cookie submit pattern)
 	 */
-	public function __construct($csrf_cookiename = '_CSRF_', $csrf_submittedvaluename = '_FORM_CSRF_')
+	public function __construct($csrf_cookiename = '_CSRF_', $csrf_submittedvaluename = '_FORM_CSRF_', $secret = __FILE__)
 	{
 		$this->_csrf_cookiename = $csrf_cookiename;
 		$this->_csrf_submittedvaluename = $csrf_submittedvaluename;
-		$this->_browserInterface = new SecureRequestHelper\BrowserInterface();
-	}
-	
-	
-	
-	/** 
-	 * Set the browser interface ; used in unit testing
-	 *
-	 * @param SecureRequestHelper\AbstractBrowserInterface $intf
-	 */
-	public function setBrowserInterface(SecureRequestHelper\AbstractBrowserInterface $intf)
-	{
-		$this->_browserInterface = $intf;
+		$this->_secret = $secret;
 	}
 	
 	
@@ -69,13 +63,13 @@ class SecureRequestHelper {
 	 * Get CSRF cookie value
 	 * 
 	 * @return string
-	 * @throws SecureRequestHelper\CSRFException Thrown if the CSRF layer has not been initialized
+	 * @throws CSRFException Thrown if the CSRF layer has not been initialized
 	 */
 	public function getCSRFCookie()
 	{
-		$cookie = $this->_browserInterface->getCookie($this->_csrf_cookiename);
+		$cookie = array_key_exists($this->_csrf_cookiename, $_COOKIE) ? $_COOKIE[$this->_csrf_cookiename] : null;
 		if ( !$cookie )
-			throw new SecureRequestHelper\CSRFException('CSRF cookie has not been initialized');
+			throw new CSRFException('CSRF cookie has not been initialized');
 		
 		return $cookie;
 	}
@@ -89,7 +83,7 @@ class SecureRequestHelper {
 	 */
 	public function testCSRFCookie()
 	{
-		$cookie = $this->_browserInterface->getCookie($this->_csrf_cookiename);
+		$cookie = array_key_exists($this->_csrf_cookiename, $_COOKIE) ? $_COOKIE[$this->_csrf_cookiename] : null;
 		return $cookie ? true : false;
 	}
 	
@@ -112,8 +106,13 @@ class SecureRequestHelper {
 	 */
 	public function initializeCSRF()
 	{
-		// create a CSRF value
-		$this->_browserInterface->setCookie($this->_csrf_cookiename, bin2hex(random_bytes(32)), 0, '/');
+		// prepare JWT stuff ; the JWT token will expire in 1 day
+		$opt = [ 'tok' => bin2hex(random_bytes(32)), 'csrf' => $this->_csrf_cookiename, 'exp' => time()+60*60*24 ];
+		$value = JWT::encode($opt, md5($this->_secret), 'HS256');
+				
+		// set cookie in browser
+		setcookie($this->_csrf_cookiename, $value, 0, '/');
+		$_COOKIE[$this->_csrf_cookiename] = $value;
 	}
 	
 	
@@ -123,7 +122,8 @@ class SecureRequestHelper {
 	 */
 	public function revokeCSRF()
 	{
-		$this->_browserInterface->deleteCookie($this->_csrf_cookiename, '/');
+		setcookie($this->_csrf_cookiename, '', time() - 3600, '/');
+		unset($_COOKIE[$this->_csrf_cookiename]);
 	}
 	
 	
@@ -133,19 +133,30 @@ class SecureRequestHelper {
 	 * 
 	 * @param string[] $request
 	 * @return bool Returns TRUE if request is authorized
-	 * @throws SecureRequestHelper\CSRFException Thrown if the request has not been authorized
+	 * @throws CSRFException Thrown if the request has not been authorized
 	 */
 	public function authorizeCSRF(array $request)
 	{
-		$t = array_key_exists($this->_csrf_submittedvaluename, $request) ? $request[$this->_csrf_submittedvaluename] : null;
-		if ( is_null($t) )
-			$t = '';
+		$token = array_key_exists($this->_csrf_submittedvaluename, $request) ? $request[$this->_csrf_submittedvaluename] : null;
+		if ( is_null($token) )
+			throw new CSRFException('CSRF security validation failed');
 		
 		
-		// if CSRF cookie exists, comparing with double-submitted cookie as a request value
-		if ( !hash_equals($this->getCSRFCookie(), $t) )
-			throw new SecureRequestHelper\CSRFException('CSRF security validation failed');
-		
+		try
+		{
+			// check JWT
+			$payload = JWT::decode($token, new Key(md5($this->_secret), 'HS256'));
+		}
+		catch ( \Exception $e )
+		{
+			throw new CSRFException('CSRF security validation failed');
+		}
+
+
+		// checking payload
+		if ( ($payload->csrf != $this->_csrf_cookiename) || !hash_equals($this->getCSRFCookie(), $paylad->tok) )
+			throw new CSRFException('CSRF security validation failed');
+
 		return true;
 	}
 	
@@ -155,7 +166,6 @@ class SecureRequestHelper {
 	 * Get the HTML for an hidden CSRF field
 	 *
 	 * @return string
-	 * @throws SecureRequestHelper\CSRFException Thrown if the CSRF layer has not been initialized
 	 */
 	public function addCSRFHiddenInput()
 	{
