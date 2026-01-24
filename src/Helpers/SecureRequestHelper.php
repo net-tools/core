@@ -29,6 +29,7 @@ class SecureRequestHelper {
 	protected $_csrf_cookiename;
 	protected $_csrf_submittedvaluename;
 	protected $_secret;
+	protected $_cookie_samesite;
 	
 	
 	
@@ -37,12 +38,14 @@ class SecureRequestHelper {
 	 *
 	 * @param string $csrf_cookiename Name of CSRF cookie
 	 * @param string $csrf_submittedvaluename Name of CSRF value submitted along the request (double CSRF cookie submit pattern)
+	 * @param string $secret A secret to hash the CSRF token with
 	 */
-	public function __construct($csrf_cookiename = '_CSRF_', $csrf_submittedvaluename = '_FORM_CSRF_', $secret = __FILE__)
+	public function __construct($csrf_cookiename = '_CSRF_', $csrf_submittedvaluename = '_FORM_CSRF_', $secret = __FILE__, $cookie_samesite = true)
 	{
 		$this->_csrf_cookiename = $csrf_cookiename;
 		$this->_csrf_submittedvaluename = $csrf_submittedvaluename;
 		$this->_secret = $secret;
+		$this->_cookie_samesite = $cookie_samesite ? 'Strict':'None';
 	}
 	
 	
@@ -111,7 +114,15 @@ class SecureRequestHelper {
 		$value = JWT::encode($opt, md5($this->_secret), 'HS256');
 				
 		// set cookie in browser
-		setcookie($this->_csrf_cookiename, $value, 0, '/');
+		setcookie($this->_csrf_cookiename, $value, 
+				[ 
+					'expires'	=> 0, 
+					'secure'	=> true,
+					'domain'	=> null,
+					'path'		=> '/',
+					'samesite'	=> $this->_cookie_samesite
+				]
+			);
 		$_COOKIE[$this->_csrf_cookiename] = $value;
 	}
 	
