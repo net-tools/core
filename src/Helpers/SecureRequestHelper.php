@@ -21,7 +21,7 @@ use \Firebase\JWT\Key;
 
 
 /** 
- * Helper cass to deal with secure requests
+ * Helper class to deal with secure requests
  */
 class SecureRequestHelper {
 
@@ -30,6 +30,7 @@ class SecureRequestHelper {
 	protected $_csrf_submittedvaluename;
 	protected $_secret;
 	protected $_cookie_samesite;
+	protected $_cookies_intf;
 	
 	
 	
@@ -47,6 +48,19 @@ class SecureRequestHelper {
 		$this->_csrf_submittedvaluename = $csrf_submittedvaluename;
 		$this->_secret = $secret;
 		$this->_cookie_samesite = $cookie_samesite ? 'Strict':'None';
+		$this->_cookies_intf = new SecureRequestCookies();
+	}
+	
+	
+	
+	/**
+	 * Set the underlying SecureRequestCookiesInterface object ; useful for unit test this file
+	 *
+	 * @param SecureRequestCookiesInterface $intf
+	 */
+	public function setCookiesInterface(SecureRequestCookiesInterface $intf)
+	{
+		$this->_cookies_intf = $intf;
 	}
 	
 	
@@ -71,11 +85,11 @@ class SecureRequestHelper {
 	 */
 	public function getCSRFCookie()
 	{
-		$cookie = array_key_exists($this->_csrf_cookiename, $_COOKIE) ? $_COOKIE[$this->_csrf_cookiename] : null;
-		if ( !$cookie )
+		$c = $this->_cookies_intf->getCookie($this->_csrf_cookiename);
+		if ( $c === FALSE )
 			throw new CSRFException('CSRF cookie not found');
-		
-		return $cookie;
+
+		return $c;
 	}
 	
 	
@@ -87,8 +101,7 @@ class SecureRequestHelper {
 	 */
 	public function testCSRFCookie()
 	{
-		$cookie = array_key_exists($this->_csrf_cookiename, $_COOKIE) ? $_COOKIE[$this->_csrf_cookiename] : null;
-		return $cookie ? true : false;
+		return $this->_cookies_intf->testCookie($this->_csrf_cookiename);
 	}
 	
 	
@@ -113,18 +126,8 @@ class SecureRequestHelper {
 		// prepare JWT stuff ; the JWT token will expire in 1 day
 		$opt = [ 'tok' => bin2hex(random_bytes(32)), 'csrf' => $this->_csrf_cookiename, 'exp' => time()+60*60*24 ];
 		$value = JWT::encode($opt, md5($this->_secret), 'HS256');
-				
-		// set cookie in browser
-		setcookie($this->_csrf_cookiename, $value, 
-				[ 
-					'expires'	=> 0, 
-					'secure'	=> true,
-					'domain'	=> null,
-					'path'		=> '/',
-					'samesite'	=> $this->_cookie_samesite
-				]
-			);
-		$_COOKIE[$this->_csrf_cookiename] = $value;
+		
+		$this->_cookies_intf->setCookie($this->_csrf_cookiename, $value, $this->_cookie_samesite);
 	}
 	
 	
@@ -134,8 +137,7 @@ class SecureRequestHelper {
 	 */
 	public function revokeCSRF()
 	{
-		setcookie($this->_csrf_cookiename, '', time() - 3600, '/');
-		unset($_COOKIE[$this->_csrf_cookiename]);
+		$this->_cookies_intf->deleteCookie($this->_csrf_cookiename);
 	}
 	
 	
