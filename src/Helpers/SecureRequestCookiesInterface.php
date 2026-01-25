@@ -27,7 +27,7 @@ interface SecureRequestCookiesInterface {
 	 * @param string $name
 	 * @return string
 	 */
-	abstract public function getCookie($name);
+	public function getCookie($name);
 	
 	
 	
@@ -37,7 +37,7 @@ interface SecureRequestCookiesInterface {
 	 * @param string $name
 	 * @return bool
 	 */
-	abstract public function testCookie($name);
+	public function testCookie($name);
 	
 	
 	
@@ -48,7 +48,7 @@ interface SecureRequestCookiesInterface {
 	 * @param string $value Cookie value
 	 * @param string $samesite Cookie 'samesite' attribute (may be set to None, Lax, Strict)
 	 */
-	abstract public function setCookie($name, $value, $samesite = 'Lax');
+	public function setCookie($name, $value, $samesite = 'Lax');
 	
 	
 	
@@ -57,7 +57,7 @@ interface SecureRequestCookiesInterface {
 	 *
 	 * @param string $name Cookie name
 	 */
-	abstract public function deleteCookie($name);	
+	public function deleteCookie($name);	
 }
 
 ?>
