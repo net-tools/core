@@ -16,9 +16,9 @@ namespace Nettools\Core\Helpers;
 
 
 /** 
- * Abstract class to interface with browser cookies
+ * Interface to browser cookies
  */
-abstract class SecureRequestCookiesInterface {
+interface SecureRequestCookiesInterface {
 
 	
 	/**
