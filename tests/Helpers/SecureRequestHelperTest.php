@@ -97,8 +97,12 @@ class SecureRequestHelperTest extends TestCase
 	{
 		$sec = new SecureRequestHelper('csrf', 'form_csrf', 'my_secret', true);
 		$stub = new CookiesStub();
-
-		
+        
+        
+        $this->assertEquals('csrf', $sec->getCSRFCookieName());
+        $this->assertEquals('form_csrf', $sec->getCSRFSubmittedValueName());
+        
+        
 		$sec->setCookiesInterface($stub);
 		$sec->initializeCSRF();
 
@@ -108,6 +112,7 @@ class SecureRequestHelperTest extends TestCase
 		$this->assertEquals('Strict', $stub->samesite);
 		$this->assertEquals($cookie, $sec->getCSRFCookie());
 		$this->assertEquals(true, $sec->testCSRFCookie());
+        $this->assertEquals("<input type=\"hidden\" name=\"form_csrf\" value=\"$cookie\">", $sec->addCSRFHiddenInput());
 		
 		JWT::decode($cookie, new Key(md5('my_secret'), 'HS256'));		
 
@@ -133,11 +138,12 @@ class SecureRequestHelperTest extends TestCase
 		$sec->setCookiesInterface($stub);
 		$sec->initializeCSRF();
 
+        $realvalue = $stub->value;
 		$stub->value = 'corruptedvalue';
 
 		// exception levée si erreur
 		$this->expectException(\Nettools\Core\Helpers\CSRFException::class);
-		$sec->authorizeCSRF(['form_csrf' => 'anything']);	
+		$sec->authorizeCSRF(['form_csrf' => $realvalue]);	
 	}
 
 
