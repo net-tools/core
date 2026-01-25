@@ -4,7 +4,12 @@ namespace Nettools\Core\Helpers\Tests;
 
 
 use \Nettools\Core\Helpers\SecureRequestHelper;
+use \Nettools\Core\Helpers\SecureRequestCookiesInterface;
 use \PHPUnit\Framework\TestCase;
+
+
+
+
 
 
 
