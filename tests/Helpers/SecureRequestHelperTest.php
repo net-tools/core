@@ -5,6 +5,8 @@ namespace Nettools\Core\Helpers\Tests;
 
 use \Nettools\Core\Helpers\SecureRequestHelper;
 use \Nettools\Core\Helpers\SecureRequestCookiesInterface;
+use \Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
 use \PHPUnit\Framework\TestCase;
 
 
@@ -50,7 +52,7 @@ class CookiesStub implements SecureRequestCookiesInterface {
 	public function testCookie($name)
 	{
 		$this->name = $name;
-		return $exists;
+		return $this->exists;
 	}
 	
 	
@@ -67,6 +69,7 @@ class CookiesStub implements SecureRequestCookiesInterface {
 		$this->name = $name;
 		$this->value = $value;
 		$this->samesite = $samesite;
+        $this->exists = true;
 	}
 	
 	
@@ -80,6 +83,7 @@ class CookiesStub implements SecureRequestCookiesInterface {
 	{
 		$this->value = NULL;
 		$this->samesite = NULL;
+        $this->exists = false;
 	}
 }
 
@@ -92,18 +96,18 @@ class SecureRequestHelperTest extends TestCase
 	function testCSRF_Ok()
 	{
 		$sec = new SecureRequestHelper('csrf', 'form_csrf', 'my_secret', true);
-		$stub = new CoookiesStub();
+		$stub = new CookiesStub();
 
 		
-		$sec->setCookiesInterface($s);
+		$sec->setCookiesInterface($stub);
 		$sec->initializeCSRF();
 
-		$cookie = $s->value;
+		$cookie = $stub->value;
 		
-		$this->assertEquals('csrf', $s->name);
-		$this->assertEquals('Strict', $s->samesite);
+		$this->assertEquals('csrf', $stub->name);
+		$this->assertEquals('Strict', $stub->samesite);
 		$this->assertEquals($cookie, $sec->getCSRFCookie());
-		$this->assertEquals(true, $sec->testCookie());
+		$this->assertEquals(true, $sec->testCSRFCookie());
 		
 		JWT::decode($cookie, new Key(md5('my_secret'), 'HS256'));		
 
@@ -112,10 +116,82 @@ class SecureRequestHelperTest extends TestCase
 		$sec->authorizeCSRF(['form_csrf' => $cookie]);	
 		
 		
-		$this->assertEquals(true, $sec->revokeCSRF());
-		$this->assertEquals(NULL, $s->value);
-		$this->assertEquals(NULL, $s->samesite);
+		$sec->revokeCSRF();
+		$this->assertEquals(NULL, $stub->value);
+		$this->assertEquals(NULL, $stub->samesite);
+		$this->assertEquals(false, $stub->exists);
 	}
+
+
+
+	function testCSRF_CookieCorrupt()
+	{
+		$sec = new SecureRequestHelper('csrf', 'form_csrf', 'my_secret', true);
+		$stub = new CookiesStub();
+
+		
+		$sec->setCookiesInterface($stub);
+		$sec->initializeCSRF();
+
+		$stub->value = 'corruptedvalue';
+
+		// exception levée si erreur
+		$this->expectException(\Nettools\Core\Helpers\CSRFException::class);
+		$sec->authorizeCSRF(['form_csrf' => 'anything']);	
+	}
+
+
+
+	function testCSRF_FormTokenCorrupt()
+	{
+		$sec = new SecureRequestHelper('csrf', 'form_csrf', 'my_secret', true);
+		$stub = new CookiesStub();
+
+		
+		$sec->setCookiesInterface($stub);
+		$sec->initializeCSRF();
+
+		// exception levée si erreur
+		$this->expectException(\Nettools\Core\Helpers\CSRFException::class);
+		$sec->authorizeCSRF(['form_csrf' => 'dummy']);	
+	}
+
+
+
+	function testCSRF_NotInitialized()
+	{
+		$sec = new SecureRequestHelper('csrf', 'form_csrf', 'my_secret', true);
+		$stub = new CookiesStub();
+
+		
+		$sec->setCookiesInterface($stub);
+		$this->assertEquals(false, $sec->getCSRFCookie());
+
+		
+		// exception levée si erreur
+		$this->expectException(\Nettools\Core\Helpers\CSRFException::class);
+		$sec->authorizeCSRF(['form_csrf' => 'anything']);
+	}
+	
+	
+	
+	function testCSRF_Revoke()
+	{
+		$sec = new SecureRequestHelper('csrf', 'form_csrf', 'my_secret', true);
+		$stub = new CookiesStub();
+
+		
+		$sec->setCookiesInterface($stub);
+		$sec->initializeCSRF();
+		$sec->revokeCSRF();
+		
+		// exception levée si erreur
+		$this->expectException(\Nettools\Core\Helpers\CSRFException::class);
+		$sec->authorizeCSRF(['form_csrf' => 'anything']);
+	}
+
+
+
 }
 
 ?>
