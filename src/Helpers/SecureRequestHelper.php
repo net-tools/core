@@ -73,7 +73,7 @@ class SecureRequestHelper {
 	{
 		$cookie = array_key_exists($this->_csrf_cookiename, $_COOKIE) ? $_COOKIE[$this->_csrf_cookiename] : null;
 		if ( !$cookie )
-			throw new CSRFException('CSRF cookie has not been initialized');
+			throw new CSRFException('CSRF cookie not found');
 		
 		return $cookie;
 	}
@@ -150,7 +150,7 @@ class SecureRequestHelper {
 	{
 		$token = array_key_exists($this->_csrf_submittedvaluename, $request) ? $request[$this->_csrf_submittedvaluename] : null;
 		if ( is_null($token) )
-			throw new CSRFException('CSRF security validation failed');
+			throw new CSRFException('CSRF token not found in request');
 		
 		
 		try
@@ -160,13 +160,13 @@ class SecureRequestHelper {
 		}
 		catch ( \Exception $e )
 		{
-			throw new CSRFException('CSRF security validation failed');
+			throw new CSRFException('CSRF JWT token validation failed');
 		}
 
 
 		// checking payload
 		if ( ($payload->csrf != $this->_csrf_cookiename) || !hash_equals($this->getCSRFCookie(), $token) )
-			throw new CSRFException('CSRF security validation failed');
+			throw new CSRFException('CSRF checks failed');
         
         
         return true;
