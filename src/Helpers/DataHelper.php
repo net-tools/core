@@ -232,49 +232,7 @@ class DataHelper {
 		}
 	}
 	
-	
-	/**
-     * Decode a string to an associative array
-     * 
-     * Useful to decode url parameters to array : e.g. file=my.txt&user=me becomes the array ['file'=>'my.txt','user'=>'me']
-     * 
-     * @param string $str String to process
-     * @param string $sep Separator of values (e.g. '&' in a querystring)
-     * @param string $sepval Separator between key and value (e.g. '=' in a querystring)
-     * @param string $valIfEmpty Default value if value is empty
-     * @return string[] String converted to an associative array
-     */
-	static function string2associativeArray($str, $sep, $sepval, $valIfEmpty = NULL)
-	{
-		$str = explode($sep, $str);
-		$ret = array();
 		
-		// for each items
-		foreach ( $str as $s )
-		{
-			// get key and value
-			$s = explode($sepval, $s);
-			if ( count($s) == 2 )	// we should always have 2 items here : the key and the value
-				$ret[$s[0]] = ($s[1]!='') ? $s[1] : $valIfEmpty;
-		}
-		
-		return $ret;
-	}
-	
-
-    /** 
-     * Synonymous for string2associativeArray, with default values for separators
-     * @param string $str String to process
-     * @param string $sep Separator of values (e.g. '&' in a querystring)
-     * @param string $sepval Separator between key and value (e.g. '=' in a querystring)
-     * @param string $valIfEmpty Default value if value is empty
-     * @return string[] String converted to an associative array
-    */
-	static function explodeAssociativeArray($str, $sep = ';', $sepval = '=', $valIfEmpty = NULL)
-	{
-		return self::string2associativeArray($str, $sep, $sepval, $valIfEmpty);
-	}
-	
 	
 	/** 
      * utf8 compliant str_pad
